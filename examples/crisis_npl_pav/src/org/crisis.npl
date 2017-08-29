@@ -1,0 +1,7 @@
+scope main {
+
+norm n1:
+   secure(Zone)
+      -> obligation(mayor,n1,evacuate(Zone),`never`).
+
+}

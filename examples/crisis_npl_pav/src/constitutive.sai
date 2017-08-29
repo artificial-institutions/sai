@@ -1,0 +1,115 @@
+/**/
+institution_id : bhInst.
+
+
+status_functions:
+
+agents: mayor, firefighter, table_mediator, interaction_inspector.
+events: evacuate(Zone), tangibleInteraction(Table,TangibleObject,X,Y,Actor), inform_invalid_evacuation(Zone,Target).
+states: secure(Zone), insecure(Zone), electric_risky(Zone), informTangibleInteraction(Table,TangibleObject,X,Y).
+
+
+
+
+constitutive_rules:
+
+
+/***** Constitutive rules related to the crisis scenario *****/
+
+/* An actor is the mayor if it has checked in the table_mayor and if there is not other actor being the mayor */
+1: Actor count-as mayor
+   when checkin(table_mayor)[sai__agent(Actor)] 
+   while not(Other is mayor)|
+         Actor is mayor.
+
+
+/* An actor is a firefighter if it has checked in the table_fire_brigade */
+2: Actor count-as firefighter 
+   when checkin(table_fire_brigade)[sai__agent(Actor)].
+
+
+/* Putting the object launch_tangible_object in the coordinates 1,2 of any table counts as the evacuation of the downtown*/
+3: putTangible(_,launch_tangible_object,1,2)[sai__agent(Actor)] count-as evacuate(downtown)
+   /*while Actor is mayor*/
+   .
+
+/*4: putTangible(_,launch_tangible_object,1,2)[sai__agent(Actor)] count-as evacuate(downtown)
+   while Actor is firefighter.
+*/
+
+
+
+/* A zone preventive phase of crisis managament counts as that zone being secure if
+   (i) it does not pose electrical risks and (ii) it has at most 500 inhabitants
+*/
+5: security_phase(_,Zone,preventive) count-as secure(Zone)
+   while not( AnyState is electric_risky(Zone)) &
+        ((nbInhabit(_,Zone,X)& X<=500) | security_phase(_,Zone,preventive) is secure(Zone)).
+
+
+/* A zone preventive phase of crisis managament counts as that zone being insecure if
+   is electrical risky */
+6: security_phase(_,Zone,preventive) count-as insecure(Zone)
+   while AnyState is electric_risky(Zone).
+
+
+/* A zone emergency phase of crisis managament allways counts as that zone being insecure */
+7: security_phase(_,Zone,emergency) count-as insecure(Zone).
+
+
+/*  A zone is electrical risky if an actor counting as a firefighter puts the tangible
+    alert_tangible_object in the coordinates (1,2) */
+8: count-as electric_risky(downtown)
+   when putTangible(_,alert_tangible_object,1,2)[sai__agent(Actor)] 
+   while Actor is firefighter.
+
+
+
+
+
+/******* Constitutive rules related to the collaboration platform *********/
+
+9: communicator count-as table_mediator.
+
+10: regulator count-as interaction_inspector.
+
+11: putTangible(Table,TangibleObject,X,Y)[sai__agent(Actor)] count-as 
+   tangibleInteraction(Table,TangibleObject,X,Y,Actor).
+
+
+12: putImagible(table_fire_brigade,wrong_action_imagible_object,1,2)[sai__agent(Actor)] 
+    count-as inform_invalid_evacuation(downtown, firefighter).
+
+13: putImagible(table_mayor,wrong_action_imagible_object,1,2)[sai__agent(Actor)] 
+    count-as inform_invalid_evacuation(downtown, mayor).
+
+14: count-as informTangibleInteraction(table_mayor,launch_tangible_object,X,Y)
+    while tangibleIn(table_mayor,launch_tangible_object,X,Y) & 
+          not(           
+               not(imagibleIn(table_fire_brigade,launch_imagible_object,X,Y))
+             ) .
+
+15: count-as informTangibleInteraction(table_fire_brigade,launch_tangible_object,X,Y)
+    while tangibleIn(table_fire_brigade,launch_tangible_object,X,Y) & 
+          not(
+               not(imagibleIn(table_mayor,launch_imagible_object,X,Y))
+             ) .
+
+
+/*11: count-as informTangibleInteraction(SourceTable,to1,X,Y)
+    while tangibleIn(SourceTable,to1,X,Y) & 
+          not(           
+               artifact(workspace,TargetTable,_,_) & 
+               not(SourceTable==TargetTable)&
+               (TargetTable==table_mayor|TargetTable==table_fire_brigade|TargetTable==table_logistic_cell) &
+               not(imagibleIn(TargetTable,img1,X,Y))
+             ) .
+*/
+16: count-as informTangibleInteraction(SourceTable,alert_tangible_object,X,Y)
+    while tangibleIn(SourceTable,alert_tangible_object,X,Y) & 
+          not(           
+               artifact(workspace,TargetTable,_,_) & 
+               not(SourceTable==TargetTable)&
+               (TargetTable==table_mayor|TargetTable==table_fire_brigade|TargetTable==table_logistic_cell) &
+               not(imagibleIn(TargetTable,img2,X,Y))
+             ).

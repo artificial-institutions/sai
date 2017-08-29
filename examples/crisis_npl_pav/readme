@@ -1,0 +1,45 @@
+The application consists in a simulation of crisis management where agents collaborate working on tangible tables (more info in http://dx.doi.org/10.1007/978-3-319-18944-4_6 and http://dx.doi.org/10.1007/978-3-319-18944-4_24). 
+
+There are 4 workspaces:
+  - wsp_mayor: where the mayor performs its tasks;
+  - wsp_fire_brigade: where the firefighters perform their tasks;
+  - wsp_gis: represents a gate for all relevant geographic systems informations. 
+  - wsp_sai: hosts the infrastructure to regulate the system.
+
+
+
+Running:
+=======
+It is recommended to import sources as a JaCaMo project in Eclipse (see http://jacamo.sourceforge.net/eclipseplugin/tutorial/ to install the plugin). It is necessary to launch two JaCaMo projects as described below:
+
+1. Launching the workspaces:
+   The workspaces can run either all of them in the same node (launch option 1.1 below) or in distributed nodes (launch option 1.2 below):
+   1.1 Running all the workspaces in the same node:
+       - Launch main.jcm. To launch, go to the terminal and type ant -buildfile bin/main.xml
+       - IMPORTANT: to keep the proper running settings, do not launch it by the JaCaMo Eclipse plugin. (To be changed soon). 
+
+   1.2 Running distributed workspaces (not tested yet)
+       - Launch mayor.jcm, fire_brigade.jcm, gis.jcm, and sai.jcm.
+
+2. Launching the artificial agents:
+     - Launch crisis_agents.jcm. Can be launched by the JaCaMo Eclipse plugin.
+     - Launching the artificial agents is optional. It the agents are not launched, there is not feedback for the tangible operations.
+
+Inspecting the SAI regulation:
+=============================
+   Go to http://localhost:3275/crisis to check the constitutive state state. 
+   Go to http://localhost:3275/npl/crisis to check the normative  state. 
+   Go http://localhost:3275/npl/crisis/history to check the history of the institutional state.
+
+
+
+About the simulation:
+====================
+	The simulation consists of two tables -- table_mayor and table_fire_brigade -- where the (human) actors perform their activities on crisis management. Before act, the actors must check in the tables informing their names. Then, the actors have available two tangible objects (launch , allert) to put on the table.
+
+	If the artificial agents are running (step 2 above), then two kinds of agents collaborate in the scenario: (i) a "communicator", responsible to inform the tangible actions to the distributed actors and (ii) a "regulator" agent, responsible to inform the actors when they perform forbidden tangible actions.
+
+
+About this version of the example:
+=================================
+The NPL engine is enclosed in the artifact "npl2sai", in the workspace wsp_sai. Currently, this artifact does not allow us to load a NPL program. This is a TODO. The norms are hardcoded in the artifact. The normative program can be seen at http://localhost:3273/npl/crisis

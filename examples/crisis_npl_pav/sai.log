@@ -1,0 +1,34 @@
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #7 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 7] environmental fact: sigmaA(infra)
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #8 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 8] environmental fact: sigmaE(setWSPRuleEngine(_161)[sai__agent(infra)])
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #9 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 9] environmental fact: sigmaA(infra)
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #10 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 10] environmental fact: sigmaE(setWSPRuleEngine(_162)[sai__agent(infra)])
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #11 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 11] environmental fact: sigmaA(infra)
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #12 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 12] environmental fact: sigmaE(setWSPRuleEngine(_163)[sai__agent(infra)])
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #13 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 13] environmental fact: sai__replace(nbInhabit(crisis_parameters,_164,_165),nbInhabit(crisis_parameters,downtown,200))
+Thu May 18 21:51:16 BRT 2017   FINEST   ***** Started cycle #14 *****
+Thu May 18 21:51:16 BRT 2017   FINEST   [cycle 14] environmental fact: sigmaA(infra)
+Thu May 18 21:51:17 BRT 2017   FINEST   ***** Started cycle #15 *****
+Thu May 18 21:51:17 BRT 2017   FINEST   [cycle 15] environmental fact: sigmaE(updateInhabitants(downtown,200)[sai__agent(infra)])
+Thu May 18 21:51:17 BRT 2017   FINEST   ***** Started cycle #16 *****
+Thu May 18 21:51:17 BRT 2017   FINEST   [cycle 16] environmental fact: sai__replace(security_phase(crisis_parameters,_166,_167),security_phase(crisis_parameters,downtown,preventive))
+Thu May 18 21:51:17 BRT 2017   FINEST   [cycle 16] 1 adding sai__is(security_phase(crisis_parameters,downtown,preventive),secure(downtown),(not (sai__is(Var,electric_risky(downtown),_))&((nbInhabit(crisis_parameters,downtown,200)&(200<=500))|sai__is(security_phase(Var,downtown,preventive),secure(downtown),_))))
+Thu May 18 21:51:17 BRT 2017   FINEST   ***** Started cycle #17 *****
+Thu May 18 21:51:17 BRT 2017   FINEST   [cycle 17] environmental fact: sigmaA(infra)
+Thu May 18 21:51:17 BRT 2017   FINEST   ***** Started cycle #18 *****
+Thu May 18 21:51:17 BRT 2017   FINEST   [cycle 18] environmental fact: sigmaE(updatePhase(downtown,preventive)[sai__agent(infra)])
+Thu May 18 21:51:27 BRT 2017   FINEST   ***** Started cycle #125 *****
+Thu May 18 21:51:27 BRT 2017   FINEST   [cycle 125] environmental fact: sigmaA(ddd)
+Thu May 18 21:51:27 BRT 2017   FINEST   ***** Started cycle #126 *****
+Thu May 18 21:51:27 BRT 2017   FINEST   [cycle 126] environmental fact: sigmaE(checkin(table_mayor)[sai__agent(ddd)])
+Thu May 18 21:51:27 BRT 2017   FINEST   [cycle 126] 1 adding sai__is(ddd,mayor,(not (sai__is(Var,mayor,Var)) | sai__is(ddd,mayor,Var)))
+Thu May 18 21:52:53 BRT 2017   FINEST   ***** Started cycle #985 *****
+Thu May 18 21:52:53 BRT 2017   FINEST   [cycle 985] environmental fact: sai__replace(security_phase(crisis_parameters,_440,_441),security_phase(crisis_parameters,downtown,emergency))
+Thu May 18 21:52:53 BRT 2017   FINEST   [cycle 985] 1 adding sai__is(security_phase(crisis_parameters,downtown,emergency),insecure(downtown),security_phase(crisis_parameters,downtown,emergency))
+Thu May 18 21:52:53 BRT 2017   FINEST   [cycle 985] 1 removing sai__is(security_phase(crisis_parameters,downtown,preventive),secure(downtown),(not (sai__is(Var,electric_risky(downtown),Var)) & ((nbInhabit(crisis_parameters,downtown,200) & (200 <= 500)) | sai__is(security_phase(Var,downtown,preventive),secure(downtown),Var))))

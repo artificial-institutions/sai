@@ -1,0 +1,65 @@
+/* 
+
+    Launches all the workspaces in the same node. To launch, go to the terminal and type ant -buildfile bin/main.xml
+
+*/
+
+mas main {
+
+   agent infra{
+    	focus: wsp_mayor.table_mayor
+        focus: wsp_gis.crisis_parameters
+    	focus: wsp_fire_brigade.table_fire_brigade
+    	focus: wsp_sai.sai
+    	focus: wsp_sai.npl2sai
+    }
+        
+        
+     agent communicator{
+    	focus: wsp_mayor.table_mayor
+    	focus: wsp_fire_brigade.table_fire_brigade
+    	focus: wsp_sai.sai
+    }
+    
+    agent regulator{
+    	focus: wsp_sai.sai
+    	focus: wsp_mayor.table_mayor
+    	focus: wsp_fire_brigade.table_fire_brigade
+    	focus: wsp_sai.npl2sai
+    }	
+    
+	        
+        
+    workspace wsp_gis{                    
+          artifact crisis_parameters : simulator.CrisisParametersArt          
+       }
+        
+        
+    workspace wsp_mayor{
+    	artifact table_mayor : simulator.TangibleTableArt(3,3,"table_mayor")
+    }   
+     
+        
+    workspace wsp_fire_brigade{
+    	artifact table_fire_brigade : simulator.TangibleTableArt(3,3,"table_fire_brigade")
+    }
+    
+      
+	workspace wsp_sai {          
+          artifact sai: sai.bridges.jacamo.ConstitutiveArt( "crisis","src/constitutive.sai")
+          artifact npl2sai: sai.bridges.jacamo.SaiNplArt( "crisis", "src/constitutive.sai")
+       }
+     
+   
+
+   
+    // agent source path
+    asl-path: src/agt
+              src/agt/inc
+              
+              
+   
+    //platform: cartago("infrastructure")
+
+}
+
