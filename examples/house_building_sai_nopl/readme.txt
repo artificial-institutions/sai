@@ -2,7 +2,7 @@ This is a "situated" version of the classical house_built example.
 The dynamic facts that animate the NOPL dynamics are constituted from the environment instead of being produced by operations in the artifacts.
 The constitutive specification is in /src/org/constitutive.sai
 
-* Before running: copy the files antlr-runtime-4.7.jar and sai.jar to the JACAMO_HOME directory. Such files are available in the /build/libs directory of the sai package.
+* Before running: copy the files antlr-runtime-4.7.jar and sai.jar to the JACAMO_HOME/libs directory. Such files are available in the /build/libs directory of the sai package.
 
 
 * Running the example: (i) Import the project as a JaCaMo project in Eclipse and run it as usual  or (ii) in a terminal, type jacamo house.jcm
