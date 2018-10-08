@@ -278,8 +278,10 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
 
 	private void commitMission(final String ag, final String mission) throws CartagoException {
         ora4masOperationTemplate(new Operation() {        	
-            public void exec() throws NormativeFailureException, Exception {
+            public void exec() throws NormativeFailureException, Exception {            	
             	//log("commitMission starting: " + ag + ";" + mission );
+            	if (orgState.hasPlayer(ag, mission))
+                    return;
                 orgState.addPlayer(ag, mission);
                 nengine.verifyNorms();
                 

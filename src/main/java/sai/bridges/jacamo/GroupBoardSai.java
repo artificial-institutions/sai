@@ -128,6 +128,8 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 	
 	/*TODO: make protected in superclass*/
 	private void adoptRole(final String ag, final String role) {
+		if (orgState.hasPlayer(ag, role))
+            return;
         ora4masOperationTemplate(new Operation() {
             public void exec() throws NormativeFailureException, Exception {
                 boolean oldStatus = isWellFormed();
@@ -164,14 +166,10 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 
 	//from the superclass - should be protected there
 	private void notifyObservers() throws CartagoException {
-		for (ArtifactId a: schemes) {
-			//log("schemes " + a.getName() + " - " + schemes.size() );
-			//log("schemes getId: " + orgState.getId());
-			//log("schemes getPlayers: " + orgState.getPlayers());
+		for (ArtifactId a: schemes) {	
 			execLinkedOp(a, "updateRolePlayers", orgState.getId(), orgState.getPlayers());
 		}
 		for (ArtifactId a: listeners) {
-			//log("listeners " + a.getName() + " - " + listeners.size());
 			execLinkedOp(a, "updateRolePlayers", orgState.getId(), orgState.getPlayers());
 		}
 	}
@@ -247,9 +245,9 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 
 
 	//the same in the superclass. Should be protected there
-	private Group getGrpState() {
+	/*private Group getGrpState() {
 		return (Group)orgState;
-	}
+	}*/
 
 
 }
