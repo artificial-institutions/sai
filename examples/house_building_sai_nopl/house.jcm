@@ -25,12 +25,12 @@ mas house_building {
    }     
    
    agent companyA{   // builder agents (see their code for details)
+      focus: wsp_sai.sai
       focus: wsp_auction.auction_for_Plumbing
       focus: wsp_auction.clock
       focus: wsp_ora4mas.bhsch
       focus: wsp_ora4mas.hsh_group
-      focus: wsp_house.housegui
-      focus: wsp_sai.sai
+      focus: wsp_house.housegui      
    }
    agent companyB{
       focus: wsp_auction.auction_for_SitePreparation

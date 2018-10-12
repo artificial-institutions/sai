@@ -64,7 +64,8 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 
 	@Override
 	public void sai_play(String agent, String role, String group) {
-		//execInternalOp("internal_adoptRole", agent, role);
+		if (orgState.hasPlayer(agent, role))
+            return;
 		try {
 			cartagoCtx.doAction(this.getId(), new Op("internal_adoptRole", new Object[] {agent, role}));
 		} catch (ActionFailedException e) {

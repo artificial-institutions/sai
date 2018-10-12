@@ -73,7 +73,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 	*/
 
 	void init(String id, String constitutiveProgramPath) {
-                log("SAI Engine version 0.02-03"); 
+                log("SAI Engine version 0.02-04"); 
 		this.ruleEngine = new RuleEngine();
 		sai = new SaiEngine();
 		this.id = id;
