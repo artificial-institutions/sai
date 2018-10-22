@@ -1,6 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'antlr'
 apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+version '0.1-SNAPSHOT'
+group   'org.jacamo'
 
 repositories {
     mavenCentral()
@@ -12,11 +16,65 @@ repositories {
 
 dependencies{
    antlr "org.antlr:antlr4:4.7" // use ANTLR version 4
-   compile group: 'org.jason-lang', name: 'jason',    version: '2.1', changing: false
+   compile group: 'org.jason-lang', name: 'jason',    version: '2.3', changing: false
    compile group: 'org.jacamo',     name: 'moise' ,   version: '0.11', changing: true, transitive: false
-   compile group: 'org.jacamo',     name: 'npl' ,     version: '0.+', changing: false, transitive: false
-   compile group: 'org.jacamo',     name: 'cartago',  version: '2.3-SNAPSHOT', changing: true
+   compile group: 'org.jacamo',     name: 'npl' ,     version: '0.3', changing: false, transitive: false
+   compile group: 'org.jacamo',     name: 'cartago',  version: '2.3', changing: true
    	
    testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
+jar {
+    baseName 'sai'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+            artifactId 'sai'
+        }
+    }
+}
+
+task fixTab {
+    ant.fixcrlf(eol: 'lf',  includes: '**/*.txt,**/*.bat, **/*.adoc', srcdir: '.')
+    ant.fixcrlf(tab: 'remove', tablength: '4', javafiles: 'true', includes: '**/*.java,**/*.xml,**/*.xsl,**/*.xsd', srcdir: 'src')
+    ant.fixcrlf(tab: 'remove', tablength: '4', javafiles: 'true', includes: '**/*.java,**/*.xml,**/*.xsl,**/*.xsd', srcdir: 'examples')
+}
+
+task javadocJar (type: Jar, dependsOn: javadoc) {
+    baseName 'sai'
+    classifier = 'javadoc'
+    from '${docsDir}/../../doc/api'
+}
+
+task sourceJar (type : Jar) {
+    baseName 'sai'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+
+task publishMavenSF(dependsOn: [ 'jar', 'build', 'publishToMavenLocal', 'sourceJar', 'javadocJar']) {
+  doLast {
+    description 'transfer local maven artifact to our maven2 repository at sourceforge'
+
+    def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/sai'
+    def tdir = 'jomifred,jacamo@web.sf.net:/home/project-web/jacamo/htdocs/maven2/org/jacamo/sai'
+    exec {
+        commandLine 'scp', '-r', project.version, tdir
+        workingDir wdir
+    }
+    exec {
+        commandLine 'cp', 'maven-metadata-local.xml', 'maven-metadata.xml'
+        workingDir wdir
+    }
+    exec {
+        commandLine 'scp', 'maven-metadata.xml', tdir
+        workingDir wdir
+    }
+  }
+}
