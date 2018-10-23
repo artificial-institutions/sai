@@ -1,54 +1,29 @@
 package sai.bridges.jacamo;
 
-import jason.asSemantics.Unifier;
-import jason.asSyntax.Literal;
 import static jason.asSyntax.ASSyntax.parseFormula;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import sai.main.institution.INormativeEngine;
-import sai.main.institution.SaiEngine;
 import cartago.AgentIdCredential;
-import cartago.ArtifactConfig;
-import cartago.ArtifactId;
 import cartago.CartagoContext;
 import cartago.CartagoException;
 import cartago.INTERNAL_OPERATION;
-import cartago.LINK;
 import cartago.OPERATION;
 import cartago.Op;
 import cartago.OpFeedbackParam;
 import cartago.util.agent.ActionFailedException;
-import sai.main.lang.semantics.statusFunction.AgentStatusFunction;
-import sai.main.lang.semantics.statusFunction.EventStatusFunction;
-import sai.main.lang.semantics.statusFunction.StateStatusFunction;
-import sai.norms.npl.nopl2sai.IScheme2SaiListener;
-import sai.norms.npl.nopl2sai.NOpl2Sai;
+import jason.asSemantics.Unifier;
 import moise.common.MoiseException;
 import moise.os.OS;
-import npl.NormativeFailureException;
 import npl.parser.ParseException;
-import ora4mas.nopl.JasonTermWrapper;
-import ora4mas.nopl.NormativeBoard;
-import ora4mas.nopl.Operation;
 import ora4mas.nopl.SchemeBoard;
-import ora4mas.nopl.oe.CollectiveOE;
-import ora4mas.nopl.oe.Group;
-import ora4mas.nopl.oe.Player;
 import ora4mas.nopl.oe.Scheme;
-import ora4mas.nopl.tools.os2nopl;
+import sai.main.institution.INormativeEngine;
+import sai.main.institution.SaiEngine;
+import sai.norms.npl.nopl2sai.IScheme2SaiListener;
+import sai.norms.npl.nopl2sai.NOpl2Sai;
 
 public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
 
@@ -56,18 +31,18 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
     private SaiEngine institution;
     //private List<Commitment> commitmentsList = Collections.synchronizedList(new ArrayList<Commitment>()); 
     //private List<Goal> achievementsList = Collections.synchronizedList(new ArrayList<Goal>());
-    private List<Commitment> commitmentsList = new ArrayList<Commitment>(); 
-    private List<Goal> achievementsList = new ArrayList<Goal>();
+    private List<Commitment> commitmentsList = new ArrayList<>(); 
+    private List<Goal> achievementsList = new ArrayList<>();
     private CommitmentChecker commitmentChecker = new CommitmentChecker();
 
-    private moise.os.fs.Scheme spec; //could be protected in the superclass - requires for method UpdateRolePlayers
+    //private moise.os.fs.Scheme spec; //could be protected in the superclass - requires for method UpdateRolePlayers
 
 
     private CartagoContext cartagoCtx;
 
 
-    //@Override
-    public void init(final String osFile, final String schType, final String workspacename) throws ParseException, MoiseException {
+    @Override
+    public void init(final String osFile, final String schType) throws ParseException, MoiseException {
         super.init(osFile, schType);        
 
         final OS os = OS.loadOSFromURI(osFile);
@@ -78,6 +53,7 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
         this.npl2sai.addSchemeListener(this);       
 
         commitmentChecker.start();
+        String workspacename = getCreatorId().getWorkspaceId().getName();
 
         cartagoCtx = new CartagoContext(new AgentIdCredential("sai__institution__sc"), workspacename);
         try {
@@ -252,8 +228,8 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
 
         @Override
         public void run() {         
-            ArrayList<Commitment> added = new ArrayList<Commitment>();
-            ArrayList<Goal> addedAchievement = new ArrayList<Goal>();
+            ArrayList<Commitment> added = new ArrayList<>();
+            ArrayList<Goal> addedAchievement = new ArrayList<>();
             boolean toCommit;
             while(true){            
                 if(commitmentsList.size()>0){                                        

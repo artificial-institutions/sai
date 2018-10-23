@@ -26,12 +26,6 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 
     private NOpl2Sai npl2sai;
 
-    //private Set<ArtifactId>    schemes     = new HashSet<ArtifactId>();//from superclass - should be protected there
-    //private Set<ArtifactId>    listeners   = new HashSet<ArtifactId>();//from superclass - should be protected there
-    //private ArtifactId         parentGroup = null; //from superclass - should be protected there
-
-    //private List<String>       futureSchemes = new LinkedList<String>(); // schemes to be responsible to when well formed - from superclass - should be protected there
-    
     private CartagoContext cartagoCtx;
 
     @Override
