@@ -1,22 +1,5 @@
 package sai.bridges.jacamo;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import moise.common.MoiseException;
-import npl.NormativeFailureException;
-import npl.parser.ParseException;
-import ora4mas.nopl.GroupBoard;
-import ora4mas.nopl.JasonTermWrapper;
-import ora4mas.nopl.oe.CollectiveOE;
-import ora4mas.nopl.oe.Group;
-import ora4mas.nopl.Operation;
-import sai.main.institution.INormativeEngine;
-import sai.main.institution.SaiEngine;
-import sai.norms.npl.nopl2sai.IGroup2SaiListener;
-import sai.norms.npl.nopl2sai.NOpl2Sai;
 import cartago.AgentIdCredential;
 import cartago.ArtifactId;
 import cartago.CartagoContext;
@@ -27,26 +10,37 @@ import cartago.Op;
 import cartago.OpFeedbackParam;
 import cartago.OperationException;
 import cartago.util.agent.ActionFailedException;
+import moise.common.MoiseException;
+import npl.NormativeFailureException;
+import npl.parser.ParseException;
+import ora4mas.nopl.GroupBoard;
+import ora4mas.nopl.JasonTermWrapper;
+import ora4mas.nopl.oe.CollectiveOE;
+import ora4mas.nopl.oe.Group;
+import sai.main.institution.INormativeEngine;
+import sai.main.institution.SaiEngine;
+import sai.norms.npl.nopl2sai.IGroup2SaiListener;
+import sai.norms.npl.nopl2sai.NOpl2Sai;
 
 public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 
     private NOpl2Sai npl2sai;
 
-    private Set<ArtifactId>    schemes     = new HashSet<ArtifactId>();//from superclass - should be protected there
-    private Set<ArtifactId>    listeners   = new HashSet<ArtifactId>();//from superclass - should be protected there
-    private ArtifactId         parentGroup = null; //from superclass - should be protected there
+    //private Set<ArtifactId>    schemes     = new HashSet<ArtifactId>();//from superclass - should be protected there
+    //private Set<ArtifactId>    listeners   = new HashSet<ArtifactId>();//from superclass - should be protected there
+    //private ArtifactId         parentGroup = null; //from superclass - should be protected there
 
-    private List<String>       futureSchemes = new LinkedList<String>(); // schemes to be responsible to when well formed - from superclass - should be protected there
+    //private List<String>       futureSchemes = new LinkedList<String>(); // schemes to be responsible to when well formed - from superclass - should be protected there
     
     private CartagoContext cartagoCtx;
 
-    //@Override
-    public void init(final String osFile, final String grType, final String workspacename) throws ParseException, MoiseException, OperationException {
+    @Override
+    public void init(final String osFile, final String grType) throws ParseException, MoiseException, OperationException {
         super.init(osFile, grType);
 
         this.npl2sai = new NOpl2Sai(getNormativeEngine());
         this.npl2sai.addGroupListener(this);
-        
+        String workspacename = getCreatorId().getWorkspaceId().getName();
         cartagoCtx = new CartagoContext(new AgentIdCredential("sai__institution"), workspacename);
         try {
             cartagoCtx.joinWorkspace(workspacename, new AgentIdCredential("sai__institution__ag"));

@@ -101,8 +101,8 @@ mas house_building {
    }
        
    workspace wsp_ora4mas {       	  
-   	   artifact bhsch : sai.bridges.jacamo.SchemeBoardSai("src/org/house-os.xml", build_house_sch, "wsp_ora4mas")
-   	   artifact hsh_group : sai.bridges.jacamo.GroupBoardSai("src/org/house-os.xml", house_group, "wsp_ora4mas")
+   	   artifact bhsch : sai.bridges.jacamo.SchemeBoardSai("src/org/house-os.xml", build_house_sch)
+   	   artifact hsh_group : sai.bridges.jacamo.GroupBoardSai("src/org/house-os.xml", house_group)
    } 
   
   
