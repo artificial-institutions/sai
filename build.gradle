@@ -49,6 +49,15 @@ task fixTab {
     ant.fixcrlf(tab: 'remove', tablength: '4', javafiles: 'true', includes: '**/*.java,**/*.xml,**/*.xsl,**/*.xsd', srcdir: 'examples')
 }
 
+// the following lines is used to avoid errors while generating javadoc
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+      tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+      }
+    }
+}
+
 task javadocJar (type: Jar, dependsOn: javadoc) {
     baseName 'sai'
     classifier = 'javadoc'
