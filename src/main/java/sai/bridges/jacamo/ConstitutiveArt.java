@@ -55,306 +55,306 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
-	private RuleEngine ruleEngine;
-	private SaiEngine sai;
-	private String id = null;//an optional identifier for the institution
-	private ArrayList<String> agentAssignmentsToShow = new ArrayList<String>();
-	private ArrayList<String> eventAssignmentsToShow = new ArrayList<String>();
-	private ArrayList<String> stateAssignmentsToShow = new ArrayList<String>();
+    private RuleEngine ruleEngine;
+    private SaiEngine sai;
+    private String id = null;//an optional identifier for the institution
+    private ArrayList<String> agentAssignmentsToShow = new ArrayList<String>();
+    private ArrayList<String> eventAssignmentsToShow = new ArrayList<String>();
+    private ArrayList<String> stateAssignmentsToShow = new ArrayList<String>();
 
 
 
 
 
-	/*void init(String id, String normativeProgramPath, String constitutiveProgramPath){
-		this.id = id;
-		init(normativeProgramPath, constitutiveProgramPath);
-	}
-	*/
+    /*void init(String id, String normativeProgramPath, String constitutiveProgramPath){
+        this.id = id;
+        init(normativeProgramPath, constitutiveProgramPath);
+    }
+    */
 
-	void init(String id, String constitutiveProgramPath) {
-                log("SAI Engine version 0.02-04"); 
-		this.ruleEngine = new RuleEngine();
-		sai = new SaiEngine();
-		this.id = id;
-		this.ruleEngine.addInstitution(sai);
-		this.sai.addConstitutiveListener(this);
-
-
+    void init(String id, String constitutiveProgramPath) {
+                log("SAI Engine version 0.02-05"); 
+        this.ruleEngine = new RuleEngine();
+        sai = new SaiEngine();
+        this.id = id;
+        this.ruleEngine.addInstitution(sai);
+        this.sai.addConstitutiveListener(this);
 
 
-		try {
-			loadConstitutiveProgram(constitutiveProgramPath);			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
 
 
-		//The HTTP server
-		SaiHttpServer server = SaiHttpServer.getInstance();
-		//server.getServer().createContext(getContext()+ "/", new MyHandler());
-		server.getServer().createContext(getContext(), new MyHandler());
-		server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
-		server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
-		
-		log("Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
+        try {
+            loadConstitutiveProgram(constitutiveProgramPath);           
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }   
 
-	}
+
+        //The HTTP server
+        SaiHttpServer server = SaiHttpServer.getInstance();
+        //server.getServer().createContext(getContext()+ "/", new MyHandler());
+        server.getServer().createContext(getContext(), new MyHandler());
+        server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
+        server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
+        
+        log("Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
+
+    }
 
 /*
-	void init(String normativeProgramPath, String constitutiveProgramPath) {
-		this.ruleEngine = new RuleEngine();
-		sai = new SaiEngine();
-		this.ruleEngine.addInstitution(sai);
-		this.sai.addConstitutiveListener(this);
-	
-		try {
-			loadConstitutiveProgram(constitutiveProgramPath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		
-		
-		//The HTTP server
-		SaiHttpServer server = SaiHttpServer.getInstance();
-		server.getServer().createContext(getContext()+ "/", new MyHandler());
-		server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
-		server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
-		
-		}
-*/	
-	
-	/**
-	 * Returns a reference for the Rule Engine, that is the CArtAgO engine t
-	 * hat feeds the Constitutive Engine with facts from the environmental facts
-	 * @param engine
-	 */
-	@OPERATION 
-	public void getRuleEngine(OpFeedbackParam<RuleEngine> engine){
-		engine.set(this.ruleEngine);
-	}
-	
-	@OPERATION 
-	public void getSaiEngine(OpFeedbackParam<SaiEngine> engine){
-		engine.set(this.sai);
-	}
-	
-	@OPERATION
-	void loadConstitutiveProgram(String fileName) throws IOException{
-		this.internalLoadConstitutiveProgram(fileName);
-	}
+    void init(String normativeProgramPath, String constitutiveProgramPath) {
+        this.ruleEngine = new RuleEngine();
+        sai = new SaiEngine();
+        this.ruleEngine.addInstitution(sai);
+        this.sai.addConstitutiveListener(this);
+    
+        try {
+            loadConstitutiveProgram(constitutiveProgramPath);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }   
+        
+        
+        //The HTTP server
+        SaiHttpServer server = SaiHttpServer.getInstance();
+        server.getServer().createContext(getContext()+ "/", new MyHandler());
+        server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
+        server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
+        
+        }
+*/  
+    
+    /**
+     * Returns a reference for the Rule Engine, that is the CArtAgO engine t
+     * hat feeds the Constitutive Engine with facts from the environmental facts
+     * @param engine
+     */
+    @OPERATION 
+    public void getRuleEngine(OpFeedbackParam<RuleEngine> engine){
+        engine.set(this.ruleEngine);
+    }
+    
+    @OPERATION 
+    public void getSaiEngine(OpFeedbackParam<SaiEngine> engine){
+        engine.set(this.sai);
+    }
+    
+    @OPERATION
+    void loadConstitutiveProgram(String fileName) throws IOException{
+        this.internalLoadConstitutiveProgram(fileName);
+    }
 
 
 
-	/**
-	 * Register the normative engine N as a client to be updated when the constitutive state changes
-	 * @param normativeEngine
-	 */
-	@OPERATION
-	public void addNormativeEngine(INormativeEngine normativeEngine){
-		this.sai.addNormativeEngine(normativeEngine);		
-	}
-	
+    /**
+     * Register the normative engine N as a client to be updated when the constitutive state changes
+     * @param normativeEngine
+     */
+    @OPERATION
+    public void addNormativeEngine(INormativeEngine normativeEngine){
+        this.sai.addNormativeEngine(normativeEngine);       
+    }
+    
 
-	// returns the context used in the http gui
-	private String getContext(){		 
-		if(this.id==null)
-			return "";
-		else
-			return "/" + this.id.toLowerCase();
-	}
-
-
-
-	private void internalLoadConstitutiveProgram(String fileName) throws IOException{
-		InputStream is = new FileInputStream(fileName);
-		ANTLRInputStream input = new ANTLRInputStream(is);
-		sai_constitutiveLexer constLexer = new sai_constitutiveLexer(input);		
-		CommonTokenStream tokens = new CommonTokenStream(constLexer);
-		sai_constitutiveParser constParser = new sai_constitutiveParser(tokens);
-		ParseTree tree = constParser.constitutive_spec();
-		ParseTreeWalker walker = new ParseTreeWalker(); // create standard walker
-		sai_constitutiveListenerImpl constExtractor = new sai_constitutiveListenerImpl(sai.getProgram());
-		walker.walk(constExtractor, tree); // initiate walk of tree with listener
-		for(ConstitutiveRule c:sai.getProgram().getConstitutiveRules()){
-			execInternalOp("addConstitutiveRule", c);			
-		}
-	}
-
-	
-
-	@INTERNAL_OPERATION void addConstitutiveRule(ConstitutiveRule c){
-		Pred x;
-		if(c.getX() != null)
-			x = c.getX();
-		else
-			x = new Pred("freestanding");
-		try {
-			LogicalFormula t;
-			LogicalFormula m;
-			if(c.getT() != null)
-				t = c.getT();
-			else		
-				t = parseFormula("true");
-
-			if(c.getM() != null)
-				m = c.getM();
-			else
-				m = parseFormula("true");
-			
-			//the term Y of the constitutive rule must be casted to LogicalFormula to macth with the aim of the norm 
-			defineObsProperty("constitutive_rule", x, parseFormula(c.getY().toString()),t,m);
-
-			
-			if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof AgentStatusFunction){
-				defineObsProperty("agent_sf", c.getY().getId());	
-			}else
-				if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof EventStatusFunction){
-					defineObsProperty("event_sf", c.getY().getId());	
-				}else
-					if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof StateStatusFunction){
-						defineObsProperty("state_sf", c.getY().getId());	
-					}
-					
-	
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+    // returns the context used in the http gui
+    private String getContext(){         
+        if(this.id==null)
+            return "";
+        else
+            return "/" + this.id.toLowerCase();
+    }
 
 
-	}
+
+    private void internalLoadConstitutiveProgram(String fileName) throws IOException{
+        InputStream is = new FileInputStream(fileName);
+        ANTLRInputStream input = new ANTLRInputStream(is);
+        sai_constitutiveLexer constLexer = new sai_constitutiveLexer(input);        
+        CommonTokenStream tokens = new CommonTokenStream(constLexer);
+        sai_constitutiveParser constParser = new sai_constitutiveParser(tokens);
+        ParseTree tree = constParser.constitutive_spec();
+        ParseTreeWalker walker = new ParseTreeWalker(); // create standard walker
+        sai_constitutiveListenerImpl constExtractor = new sai_constitutiveListenerImpl(sai.getProgram());
+        walker.walk(constExtractor, tree); // initiate walk of tree with listener
+        for(ConstitutiveRule c:sai.getProgram().getConstitutiveRules()){
+            execInternalOp("addConstitutiveRule", c);           
+        }
+    }
+
+    
+
+    @INTERNAL_OPERATION void addConstitutiveRule(ConstitutiveRule c){
+        Pred x;
+        if(c.getX() != null)
+            x = c.getX();
+        else
+            x = new Pred("freestanding");
+        try {
+            LogicalFormula t;
+            LogicalFormula m;
+            if(c.getT() != null)
+                t = c.getT();
+            else        
+                t = parseFormula("true");
+
+            if(c.getM() != null)
+                m = c.getM();
+            else
+                m = parseFormula("true");
+            
+            //the term Y of the constitutive rule must be casted to LogicalFormula to macth with the aim of the norm 
+            defineObsProperty("constitutive_rule", x, parseFormula(c.getY().toString()),t,m);
+
+            
+            if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof AgentStatusFunction){
+                defineObsProperty("agent_sf", c.getY().getId());    
+            }else
+                if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof EventStatusFunction){
+                    defineObsProperty("event_sf", c.getY().getId());    
+                }else
+                    if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof StateStatusFunction){
+                        defineObsProperty("state_sf", c.getY().getId());    
+                    }
+                    
+    
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
+    }
 
 
 
 
-	@Override
-	public void addStateAssignment(String assignee, StateStatusFunction sf) {
-		stateAssignmentsToShow.add(assignee + " is " + sf);
-		defineObsProperty("sai_is", assignee, sf.getId());		
-	}
+
+
+    @Override
+    public void addStateAssignment(String assignee, StateStatusFunction sf) {
+        stateAssignmentsToShow.add(assignee + " is " + sf);
+        defineObsProperty("sai_is", assignee, sf.getId());      
+    }
 
 
 
-	@Override
-	public void addAgentAssignment(String assignee, AgentStatusFunction sf) {
-		agentAssignmentsToShow.add(assignee + " is " + sf);
-		defineObsProperty("sai_is", assignee, sf.getId());		
-	}
+    @Override
+    public void addAgentAssignment(String assignee, AgentStatusFunction sf) {
+        agentAssignmentsToShow.add(assignee + " is " + sf);
+        defineObsProperty("sai_is", assignee, sf.getId());      
+    }
 
 
 
-	@Override
-	public void addEventAssignment(String assignee, EventStatusFunction sf,
-			AgentStatusFunction agent) {
-		eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);
-		defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());		
-	}
+    @Override
+    public void addEventAssignment(String assignee, EventStatusFunction sf,
+            AgentStatusFunction agent) {
+        eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);
+        defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());     
+    }
 
 
-	
-	@Override
-	public void removeStateAssignment(String assignee, StateStatusFunction sf) {
-		if(stateAssignmentsToShow.contains(assignee + " is " + sf))
-			stateAssignmentsToShow.remove(assignee + " is " + sf);
-	}
-
-
-
-	@Override
-	public void removeAgentAssignment(String assignee, AgentStatusFunction sf) {
-		if(agentAssignmentsToShow.contains(assignee + " is " + sf))
-			agentAssignmentsToShow.remove(assignee + " is " + sf);
-	}
+    
+    @Override
+    public void removeStateAssignment(String assignee, StateStatusFunction sf) {
+        if(stateAssignmentsToShow.contains(assignee + " is " + sf))
+            stateAssignmentsToShow.remove(assignee + " is " + sf);
+    }
 
 
 
-	@Override
-	public void removeEventAssignment(String assignee, EventStatusFunction sf,
-			AgentStatusFunction agent) {
-		if(eventAssignmentsToShow.contains(assignee + " is " + sf + " caused by " + agent))
-			eventAssignmentsToShow.remove(assignee + " is " + sf + " caused by " + agent);
+    @Override
+    public void removeAgentAssignment(String assignee, AgentStatusFunction sf) {
+        if(agentAssignmentsToShow.contains(assignee + " is " + sf))
+            agentAssignmentsToShow.remove(assignee + " is " + sf);
+    }
 
-	}
 
-	class MyHandler implements HttpHandler {
-		@Override
-		public void handle(HttpExchange t) throws IOException {
-			String response = "<html><font face=\"arial\"></font>";
-			response = response + "<html><font face=\"arial\">SAI Constitutive State <br></font>";
-			response = response + "<iframe src=\""+ getContext() + "/assignments\"align=top width=\"100%\" height=\"40%\"></iframe>";
-			response = response + "<br><br><br><html><font face=\"arial\">Environmental State <br></font>";
-			response = response + "<iframe src=\""+ getContext() + "/environment\"align=top width=\"100%\" height=\"40%\"></iframe>";
-			t.sendResponseHeaders(200, response.length());
-			OutputStream os = t.getResponseBody();
-			os.write(response.getBytes());
-			os.close();
-		}
-	}
 
-	class AssignmentsHandler implements HttpHandler {
-		@Override
-		public void handle(HttpExchange t) throws IOException {
-			String response = "<html>";
-			response = response + "<br><font face=\"arial\" color=\"green\">Agent-status function assignments:<br></font><font face=\"arial\">";
-			for(String s:agentAssignmentsToShow){
-				response = response + s.toString().replaceAll("Var", "_") + "<br>";
-			}				
-			response = response + "<br><font face=\"arial\" color=\"green\">Event-status function assignments:<br></font><font face=\"arial\">";
-			for(String s:eventAssignmentsToShow){
-				response = response + s.toString().replaceAll("Var", "_") + "<br>";
-			}
-			response = response + "<br><font face=\"arial\" color=\"green\">State-status function assignments:<br></font><font face=\"arial\">";
-			for(String s:stateAssignmentsToShow){
-				response = response + s.toString().replaceAll("Var", "_") + "<br>";
-			}
-			response = response + "</html>";
-			t.sendResponseHeaders(200, response.length());
-			OutputStream os = t.getResponseBody();
-			os.write(response.getBytes());
-			os.close();
-		}
-	}
+    @Override
+    public void removeEventAssignment(String assignee, EventStatusFunction sf,
+            AgentStatusFunction agent) {
+        if(eventAssignmentsToShow.contains(assignee + " is " + sf + " caused by " + agent))
+            eventAssignmentsToShow.remove(assignee + " is " + sf + " caused by " + agent);
 
-	class EnvironmentalStateHandler implements HttpHandler {
-		@Override
-		public void handle(HttpExchange t) throws IOException {
-			ArrayList<Literal> envState = ruleEngine.getCurrentEnvironmentalState();
-			ArrayList<String> agents = new ArrayList<String>();
-			ArrayList<String> events = new ArrayList<String>();
-			ArrayList<String> state = new ArrayList<String>();
-			for(Literal l : envState){
-				if(l.getFunctor().toString().equals("sigmaA")){
-					agents.add(l.getTerm(0).toString());					
-				}
-				else
-					if(l.getFunctor().toString().equals("sigmaE"))
-						events.add(l.getTerm(0).toString());
-					else
-						state.add(l.toString());
-			}
-			String response = "<html><font face=\"arial\" color=\"green\">Agents</font><br><font face=\"arial\">";
-			for(String a:agents)
-				response = response + a + "<br>";
-			response = response + "<br>";
-			response = response + "<html><font face=\"arial\" color=\"green\">Events</font><br><font face=\"arial\">";
-			for(String e:events)
-			{if(!e.equals("true")) //TODO: fix this awful quickfix!!!
-				response = response + e + "<br>";
-			}
-			response = response + "<br>";
-			response = response +"<html><font face=\"arial\" color=\"green\">States</font><br><font face=\"arial\">";
-			for(String s:state)
-				response = response + s + "<br>";
-			t.sendResponseHeaders(200, response.length());
-			OutputStream os = t.getResponseBody();
-			os.write(response.getBytes());
-			os.close();
-		}
-	}
+    }
+
+    class MyHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            String response = "<html><font face=\"arial\"></font>";
+            response = response + "<html><font face=\"arial\">SAI Constitutive State <br></font>";
+            response = response + "<iframe src=\""+ getContext() + "/assignments\"align=top width=\"100%\" height=\"40%\"></iframe>";
+            response = response + "<br><br><br><html><font face=\"arial\">Environmental State <br></font>";
+            response = response + "<iframe src=\""+ getContext() + "/environment\"align=top width=\"100%\" height=\"40%\"></iframe>";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+
+    class AssignmentsHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            String response = "<html>";
+            response = response + "<br><font face=\"arial\" color=\"green\">Agent-status function assignments:<br></font><font face=\"arial\">";
+            for(String s:agentAssignmentsToShow){
+                response = response + s.toString().replaceAll("Var", "_") + "<br>";
+            }               
+            response = response + "<br><font face=\"arial\" color=\"green\">Event-status function assignments:<br></font><font face=\"arial\">";
+            for(String s:eventAssignmentsToShow){
+                response = response + s.toString().replaceAll("Var", "_") + "<br>";
+            }
+            response = response + "<br><font face=\"arial\" color=\"green\">State-status function assignments:<br></font><font face=\"arial\">";
+            for(String s:stateAssignmentsToShow){
+                response = response + s.toString().replaceAll("Var", "_") + "<br>";
+            }
+            response = response + "</html>";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+
+    class EnvironmentalStateHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            ArrayList<Literal> envState = ruleEngine.getCurrentEnvironmentalState();
+            ArrayList<String> agents = new ArrayList<String>();
+            ArrayList<String> events = new ArrayList<String>();
+            ArrayList<String> state = new ArrayList<String>();
+            for(Literal l : envState){
+                if(l.getFunctor().toString().equals("sigmaA")){
+                    agents.add(l.getTerm(0).toString());                    
+                }
+                else
+                    if(l.getFunctor().toString().equals("sigmaE"))
+                        events.add(l.getTerm(0).toString());
+                    else
+                        state.add(l.toString());
+            }
+            String response = "<html><font face=\"arial\" color=\"green\">Agents</font><br><font face=\"arial\">";
+            for(String a:agents)
+                response = response + a + "<br>";
+            response = response + "<br>";
+            response = response + "<html><font face=\"arial\" color=\"green\">Events</font><br><font face=\"arial\">";
+            for(String e:events)
+            {if(!e.equals("true")) //TODO: fix this awful quickfix!!!
+                response = response + e + "<br>";
+            }
+            response = response + "<br>";
+            response = response +"<html><font face=\"arial\" color=\"green\">States</font><br><font face=\"arial\">";
+            for(String s:state)
+                response = response + s + "<br>";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
 
 
 
