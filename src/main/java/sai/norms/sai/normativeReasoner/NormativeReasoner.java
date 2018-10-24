@@ -32,8 +32,7 @@ public class NormativeReasoner extends JasonReasoner{
 
 	
 	public NormativeReasoner(){	
-		//addObserver(new ReasonerGUI(8002));
-		super(new BasicReasonerHttpGUI(8002));
+		super(BasicReasonerHttpGUI.get(8002));
 		
 		
 		try {

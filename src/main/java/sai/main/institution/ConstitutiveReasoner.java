@@ -31,24 +31,18 @@ public class ConstitutiveReasoner extends Thread {
 	private AbstractQueue<Literal> queue;
 	private int globalCicle = 0;
 	private SaiLogger logger = SaiLogger.getInstance();
-	//private ArrayList<ConstitutiveListener> constitutiveListeners = new ArrayList<ConstitutiveListener>();
 	private CopyOnWriteArrayList<ConstitutiveListener> constitutiveListeners = new CopyOnWriteArrayList<ConstitutiveListener>();
-	//private NormativeReasoner2Sai norm2sai = NormativeReasoner2Sai.getInstance();
 	private ArrayList<INormativeEngine> normativeEngines = new ArrayList<INormativeEngine>(); //the list of normative engines on top of the constitutive state
 
 
 
 	public ConstitutiveReasoner(AbstractQueue<Literal> queue) {
 		super();
-		//this.reasoner = reasoner;
-		this.reasoner = new JasonReasoner(new BasicReasonerHttpGUI(8003));
+		this.reasoner = new JasonReasoner(BasicReasonerHttpGUI.get(8003));
 		this.queue = queue;
-		//addConstitutiveListener(NormativeReasoner2Sai.getInstance());
-
-		try {
+			try {
 			this.reasoner.assertValue("sigmaE(true)");
 			this.reasoner.assertValue("sai__freestandingY");
-			//this.reasoner.assertValue("inGa(Ag,Sf,M):- sai__crule(Ag,Sf,T,M)&T&sai__af(Sf)&sigmaA(Ag)&not(sai__is(Ag,Sf,M))&M");
 			this.reasoner.assertValue("inGa(Ag,Sf,M):- sai__crule(Ag,Sf,T,M)&T&M&sai__af(Sf)&sigmaA(Ag)&not(sai__is(Ag,Sf,M))");
 			//this.reasoner.assertValue("inGs(St,Sf,M):- sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&not(sai__is(St,S)&M&Stf,M)");
 			this.reasoner.assertValue("inGs(St,Sf,M):- sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&M&St&not(sai__is(St,Sf,M))");
@@ -268,25 +262,6 @@ public class ConstitutiveReasoner extends Thread {
 
 				}
 
-				/*
-				//remove assignments that does not make sense anymore - events
-				Iterator<Unifier> toRemoveEvents = reasoner.findall("to_remove_event(X,Y,A)");			
-				while(toRemoveEvents.hasNext()){					
-					changed=true;
-					Unifier un = toRemove.next();
-					System.out.s("[EnvironmentalHandler] Unifier events " + un.toString() );
-					if(un.get("X")!=null)
-						sToRemove.add("sai__is("+ un.get("X").toString() + ","+ un.get("Y").toString()+ ","+ un.get("A").toString()+","+un.get("M")  +")");
-					else
-						sToRemove.add("sai__is(_,"+ un.get("Y").toString()+ ","+ un.get("A").toString()+","+un.get("M")  +")");
-
-					for( ConstitutiveListener l : constitutiveListeners){
-						System.out.println("[EnvironmentalHandler] Vai remover" + un.get("Y").toString());
-						l.removeEventAssignment(un.get("X").toString(), new EventStatusFunction(new Pred(parseLiteral(un.get("Y").toString()))),new AgentStatusFunction(createAtom(un.get("A").toString())));
-					}
-				}*/
-
-
 
 				cicle++;				
 				for(String s:sToAdd){
@@ -316,68 +291,7 @@ public class ConstitutiveReasoner extends Thread {
 				nEngine.updateState();
 			}
 
-			/*do{
-				changed =false;
-				//******* Norms ******
-				//After updating the constitutive state, updates the normative state
 
-				sToAdd.clear();
-				sToRemove.clear();
-
-				Iterator<Unifier> toActivate = reasoner.findall("to_activate(A,D,I,C,O,R)&not(sai__active__norm(A,D,I,C,O,R))");
-				while(toActivate.hasNext()){
-					changed = true;
-					Unifier un = toActivate.next();
-					sToAdd.add("sai__active__norm("+un.get("A")+","+
-							un.get("D")+","+
-							un.get("I")+","+
-							un.get("C")+","+
-							un.get("O")+","+
-							un.get("R")+
-							")");
-
-				}
-
-				Iterator<Unifier> toViolate= reasoner.findall("violated(A,D,I,C,O,R)&not(sai__violated__norm(A,D,I,C,O,R))");
-				while(toViolate.hasNext()){
-					changed = true;
-					Unifier un = toViolate.next();
-					sToAdd.add("sai__violated__norm("+un.get("A")+","+
-							un.get("D")+","+
-							un.get("I")+","+
-							un.get("C")+","+
-							un.get("O")+","+
-							un.get("R")+
-							")");
-
-				}
-
-				Iterator<Unifier> toRemoveNorm= reasoner.findall("to_remove_norm(A,D,I,C,O,R)");
-				while(toRemoveNorm.hasNext()){				
-					changed = true;
-					Unifier un = toRemoveNorm.next();
-					sToRemove.add("sai__active__norm("+un.get("A")+","+
-							un.get("D")+","+
-							un.get("I")+","+
-							un.get("C")+","+
-							un.get("O")+","+
-							un.get("R")+
-							")");
-				}
-
-
-				for(String s:sToAdd){
-					logger.finest("[cycle "+globalCicle+ "] " + cicle + " adding " + s);
-					reasoner.assertValue(s);
-				}
-				sToAdd.clear();
-				for(String s:sToRemove){
-					logger.finest("[cycle "+globalCicle+ "] " + cicle + " removing " + s);
-					reasoner.retract(s);
-				}
-
-				//cicle++;						
-			}while(changed==true);*/
 		}//synchronized
 
 	}

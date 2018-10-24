@@ -24,7 +24,7 @@ public class NormativeReasonerPAV extends JasonReasoner {
 	
 	
 	public NormativeReasonerPAV(){					
-		    super(new BasicReasonerHttpGUI(8004));		
+		    super(BasicReasonerHttpGUI.get(8004));		
 			try {
 				assertValue("xactive(A,Fa,Fm,Fd,Fr,Timeout):-(norm(A,Fa,Fm,Fd,Fr,Timeout)&Fa&not(Fd)&not(ds(A,Fa,Fm,Fd,Fr,Timeout)|vs(A,Fa,Fm,Fd,Fr,Timeout)))|as(A,Fa,Fm,Fd,Fr,Timeout)");
 				assertValue("xviol(A,Fa,Fm,Fd,Fr,Timeout):-as(A,Fa,Fm,Fd,Fr,Timeout)&not(Fm)");				
