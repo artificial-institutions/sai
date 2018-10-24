@@ -32,9 +32,11 @@ public abstract class StatusFunction extends SaiElement {
 	@Override
 	public int hashCode(){
 		Pred newPred = new Pred(id.getFunctor());
-		for(Term t:id.getTerms()){
-			if(!t.isVar())
-				newPred.addTerm(t);
+		if (id.hasTerm()) {
+			for(Term t:id.getTerms()){
+				if(!t.isVar())
+					newPred.addTerm(t);
+			}
 		}
 		return newPred.hashCode();
 	}
