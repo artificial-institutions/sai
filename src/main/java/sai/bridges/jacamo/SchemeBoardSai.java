@@ -5,19 +5,23 @@ import static jason.asSyntax.ASSyntax.parseFormula;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import cartago.AgentIdCredential;
+import cartago.ArtifactId;
 import cartago.CartagoContext;
 import cartago.CartagoException;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
 import cartago.Op;
 import cartago.OpFeedbackParam;
+import cartago.OperationException;
 import cartago.util.agent.ActionFailedException;
 import jason.asSemantics.Unifier;
 import moise.common.MoiseException;
 import moise.os.OS;
 import npl.parser.ParseException;
+import ora4mas.nopl.NormativeBoard;
 import ora4mas.nopl.SchemeBoard;
 import ora4mas.nopl.oe.Scheme;
 import sai.main.institution.INormativeEngine;
@@ -64,7 +68,18 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
 
     }
 
-
+    @Override
+    protected String getNormativeBoardClass() {
+        return NormativeBoardSai.class.getName();
+    }
+    protected void normBoardPostCreation(String aName, ArtifactId aid) {
+        try {
+            execLinkedOp(aid, "setInstitution", institution );
+            System.out.println("ok set inst for nb");
+        } catch (OperationException e) {
+            logger.log(Level.WARNING, "Error setting institution for "+aName, e);
+        }    	
+    }
 
     /**
      * Set the institution which the SchemeBoard belongs to. 
