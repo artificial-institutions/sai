@@ -33,7 +33,7 @@ public class NormativeBoardSai extends NormativeBoard implements INormativeBoard
 	
 	public void init() {
 
-		
+		// TODO: reuse code from super?
 		
 				
         oeId = getId().getWorkspaceId().getName();
