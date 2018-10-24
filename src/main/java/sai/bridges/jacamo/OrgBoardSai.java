@@ -53,11 +53,11 @@ public class OrgBoardSai extends OrgBoard {
         setInstitution(id, artId);
     }
 
-    //@Override
+    @Override
     protected String getNormativeBoardClass() {
         return NormativeBoardSai.class.getName();
     }
-    //@Override
+    @Override
     protected void normBoardPostCreation(String aName, ArtifactId aid) {
     	setInstitution(aName, aid);
     }

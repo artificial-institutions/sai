@@ -32,29 +32,9 @@ public class NormativeBoardSai extends NormativeBoard implements INormativeBoard
 	private CommitmentChecker commitmentChecker = new CommitmentChecker();
 	
 	public void init() {
+		super.init();
 
-		// TODO: reuse code from super?
-		
-				
-        oeId = getId().getWorkspaceId().getName();
-        String nbId = getId().getName();
-        
-        
-
-        nengine = new NPLInterpreter();
-        nengine.init();
-        installNormativeSignaler();
-
-        if (! "false".equals(Config.get().getProperty(Config.START_WEB_OI))) {
-            WebInterface w = WebInterface.get();
-            try {
-                w.registerOEBrowserView(oeId, "/norm/", nbId, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        this.npl2sai = new NOpl2Sai(getNormativeEngine());
+		this.npl2sai = new NOpl2Sai(getNormativeEngine());
 		this.npl2sai.addNormListener(this);
 		
 		
@@ -102,19 +82,6 @@ public class NormativeBoardSai extends NormativeBoard implements INormativeBoard
 		commitmentChecker.interrupt();	
 	}
 	
-
-	
-	/**
-	 * The same as the operation addFact in the superclass
-	 * @param f
-	 * @throws jason.asSyntax.parser.ParseException
-	 * @throws NormativeFailureException
-	 */
-	public void addFact(String f) throws jason.asSyntax.parser.ParseException, NormativeFailureException {
-        nengine.addFact(ASSyntax.parseLiteral(f));
-        nengine.verifyNorms();
-        updateGuiOE();
-    }
     
 	
 	private class Commitment{
