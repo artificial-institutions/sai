@@ -42,8 +42,7 @@ public class BasicReasonerHttpGUI implements IReasonerHttpGUI{
             server.createContext("/", new MyHandler());
             server.setExecutor(Executors.newCachedThreadPool());
             server.start();
-            this.port = port;
-            System.out.println("Reasoner running at port " + this.port);
+            this.port = port;            
         } 
         catch (BindException e) {
             port++;
