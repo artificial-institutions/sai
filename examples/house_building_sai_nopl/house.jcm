@@ -1,0 +1,84 @@
+/*
+    JaCaMo Project for the house building scenario used
+    initially in the Multi-Agent Programming Tutorial @ EASSS 2010
+
+*/
+
+mas house_building {
+
+   agent giacomo{     // the agent that wants to build a house
+      focus: wsp_auction.auction_for_SitePreparation
+      focus: wsp_auction.auction_for_Floors
+      focus: wsp_auction.auction_for_Walls
+      focus: wsp_auction.auction_for_Roof
+      focus: wsp_auction.auction_for_WindowsDoors
+      focus: wsp_auction.auction_for_Plumbing
+      focus: wsp_auction.auction_for_ElectricalSystem
+      focus: wsp_auction.auction_for_Painting
+      focus: wsp_auction.clock
+      //focus: wsp_house.housegui
+   }
+
+   agent companyA{   // builder agents (see their code for details)
+      focus: wsp_auction.auction_for_Plumbing
+   }
+   agent companyB{
+      focus: wsp_auction.auction_for_SitePreparation
+   }
+   agent companyC {
+      instances: 5
+      focus: wsp_auction.auction_for_SitePreparation
+      focus: wsp_auction.auction_for_Floors
+      focus: wsp_auction.auction_for_Walls
+      focus: wsp_auction.auction_for_Roof
+      focus: wsp_auction.auction_for_WindowsDoors
+      focus: wsp_auction.auction_for_Plumbing
+      focus: wsp_auction.auction_for_ElectricalSystem
+      focus: wsp_auction.auction_for_Painting
+   }
+   agent companyD {
+      instances: 13
+      focus: wsp_auction.auction_for_SitePreparation
+      focus: wsp_auction.auction_for_Floors
+      focus: wsp_auction.auction_for_Walls
+      focus: wsp_auction.auction_for_Roof
+      focus: wsp_auction.auction_for_WindowsDoors
+      focus: wsp_auction.auction_for_Plumbing
+      focus: wsp_auction.auction_for_ElectricalSystem
+      focus: wsp_auction.auction_for_Painting
+   }
+   agent companyE{
+      focus: wsp_auction.auction_for_Floors
+      focus: wsp_auction.auction_for_Walls
+      focus: wsp_auction.auction_for_Roof
+   } 
+
+   workspace wsp_auction{
+     artifact auction_for_SitePreparation: tools.AuctionArt("SitePreparation", 2000) // 2000 is the maximum value I can pay for the task
+     artifact auction_for_Floors: tools.AuctionArt("Floors",1000)
+     artifact auction_for_Walls: tools.AuctionArt("Walls", 1000)
+     artifact auction_for_Roof: tools.AuctionArt("Roof", 2000)
+     artifact auction_for_WindowsDoors: tools.AuctionArt("WindowsDoors", 2500)
+     artifact auction_for_Plumbing: tools.AuctionArt("Plumbing", 500)
+     artifact auction_for_ElectricalSystem: tools.AuctionArt("ElectricalSystem", 500)
+     artifact auction_for_Painting: tools.AuctionArt("Painting", 1200)
+     artifact clock : cartago.tools.Clock()
+   }
+	
+
+   institution bh:constitutive.sai{
+       workspaces: wsp_auction
+   }
+ 
+ 
+    organisation ora4mas : house-os.xml {
+        group hsh_group: house_group {
+           debug: inspector_gui(on)
+        }
+        scheme bhsch: build_house_sch{
+           debug: inspector_gui(on)
+        }        
+        situated: bh
+    }
+
+}
