@@ -30,7 +30,6 @@ import sai.main.lang.semantics.statusFunction.StateStatusFunction;
 public class Npl2Sai implements INormativeEngine{
 
 	protected NPLInterpreter nengine;
-	//private ArrayList<NormativeListener> listeners = new ArrayList<NormativeListener>();
 	private Map<String, Integer> stateAssignments = new Hashtable<>();
 
 	public Npl2Sai(NPLInterpreter nengine){
@@ -45,7 +44,7 @@ public class Npl2Sai implements INormativeEngine{
 	@Override 
 	public void addAgentAssignment(String arg0, AgentStatusFunction arg1) {
 		synchronized (nengine) {					
-			try {
+			try {				
 				nengine.getAg().getBB().add(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -62,7 +61,7 @@ public class Npl2Sai implements INormativeEngine{
 	public void addEventAssignment(String arg0, EventStatusFunction arg1,
 			AgentStatusFunction arg2) {
 		try {
-			synchronized (nengine) {					
+			synchronized (nengine) {				
 				nengine.getAg().getBB().add(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));				
 			}
 		} catch (ParseException e) {
@@ -80,16 +79,14 @@ public class Npl2Sai implements INormativeEngine{
 			if(stateAssignments.get(arg1.toString())==null){
 				stateAssignments.put(arg1.toString(), 1);
 			}
-			else{
+			else{				
 				Integer v = stateAssignments.get(arg1.toString());
 				v++;
 				stateAssignments.put(arg1.toString(),v);
-				//System.out.println("[Npl2Sai] adding state assignment: " + arg0.toString() + " count-as " + arg1.toString() + " " + v);
 			}
 			synchronized (nengine) {					
 				nengine.getAg().getBB().add(parseLiteral(arg1.toString()));
 			}
-			updateState();
 			updateState();
 			
 			
@@ -161,8 +158,7 @@ public class Npl2Sai implements INormativeEngine{
 	 */
 	@Override 
 	public void updateState() {
-		try {
-			//TODO:verificar pq a norma não é desativada nesse momento...
+		try {		
 			nengine.verifyNorms();				
 
 		} catch (NormativeFailureException e) {
@@ -171,16 +167,6 @@ public class Npl2Sai implements INormativeEngine{
 	}
 
 	
-	
-/*
-	public void addListener(NormativeListener listener){
-		listeners.add(listener);
-	}
-
-	public void removeListener(INpl2SaiListener listener){
-		listeners.remove(listener);
-	}
-*/
 	
 
 }

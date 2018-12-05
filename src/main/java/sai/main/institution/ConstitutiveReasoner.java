@@ -40,7 +40,7 @@ public class ConstitutiveReasoner extends Thread {
 		super();
 		this.reasoner = new JasonReasoner(BasicReasonerHttpGUI.get(8003));
 		this.queue = queue;
-			try {
+		try {
 			this.reasoner.assertValue("sigmaE(true)");
 			this.reasoner.assertValue("sai__freestandingY");
 			this.reasoner.assertValue("inGa(Ag,Sf,M):- sai__crule(Ag,Sf,T,M)&T&M&sai__af(Sf)&sigmaA(Ag)&not(sai__is(Ag,Sf,M))");
@@ -107,7 +107,7 @@ public class ConstitutiveReasoner extends Thread {
 				logger.finest("***** Started cycle #" + globalCicle + " *****");
 				logger.finest("[cycle "+globalCicle+ "] environmental fact: " + s);
 				try {
-					
+
 					if(s.getFunctor().equals("retract")){
 						reasoner.retract(s.getTerm(0).toString());
 					}
@@ -118,7 +118,7 @@ public class ConstitutiveReasoner extends Thread {
 						}
 						else
 							reasoner.assertValue(s.toString());
-				
+
 					calculate();
 
 				} catch (Exception e) {				
@@ -188,13 +188,13 @@ public class ConstitutiveReasoner extends Thread {
 						if(un.get("X")!=null){
 							sToAdd.add("sai__is("+ adaptTerm(un.get("X").toString()) + ","+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptFormula1(adaptTerm(un.get("M").toString()),false)+")");
 							assignee = adaptTerm(un.get("X").toString());
-							
+
 						}
 						else{
 							sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptFormula1(adaptTerm(un.get("M").toString())) +")");						
 							assignee = "_";
 						}						
-																	
+
 						for( ConstitutiveListener l : constitutiveListeners){
 							l.addStateAssignment(assignee, new StateStatusFunction(new Pred(parseLiteral(adaptTerm(un.get("Y").toString())))));
 						}						
@@ -212,7 +212,7 @@ public class ConstitutiveReasoner extends Thread {
 						sToAdd.add("sai__is("+ adaptTerm(un.get("X").toString()) + ","+ adaptTerm(un.get("Y").toString())+","+adaptTerm(un.get("A").toString())+","+adaptTerm(un.get("M").toString())  +")");
 					else
 						sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+adaptTerm(un.get("A").toString()) +","+adaptTerm(un.get("M").toString()) +")");
-					
+
 					for( ConstitutiveListener l : constitutiveListeners){
 						l.addEventAssignment(adaptTerm(un.get("X").toString()), new EventStatusFunction(new Pred(parseLiteral(un.get("Y").toString()))),new AgentStatusFunction(createAtom(adaptTerm(un.get("A").toString()))));
 					}
@@ -253,9 +253,9 @@ public class ConstitutiveReasoner extends Thread {
 					else
 						sAssignee = "_"; 
 					StateStatusFunction pStateSf = new StateStatusFunction(new Pred(parseLiteral(adaptTerm(un.get("Y").toString()))));
-					
 
-				
+
+
 					for( ConstitutiveListener l : constitutiveListeners){
 						l.removeStateAssignment(sAssignee, pStateSf);						
 					}
@@ -286,10 +286,11 @@ public class ConstitutiveReasoner extends Thread {
 
 
 
-			//NormativeReasoner2Sai.getInstance().updateState();			
-			for(INormativeEngine nEngine : normativeEngines){
-				nEngine.updateState();
-			}
+			//NormativeReasoner2Sai.getInstance().updateState();
+			if(changed==true)
+				for(INormativeEngine nEngine : normativeEngines){
+					nEngine.updateState();
+				}
 
 
 		}//synchronized
