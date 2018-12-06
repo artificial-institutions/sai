@@ -1,0 +1,20 @@
+institution_id : test.
+
+
+status_functions:
+
+
+
+/*
+   The status function session_finished has an argument as the parser actually requires an argument in the state-status funcions. Fixing this is a ToDo.
+*/
+states: play(A,R), session_finished(1).
+
+
+
+constitutive_rules:
+
+
+1: count-as play(Agent,clock_manager) when start[sai__agent(Agent)].
+
+2: count-as session_finished(1) when stop[sai__agent(Agent)] while play(Agent, clock_manager).

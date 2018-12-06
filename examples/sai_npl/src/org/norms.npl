@@ -1,0 +1,7 @@
+scope main {
+
+    
+    norm n1: play(A,clock_manager) 
+       -> obligation(A,n1, session_finished(1), `now`+`15 seconds`).
+    
+}
