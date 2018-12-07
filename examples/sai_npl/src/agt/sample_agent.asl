@@ -10,7 +10,7 @@
 
 +!start : true <-    
    !setup_sai;      
-   load("/home/maiquel/workspace/sai_npl/src/org/norms.npl");
+   load("src/org/norms.npl");
    start. //start the clock
 
 
