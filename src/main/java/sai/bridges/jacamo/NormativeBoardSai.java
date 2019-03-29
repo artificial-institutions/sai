@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.StringReader;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import cartago.LINK;
 import cartago.OPERATION;
@@ -49,18 +52,21 @@ public class NormativeBoardSai extends NormativeBoard {
             throw e;
         }
         
+        
         /* The following piece of code is introduced in this artifact to convert Npl norms in SAI compliant NPL Nomrs */
         Iterator<INorm> it = p.getRoot().getNorms().iterator(); //get the norms to be loaded in the NPL Interpreter
+        List<String> toRemove = new ArrayList<String>();
+        List<INorm> toAdd = new ArrayList<INorm>();
         int i=0;
         while(it.hasNext()) { // for each norm...
         	INorm n = it.next();
         	try {
         		//create a SAI compliant norm
 				NormSai nSai = new NormSai("nSai" + ++i, n.getConsequence(), n.getCondition(), institution.getProgram());
-				//add the SAI compliant norm to the NPL Interpreter
-				p.getRoot().removeNorm(n.getId());
 				//remove the original norm from the NPL interpreter
-				p.getRoot().addNorm(nSai);
+				toRemove.add(n.getId());
+				//replace the original norm by a SAI compliant one
+				toAdd.add(nSai);
 			} catch (jason.asSyntax.parser.ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -68,6 +74,13 @@ public class NormativeBoardSai extends NormativeBoard {
         }
         
         
+        for(String r:toRemove) {
+        	p.getRoot().removeNorm(r);
+        }
+        
+        for(INorm a:toAdd) {
+        	p.getRoot().addNorm(a);
+        }
         
         
         nengine.loadNP(p.getRoot());
