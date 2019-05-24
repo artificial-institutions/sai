@@ -7,6 +7,7 @@ import cartago.ArtifactId;
 import cartago.OPERATION;
 import cartago.OpFeedbackParam;
 import cartago.OperationException;
+import jason.asSyntax.ASSyntax;
 import moise.common.MoiseException;
 import npl.parser.ParseException;
 import ora4mas.nopl.OrgBoard;
@@ -27,7 +28,7 @@ public class OrgBoardSai extends OrgBoard {
     
             this.institution = instId;
             this.saiEngine   = fbre.get();
-            defineObsProperty("institution", instId);
+            defineObsProperty("institution", ASSyntax.createAtom(instId));
         } catch (Exception e) {
             e.printStackTrace();
         }
