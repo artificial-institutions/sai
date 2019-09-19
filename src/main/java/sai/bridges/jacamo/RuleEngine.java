@@ -41,7 +41,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	}
 
 
-	
+
 	/**
 	 * Add the "institutions" (represented by the SaiEngines) that are based on the environment managed by this RuleEngine 
 	 * @param institution
@@ -51,7 +51,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	}
 
 
-	
+
 
 
 	@Override
@@ -63,8 +63,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 
 
 	@Override
-	protected void processActionCompleted(ActionSucceededEvent ev, AgentId agentId ){
-		
+	public void processActionCompleted(ActionSucceededEvent ev, AgentId agentId ){
+
 		if(!toIgnoreArt(ev)){
 
 			if(!ev.getOp().getName().equals("addNormativeProgram")&!ev.getOp().getName().equals("addConstitutiveProgram")&(!ev.getOp().getName().equals("println"))){
@@ -88,6 +88,28 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 					}
 				}
 
+			}
+		}
+	}
+
+	protected void processActionCompleted(String fact, String agentId ){
+
+
+		String agent;
+		if(agentId.equals("workspace-manager"))
+			agent =  "workspace";
+		else{						
+			agent = agentId;
+		}
+
+		//System.out.println("[RuleEngine] processing action completed: " + fact + " by " + agent);
+
+		for(SaiEngine institution:institutions){
+			try {
+				institution.addEnvironmentalEvent(parseLiteral(fact), createAtom(agent));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -193,7 +215,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 **/
 	@Override
 	protected void processObsPropertyChanged(ArtifactId artifactId, ArtifactObsProperty[] property){
-                //System.out.println("[RuleEngine] property changed " + artifactId.toString() + ", " + property.toString());		
+		//System.out.println("[RuleEngine] property changed " + artifactId.toString() + ", " + property.toString());		
 		if(!toIgnoreArt(artifactId)){
 			for(int i=0;i<property.length;i++){
 				for(SaiEngine engine:institutions){
@@ -218,7 +240,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 
 	@Override
 	protected void processObsPropertyAdded(ArtifactId artifactId, ArtifactObsProperty[] property){
-                //System.out.println("[RuleEngine] property added " + artifactId.toString() + ", " + property.toString());		
+		//System.out.println("[RuleEngine] property added " + artifactId.toString() + ", " + property.toString());		
 		if(!toIgnoreArt(artifactId)){
 			for(int i=0;i<property.length;i++){
 				for(SaiEngine engine:institutions){
@@ -316,8 +338,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 			return true;
 		return false;
 	}
-	
-	
+
+
 	//TODO: find a better way to do this
 	public ArrayList<Literal> getCurrentEnvironmentalState(){
 		ArrayList<Literal> result = new ArrayList<Literal>();
