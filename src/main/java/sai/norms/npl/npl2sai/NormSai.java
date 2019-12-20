@@ -17,10 +17,10 @@ public class NormSai extends Norm {
 	//TODO: hide constructor in the superclass??
 	public NormSai(String id, Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException {
 		super(id, adaptHead(head, instProgram), adaptBody(head, body, instProgram));
-				
+
 	}
-	
-	
+
+
 	private static Literal adaptHead(Literal head, InstProgram instProgram){
 		Literal newHead = (Literal) head.clone();
 		if(!head.getTerm(0).isVar())
@@ -39,7 +39,7 @@ public class NormSai extends Norm {
 		return newHead;
 		//return head;
 	}
-	
+
 
 	private static LogicalFormula adaptBody(Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException{
 		if(!head.getTerm(0).isVar())
@@ -49,8 +49,12 @@ public class NormSai extends Norm {
 					LogicalFormula newBody = parseFormula("(sai__is(Sai__Agent,"+head.getTerm(0).toString()+"))&" + body.toString() );
 					return newBody;
 				}
+		if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
+			LogicalFormula newBody = parseFormula("sai__event("+body+"[sai__agent(Sai__Agent)])");
+			return newBody;
+		}
 		return body;
 	}
-	
-	
+
+
 }
