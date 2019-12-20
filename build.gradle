@@ -3,7 +3,7 @@ apply plugin: 'antlr'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version '0.3-SNAPSHOT'
+version '0.3'
 group   'org.jacamo'
 
 sourceCompatibility = 1.8
@@ -19,11 +19,11 @@ repositories {
 
 dependencies{
    antlr "org.antlr:antlr4:4.7" // use ANTLR version 4
-   compile group: 'org.jason-lang', name: 'jason',    version: '2.3', changing: false
-   compile group: 'org.jacamo',     name: 'moise' ,   version: '0.12-SNAPSHOT', changing: true, transitive: false
-   compile group: 'org.jacamo',     name: 'npl' ,     version: '0.3', changing: false, transitive: false
-   compile group: 'org.jacamo',     name: 'cartago',  version: '2.3', changing: true, transitive: false
-   compile group: 'org.jacamo',     name: 'jaca',     version: '2.3', changing: true, transitive: false
+   compile group: 'org.jason-lang', name: 'jason',    version: '2.4', changing: false
+   compile group: 'org.jacamo',     name: 'moise' ,   version: '0.12', changing: true, transitive: false
+   compile group: 'org.jacamo',     name: 'npl' ,     version: '0.4', changing: false, transitive: false
+   compile group: 'org.jacamo',     name: 'cartago',  version: '2.4', changing: true, transitive: false
+   compile group: 'org.jacamo',     name: 'jaca',     version: '2.4', changing: true, transitive: false
    	
    testCompile group: 'junit', name: 'junit', version: '4.+'
 }
@@ -32,16 +32,6 @@ jar {
     baseName 'sai'
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            artifact sourceJar
-            artifact javadocJar
-            artifactId 'sai'
-        }
-    }
-}
 
 //task fixTab {
 //    ant.fixcrlf(eol: 'lf',  includes: '**/*.txt,**/*.bat, **/*.adoc', srcdir: '.')
@@ -69,6 +59,17 @@ task sourceJar (type : Jar) {
     baseName 'sai'
     classifier = 'sources'
     from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+            artifactId 'sai'
+        }
+    }
 }
 
 
