@@ -4,6 +4,7 @@ package sai.norms.npl.npl2sai;
 import static jason.asSyntax.ASSyntax.createLiteral;
 import static jason.asSyntax.ASSyntax.createVar;
 import static jason.asSyntax.ASSyntax.parseFormula;
+import static jason.asSyntax.ASSyntax.parseLiteral;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
 import jason.asSyntax.parser.ParseException;
@@ -15,13 +16,15 @@ import npl.Norm;
 public class NormSai extends Norm {
 
 	//TODO: hide constructor in the superclass??
-	public NormSai(String id, Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException {
-		super(id, adaptHead(head, instProgram), adaptBody(head, body, instProgram));
+	public NormSai(String id, Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException {						
+		super(id, adaptHead(head, body, instProgram), adaptBody(head, body, instProgram));
+		
+		
 
 	}
 
 
-	private static Literal adaptHead(Literal head, InstProgram instProgram){
+	private static Literal adaptHead(Literal head, LogicalFormula body, InstProgram instProgram){
 		Literal newHead = (Literal) head.clone();
 		if(!head.getTerm(0).isVar())
 			if(instProgram.getStatusFunctionByName(head.getTerm(0).toString())!=null)
@@ -36,8 +39,12 @@ public class NormSai extends Norm {
 				Literal event = createLiteral("sai__event", (Literal)head.getTerm(2));
 				newHead.setTerm(2, event);
 			}
+		//if the activation condition is an event, then the maintenance condition is set to true to permanently hold
+		if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
+			newHead.setTerm(1, createLiteral("true"));
+		}
+		
 		return newHead;
-		//return head;
 	}
 
 
@@ -50,8 +57,8 @@ public class NormSai extends Norm {
 					return newBody;
 				}
 		if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
-			LogicalFormula newBody = parseFormula("sai__event("+body+"[sai__agent(Sai__Agent)])");
-			return newBody;
+			LogicalFormula newBody = parseFormula("sai__event("+body+"[sai__agent(Sai__Agent)])");									
+			return newBody;			
 		}
 		return body;
 	}
