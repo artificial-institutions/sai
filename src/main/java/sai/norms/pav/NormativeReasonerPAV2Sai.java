@@ -4,6 +4,7 @@ package sai.norms.pav;
 import java.util.ArrayList;
 
 import jason.RevisionFailedException;
+import jason.asSyntax.Atom;
 import jason.asSyntax.Pred;
 import jason.asSyntax.parser.ParseException;
 import static jason.asSyntax.ASSyntax.parseLiteral;
@@ -54,7 +55,7 @@ public class NormativeReasonerPAV2Sai implements INormativeEngine {
 
 	@Override
 	public void addEventAssignment(String assignee, EventStatusFunction sf,
-			AgentStatusFunction agent) {
+			Atom agent) {
 		try {
 			this.reasoner.assertValue("sai__is("+assignee+","+sf.toString()+","+agent.toString()+")" );
 			this.reasoner.assertValue("sai__event("+sf.toString()+","+agent.toString()+")");

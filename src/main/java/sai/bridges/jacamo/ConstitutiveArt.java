@@ -1,6 +1,9 @@
 package sai.bridges.jacamo;
 
 import static jason.asSyntax.ASSyntax.parseFormula;
+import static jason.asSyntax.ASSyntax.createAtom;
+
+import jason.asSyntax.Atom;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
 import jason.asSyntax.Pred;
@@ -73,13 +76,14 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     */
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.3-01"); 
+        log("SAI Engine version 0.3-09");
+        defineObsProperty("teste(inst)");   
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
         this.id = id;
         this.ruleEngine.addInstitution(sai);
         this.sai.addConstitutiveListener(this);
-
+  
 
 
 
@@ -97,6 +101,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         server.getServer().createContext(getContext(), new MyHandler());
         server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
         server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
+        server.getServer().createContext(getContext()+"/constProgram", new ConstitutiveProgramHandler());
         
         log("Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
 
@@ -234,7 +239,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     @Override
     public void addStateAssignment(String assignee, StateStatusFunction sf) {
         stateAssignmentsToShow.add(assignee + " is " + sf);
-        defineObsProperty("sai_is", assignee, sf.getId());      
+        defineObsProperty("sai_is", assignee, sf.getId());
     }
 
 
@@ -249,9 +254,9 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
     @Override
     public void addEventAssignment(String assignee, EventStatusFunction sf,
-            AgentStatusFunction agent) {
+            Atom agent) {
         eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);
-        defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());     
+        defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());    
     }
 
 
@@ -288,6 +293,8 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             response = response + "<iframe src=\""+ getContext() + "/assignments\"align=top width=\"100%\" height=\"40%\"></iframe>";
             response = response + "<br><br><br><html><font face=\"arial\">Environmental State <br></font>";
             response = response + "<iframe src=\""+ getContext() + "/environment\"align=top width=\"100%\" height=\"40%\"></iframe>";
+            response = response + "<br><br><br><html><font face=\"arial\">Constitutive Program <br></font>";
+            response = response + "<iframe src=\""+ getContext() + "/constProgram\"align=top width=\"100%\" height=\"40%\"></iframe>";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
@@ -349,6 +356,22 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             response = response +"<html><font face=\"arial\" color=\"green\">States</font><br><font face=\"arial\">";
             for(String s:state)
                 response = response + s + "<br>";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+    
+    class ConstitutiveProgramHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            String response = "<html>";
+            response = response + "<br><font face=\"arial\" color=\"green\">Constitutive program:<br></font><font face=\"arial\">";
+            for(ConstitutiveRule r: sai.getProgram().getConstitutiveRules()) {
+            	response = response + r.toString().replaceAll("Var", "_") + "<br>";
+            }            
+            response = response + "</html>";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());

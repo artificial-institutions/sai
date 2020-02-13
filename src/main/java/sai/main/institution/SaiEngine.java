@@ -51,9 +51,21 @@ public class SaiEngine/* implements Observer */{
 	 * @param normativeEngine
 	 */
 	public void addNormativeEngine(INormativeEngine normativeEngine){
-		//this.envHandler.addConstitutiveListener(normativeEngine);
 		this.addConstitutiveListener(normativeEngine);
 		this.envHandler.addNormativeEngine(normativeEngine);
+
+		//update the normativeEngine with the current constitutive state
+		try {
+			Iterator<Unifier> un = envHandler.getReasoner().findall("sai__is(X,Y,M)");
+			while(un.hasNext()) {
+				Unifier current = un.next();
+				normativeEngine.addStateAssignment(current.get("X").toString(), new StateStatusFunction(new Pred(parseLiteral(adaptTerm(current.get("Y").toString())))));
+				normativeEngine.updateState();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -137,7 +149,7 @@ public class SaiEngine/* implements Observer */{
 			it = this.envHandler.getReasoner().findall("sai__is(X,Y,A,M)&sai__ef(Y)");
 			while(it.hasNext()){
 				Unifier un = it.next();
-				listener.addEventAssignment(adaptTerm(un.get("X").toString()), new EventStatusFunction(new Pred(parseLiteral(adaptTerm(un.get("Y").toString())))), new AgentStatusFunction(createAtom(adaptTerm(un.get("A").toString()))));
+				listener.addEventAssignment(adaptTerm(un.get("X").toString()), new EventStatusFunction(new Pred(parseLiteral(adaptTerm(un.get("Y").toString())))),  createAtom(adaptTerm(un.get("A").toString())));
 
 			}
 		} catch (Exception e) {

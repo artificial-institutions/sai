@@ -9,6 +9,7 @@ import jason.asSyntax.Pred;
 import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import sai.util.reasoner.BasicReasonerHttpGUI;
@@ -214,7 +215,7 @@ public class ConstitutiveReasoner extends Thread {
 						sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+adaptTerm(un.get("A").toString()) +","+adaptTerm(un.get("M").toString()) +")");
 
 					for( ConstitutiveListener l : constitutiveListeners){
-						l.addEventAssignment(adaptTerm(un.get("X").toString()), new EventStatusFunction(new Pred(parseLiteral(un.get("Y").toString()))),new AgentStatusFunction(createAtom(adaptTerm(un.get("A").toString()))));
+						l.addEventAssignment(adaptTerm(un.get("X").toString()), new EventStatusFunction(new Pred(parseLiteral(un.get("Y").toString()))),createAtom(adaptTerm(un.get("A").toString())));
 					}
 				}
 
@@ -297,7 +298,24 @@ public class ConstitutiveReasoner extends Thread {
 
 	}
 
+	public List<Unifier> getConstitutiveLiterals() throws Exception{
+		Iterator<Unifier> it =  this.reasoner.findall("sai__is(X,Y,M)");
+		List<Unifier> l = new ArrayList<Unifier>();
+		while(it.hasNext()) {
+			l.add(it.next());
+		}
+		return l;
+	}
 
+	
+	public void doCalculate() {
+		try {
+			calculate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 }

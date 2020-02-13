@@ -1,5 +1,6 @@
 package sai.main.institution;
 
+import jason.asSyntax.Atom;
 import sai.main.lang.semantics.statusFunction.AgentStatusFunction;
 import sai.main.lang.semantics.statusFunction.EventStatusFunction;
 import sai.main.lang.semantics.statusFunction.StateStatusFunction;
@@ -15,7 +16,7 @@ import sai.main.lang.semantics.statusFunction.StateStatusFunction;
 public interface ConstitutiveListener {
 	public void addStateAssignment(String assignee, StateStatusFunction sf);
 	public void addAgentAssignment(String assignee, AgentStatusFunction sf);
-	public void addEventAssignment(String assignee, EventStatusFunction sf, AgentStatusFunction agent);
+	public void addEventAssignment(String assignee, EventStatusFunction sf, Atom agent);
 	
 	public void removeStateAssignment(String assignee, StateStatusFunction sf);
 	public void removeAgentAssignment(String assignee, AgentStatusFunction sf);

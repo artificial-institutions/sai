@@ -1,6 +1,9 @@
 package sai.norms.npl.npl2sai;
 
 import static jason.asSyntax.ASSyntax.parseLiteral;
+import static jason.asSyntax.ASSyntax.createLiteral;
+
+import jason.asSyntax.Atom;
 import jason.asSyntax.parser.ParseException;
 
 import java.util.Hashtable;
@@ -33,7 +36,8 @@ public class Npl2Sai implements INormativeEngine{
 	private Map<String, Integer> stateAssignments = new Hashtable<>();
 
 	public Npl2Sai(NPLInterpreter nengine){
-		this.nengine = nengine; 
+		this.nengine = nengine;
+		this.nengine.getAg().getBB().add(createLiteral("true"));
 	}
 
 
@@ -46,6 +50,7 @@ public class Npl2Sai implements INormativeEngine{
 		synchronized (nengine) {					
 			try {				
 				nengine.getAg().getBB().add(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
+				updateState();
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -59,11 +64,12 @@ public class Npl2Sai implements INormativeEngine{
 	 */
 	@Override
 	public void addEventAssignment(String arg0, EventStatusFunction arg1,
-			AgentStatusFunction arg2) {
+			Atom arg2) {
 		try {
 			synchronized (nengine) {				
 				nengine.getAg().getBB().add(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));				
 			}
+			updateState();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -88,7 +94,6 @@ public class Npl2Sai implements INormativeEngine{
 				nengine.getAg().getBB().add(parseLiteral(arg1.toString()));
 			}
 			updateState();
-			
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -159,6 +164,7 @@ public class Npl2Sai implements INormativeEngine{
 	@Override 
 	public void updateState() {
 		try {		
+			
 			nengine.verifyNorms();				
 
 		} catch (NormativeFailureException e) {

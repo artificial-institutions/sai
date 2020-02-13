@@ -242,7 +242,7 @@ public class NormativeReasoner2Sai implements INormativeEngine {
 
 	@Override
 	public void addEventAssignment(String assignee, EventStatusFunction sf,
-			AgentStatusFunction agent) {
+			Atom agent) {
 		try {
 			this.reasoner.assertValue("sai__is("+assignee+","+sf.toString()+","+agent.toString()+")" );
 			this.reasoner.assertValue("sai__event("+sf.toString()+","+agent.toString()+")");
