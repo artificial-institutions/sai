@@ -34,8 +34,8 @@ public class NormSai extends Norm {
 					//return newHead;
 				}
 		if(instProgram.getStatusFunctionByName(head.getTerm(2).toString())!=null)
-			if(instProgram.getStatusFunctionByName(head.getTerm(2).toString()) instanceof EventStatusFunction){
-				((Literal)head.getTerm(2)).addAnnot(createLiteral("sai__agent", createVar("Sai__Agent")));
+			if(instProgram.getStatusFunctionByName(head.getTerm(2).toString()) instanceof EventStatusFunction){ //if the goal is an event-status function assigment (e,a)				
+				((Literal)head.getTerm(2)).addAnnot(createLiteral("sai__agent", head.getTerm(0))); //the element "a" is the agent in charge to fulfill the norm
 				Literal event = createLiteral("sai__event", (Literal)head.getTerm(2));
 				newHead.setTerm(2, event);
 			}
