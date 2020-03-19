@@ -44,7 +44,7 @@ public class ConstitutiveReasoner extends Thread {
 		try {
 			this.reasoner.assertValue("sigmaE(true)");
 			this.reasoner.assertValue("sai__freestandingY");
-			this.reasoner.assertValue("inGa(Ag,Sf,M):- sai__crule(Ag,Sf,T,M)&T&M&sai__af(Sf)&sigmaA(Ag)&not(sai__is(Ag,Sf,M))");
+			this.reasoner.assertValue("inGa(Ag,Sf,M):- sai__crule(Ag,Sf,T,M)&T&sai__af(Sf)&sigmaA(Ag)&M&not(sai__is(Ag,Sf,M))");
 			//this.reasoner.assertValue("inGs(St,Sf,M):- sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&not(sai__is(St,S)&M&Stf,M)");
 			this.reasoner.assertValue("inGs(St,Sf,M):- sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&M&St&not(sai__is(St,Sf,M))");
 			//this.reasoner.assertValue("inGe(event(Ev),Ef,TriggerAgent,M):-sai__crule(event(Ev),Ef,T,M)&sai__ef(Ef)&(sigmaE(Ev[sai__agent(TriggerAgent)]))&T&M&not(sai__is(event(Ev),Ef,TriggerAgent,M))");			
