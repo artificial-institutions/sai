@@ -139,7 +139,7 @@ public class ConstitutiveReasoner extends Thread {
 
 
 	private synchronized void calculate() throws Exception{
-		boolean changed;		
+		boolean changed, pendingNormativeUpdates;		
 		int cicle=0;
 		ArrayList<String> sToAdd = new ArrayList<String>();
 		ArrayList<String> sToRemove = new ArrayList<String>();
@@ -155,6 +155,7 @@ public class ConstitutiveReasoner extends Thread {
 			}
 			//after, remove from the internal constitutive state representation
 			reasoner.retract("sai__is(X,Y,A,H)");
+			pendingNormativeUpdates = false;
 			do{
 				changed=false;
 
@@ -213,6 +214,7 @@ public class ConstitutiveReasoner extends Thread {
 						sToAdd.add("sai__is("+ adaptTerm(un.get("X").toString()) + ","+ adaptTerm(un.get("Y").toString())+","+adaptTerm(un.get("A").toString())+","+adaptTerm(un.get("M").toString())  +")");
 					else
 						sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+adaptTerm(un.get("A").toString()) +","+adaptTerm(un.get("M").toString()) +")");
+					sToAdd.add("sigmaE("+adaptTerm(un.get("Y").toString())+"[sai__agent("+adaptTerm(un.get("A").toString())+")])");
 
 					for( ConstitutiveListener l : constitutiveListeners){
 						l.addEventAssignment(adaptTerm(un.get("X").toString()), new EventStatusFunction(new Pred(parseLiteral(un.get("Y").toString()))),createAtom(adaptTerm(un.get("A").toString())));
@@ -275,8 +277,9 @@ public class ConstitutiveReasoner extends Thread {
 					reasoner.retract(s);
 				}	
 				sToRemove.clear();
-
-
+				
+				if(changed==true) //if the constitutive state has changed, then there are pending updates in the normative listeners
+				   pendingNormativeUpdates = true;
 
 
 			}while(changed==true);
@@ -286,13 +289,12 @@ public class ConstitutiveReasoner extends Thread {
 			reasoner.assertValue("sigmaE(true)");
 
 
-
-			//NormativeReasoner2Sai.getInstance().updateState();
-			if(changed==true)
+			//trigger the updates in the normative states of every normative engine plugged in the institution
+			if(pendingNormativeUpdates==true) {
 				for(INormativeEngine nEngine : normativeEngines){
 					nEngine.updateState();
 				}
-
+			}
 
 		}//synchronized
 
@@ -307,7 +309,7 @@ public class ConstitutiveReasoner extends Thread {
 		return l;
 	}
 
-	
+
 	public void doCalculate() {
 		try {
 			calculate();

@@ -50,7 +50,6 @@ public class Npl2Sai implements INormativeEngine{
 		synchronized (nengine) {					
 			try {				
 				nengine.getAg().getBB().add(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
-				updateState();
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -66,10 +65,9 @@ public class Npl2Sai implements INormativeEngine{
 	public void addEventAssignment(String arg0, EventStatusFunction arg1,
 			Atom arg2) {
 		try {
-			synchronized (nengine) {				
-				nengine.getAg().getBB().add(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));				
+			synchronized (nengine) {
+				nengine.getAg().getBB().add(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));	
 			}
-			updateState();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -90,11 +88,9 @@ public class Npl2Sai implements INormativeEngine{
 				v++;
 				stateAssignments.put(arg1.toString(),v);
 			}
-			synchronized (nengine) {					
+			synchronized (nengine) {
 				nengine.getAg().getBB().add(parseLiteral(arg1.toString()));
 			}
-			updateState();
-			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -127,7 +123,7 @@ public class Npl2Sai implements INormativeEngine{
 		}
 	}
 
-	
+
 	/**
 	 * Remove state-status function assignments from the set of facts of the NPL interpreter
 	 */
@@ -140,16 +136,17 @@ public class Npl2Sai implements INormativeEngine{
 				v--;
 				stateAssignments.put(arg1.toString(), v);
 			}
-			if(v==0)
-			   nengine.getAg().getBB().remove(parseLiteral(arg1.toString()));
+			if(v==0) {
+				nengine.getAg().getBB().remove(parseLiteral(arg1.toString()));
+			}
 		} catch (ParseException e) {
 			e.printStackTrace();			
 		}
 	}
 
-	
-	
-	
+
+
+
 	@Override
 	public void setInstitutionalProgram(InstProgram arg0) {
 
@@ -163,16 +160,16 @@ public class Npl2Sai implements INormativeEngine{
 	 */
 	@Override 
 	public void updateState() {
-		try {		
-			
-			nengine.verifyNorms();				
+		synchronized (nengine) {
+			try {		
+				nengine.verifyNorms();				
 
-		} catch (NormativeFailureException e) {
-			e.printStackTrace();
+			} catch (NormativeFailureException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	
-	
+
 
 }
