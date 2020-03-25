@@ -76,7 +76,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     */
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.3-11");        
+        log("SAI Engine version 0.3-12");        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
@@ -238,16 +238,16 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
     @Override
     public void addStateAssignment(String assignee, StateStatusFunction sf) {
-        stateAssignmentsToShow.add(assignee + " is " + sf);
-        defineObsProperty("sai_is", assignee, sf.getId());
+    	defineObsProperty("sai_is", assignee, sf.getId());
+        stateAssignmentsToShow.add(assignee + " is " + sf);      
     }
 
 
 
     @Override
     public void addAgentAssignment(String assignee, AgentStatusFunction sf) {
-        agentAssignmentsToShow.add(assignee + " is " + sf);
-        defineObsProperty("sai_is", assignee, sf.getId());      
+    	defineObsProperty("sai_is", assignee, sf.getId());
+        agentAssignmentsToShow.add(assignee + " is " + sf);              
     }
 
 
@@ -255,8 +255,8 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     @Override
     public void addEventAssignment(String assignee, EventStatusFunction sf,
             Atom agent) {
-        eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);
-        defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());    
+    	defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());
+        eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);           
     }
 
 
