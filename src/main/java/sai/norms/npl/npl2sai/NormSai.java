@@ -47,8 +47,23 @@ public class NormSai extends Norm {
 		return newHead;
 	}
 
-
+	
 	private static LogicalFormula adaptBody(Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException{
+		LogicalFormula newBody = body; 
+		if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
+			System.out.println("[NormSai] adaptBody " + body + " is event");
+			newBody = parseFormula("sai__event("+newBody+"[sai__agent(Sai__Agent)])");										
+		}		
+		if(!head.getTerm(0).isVar())
+			if(instProgram.getStatusFunctionByName(head.getTerm(0).toString())!=null)
+				if(instProgram.getStatusFunctionByName(head.getTerm(0).toString()) instanceof AgentStatusFunction){
+					newBody = parseFormula("(sai__is(Sai__Agent,"+head.getTerm(0).toString()+"))&" + newBody.toString() );
+				}				
+		return newBody;
+	}
+
+	/*private static LogicalFormula adaptBody(Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException{
+		System.out.println("[NormSai] adaptBody 1" + body);
 		if(!head.getTerm(0).isVar())
 			if(instProgram.getStatusFunctionByName(head.getTerm(0).toString())!=null)
 				if(instProgram.getStatusFunctionByName(head.getTerm(0).toString()) instanceof AgentStatusFunction){
@@ -56,12 +71,14 @@ public class NormSai extends Norm {
 					LogicalFormula newBody = parseFormula("(sai__is(Sai__Agent,"+head.getTerm(0).toString()+"))&" + body.toString() );
 					return newBody;
 				}
+		System.out.println("[NormSai] adaptBody 2" + body);
 		if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
+			System.out.println("[NormSai] adaptBody " + body + " is event");
 			LogicalFormula newBody = parseFormula("sai__event("+body+"[sai__agent(Sai__Agent)])");									
 			return newBody;			
 		}
 		return body;
-	}
+	}*/
 
 
 }
