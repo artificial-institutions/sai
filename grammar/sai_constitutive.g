@@ -55,7 +55,7 @@ sff_rel	:		arithm_term((TK_REL_OP|TK_IS) sff_rel)?;
 arithm_term	:	arithm_factor (('+'|'-') arithm_term)?;
 arithm_factor	:	sff_atom (('*'|'/'|INTDIV|INTMOD) arithm_factor)?;
 //sff_atom	:       NEGATION? (((VAR|pred)('is' (VAR|pred))?)|('('sff_or_expr')')|(DIGIT+));
-sff_atom	:       NEGATION? ((VAR|pred)|('('sff_or_expr')')|(DIGIT+));
+sff_atom	:       NEGATION? ((VAR|pred|sai__is_term)|('('sff_or_expr')')|(DIGIT+));
 
 TK_OR		:	'|';
 TK_AND		:	'&';
@@ -73,7 +73,7 @@ arithm_atom		:	VAR|DIGIT+|'('arithm_term')';	//the basic element of arithm.expre
 */
 
 
-
+sai__is_term:	'sai__is('pred_term','pred_term','sf_formula')';
 
 pred	:	//ATOM(list)?;
 		//(TK_NEG)?ATOM(list_of_pred_terms)?(list)?;
@@ -116,7 +116,6 @@ TERM_NULL:	'_';
 COMMENT_STAT
 	:	 //'/*' (options {greedy=false;} : .)* '*/' //{$channel=HIDDEN;} //<- para antlr3
 		'/*' .*? '*/'-> channel(HIDDEN) //<- para antlr4
-
 		;
 
 WS 	:	(' '|'\r'|'\n')+{skip();} ;

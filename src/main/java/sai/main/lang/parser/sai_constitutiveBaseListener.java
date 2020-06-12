@@ -1,4 +1,4 @@
-// Generated from grammar/sai_constitutive.g by ANTLR 4.7
+// Generated from sai_constitutive.g by ANTLR 4.8
 
 package sai.main.lang.parser;
 
@@ -374,6 +374,18 @@ public class sai_constitutiveBaseListener implements sai_constitutiveListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSff_atom(sai_constitutiveParser.Sff_atomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSai__is_term(sai_constitutiveParser.Sai__is_termContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSai__is_term(sai_constitutiveParser.Sai__is_termContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

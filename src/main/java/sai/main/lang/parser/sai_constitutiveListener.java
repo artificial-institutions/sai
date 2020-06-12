@@ -1,4 +1,4 @@
-// Generated from grammar/sai_constitutive.g by ANTLR 4.7
+// Generated from sai_constitutive.g by ANTLR 4.8
 
 package sai.main.lang.parser;
 
@@ -310,6 +310,16 @@ public interface sai_constitutiveListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSff_atom(sai_constitutiveParser.Sff_atomContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link sai_constitutiveParser#sai__is_term}.
+	 * @param ctx the parse tree
+	 */
+	void enterSai__is_term(sai_constitutiveParser.Sai__is_termContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link sai_constitutiveParser#sai__is_term}.
+	 * @param ctx the parse tree
+	 */
+	void exitSai__is_term(sai_constitutiveParser.Sai__is_termContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link sai_constitutiveParser#pred}.
 	 * @param ctx the parse tree

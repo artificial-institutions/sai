@@ -68,15 +68,8 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
 
-
-    /*void init(String id, String normativeProgramPath, String constitutiveProgramPath){
-        this.id = id;
-        init(normativeProgramPath, constitutiveProgramPath);
-    }
-    */
-
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.3-12");        
+        log("SAI Engine version 0.4");        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();

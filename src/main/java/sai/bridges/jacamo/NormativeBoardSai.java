@@ -85,7 +85,7 @@ public class NormativeBoardSai extends NormativeBoard {
         
         nengine.loadNP(p.getRoot());
         
-        
+        getNormEngine().updateState();
         
 
         if (gui != null) {
