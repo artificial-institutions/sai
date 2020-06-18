@@ -11,7 +11,7 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-	
+
     maven {
         url "http://jacamo.sourceforge.net/maven2"
     }
@@ -24,7 +24,7 @@ dependencies{
    compile group: 'org.jacamo',     name: 'npl' ,     version: '0.4', changing: false, transitive: false
    compile group: 'org.jacamo',     name: 'cartago',  version: '2.4', changing: true, transitive: false
    compile group: 'org.jacamo',     name: 'jaca',     version: '2.4', changing: true, transitive: false
-   	
+
    testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
@@ -72,8 +72,34 @@ publishing {
     }
 }
 
+task publishMavenGitHub(dependsOn: [ 'build', 'publishToMavenLocal']) {
+  doLast {
+    def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/sai'
+    def rdir = System.getProperty("user.home")+'/pro/jacamo-mvn-repo'
+    exec {
+        commandLine 'git', 'pull'
+        workingDir rdir
+    }
+    copy {
+        from wdir
+        into rdir + '/org/jacamo/sai'
+    }
+    exec {
+        commandLine 'git', 'add', '*'
+        workingDir rdir
+    }
+    exec {
+        commandLine 'git', 'commit', '-a', '-m', 'new version of SAI '+project.version
+        workingDir rdir
+    }
+    exec {
+        commandLine 'git', 'push'
+        workingDir rdir
+    }
+  }
+}
 
-task publishMavenSF(dependsOn: [ 'jar', 'build', 'publishToMavenLocal', 'sourceJar', 'javadocJar']) {
+/*task publishMavenSF(dependsOn: [ 'jar', 'build', 'publishToMavenLocal', 'sourceJar', 'javadocJar']) {
   doLast {
     description 'transfer local maven artifact to our maven2 repository at sourceforge'
 
@@ -92,4 +118,4 @@ task publishMavenSF(dependsOn: [ 'jar', 'build', 'publishToMavenLocal', 'sourceJ
         workingDir wdir
     }
   }
-}
+}*/
