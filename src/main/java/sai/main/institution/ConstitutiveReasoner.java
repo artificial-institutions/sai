@@ -94,7 +94,7 @@ public class ConstitutiveReasoner extends Thread {
 
 
 	private String adaptTerm(String term){
-		return term.replaceAll("((_)(\\d)+(Var)?)+", "Var");
+		return term.replaceAll("((_)(\\d)+(Var)?)+", "Var$1");
 	}
 
 
@@ -190,7 +190,6 @@ public class ConstitutiveReasoner extends Thread {
 						if(un.get("X")!=null){
 							sToAdd.add("sai__is("+ adaptTerm(un.get("X").toString()) + ","+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptFormula1(adaptTerm(un.get("M").toString()),false)+")");
 							assignee = adaptTerm(un.get("X").toString());
-
 						}
 						else{
 							sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptFormula1(adaptTerm(un.get("M").toString())) +")");						
