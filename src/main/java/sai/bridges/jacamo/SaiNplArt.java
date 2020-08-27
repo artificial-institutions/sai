@@ -97,6 +97,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 		this.id = id;
 		try {			
 			internalAddConstitutiveProgram(constitutiveProgram);
+			nengine.init();
 			npl2sai = new Npl2Sai(nengine);
 			nengine.addListener(this);
 			setupHttpServer();
@@ -122,12 +123,10 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 	//hardcoding norms to test...
 	//TODO: create an parser for NPL programs
 	private void setupNormsToTest(){							
-		nengine.init();
 		Npl2Sai npl2sai = new Npl2Sai(nengine);
 		Norm n1, n2, n3, n4, n5;
 		//TimeTerm t1 = new TimeTerm(1, "never");
 		TimeTerm t1 = new TimeTerm(10, "year");
-		log("T1: " + t1);
 		
 
 		try {
