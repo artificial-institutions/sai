@@ -13,6 +13,7 @@ public class TableObject {
 
 	protected String id;
 	protected ImageIcon icon;
+	protected String description;
 
 	public TableObject() {
 		super();
@@ -32,6 +33,14 @@ public class TableObject {
 
 	public void setIcon(ImageIcon icon) {
 		this.icon = icon;
+	}
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

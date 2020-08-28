@@ -15,6 +15,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -35,8 +36,8 @@ import cartago.*;
 
 public class TangibleTableArt extends cartago.tools.GUIArtifact {
 
-	private static final ImageIcon iconLaunch = new ImageIcon(TangibleTableArt.class.getResource("/simulator/images/play.png"));
-	private static final ImageIcon iconWarning = new ImageIcon(TangibleTableArt.class.getResource("/simulator/images/warning.gif"));
+	private static final ImageIcon iconLaunch = new ImageIcon("src/env/simulator/images/play.png");
+	private static final ImageIcon iconWarning = new ImageIcon("src/env/simulator/images/warning.gif");
 
 	private int lines = 0;
 	private int cols = 0;

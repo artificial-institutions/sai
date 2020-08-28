@@ -54,8 +54,8 @@ mas main {
 
    
     // agent source path
-    asl-path: src/agt
-              src/agt/inc
+    //asl-path: src/agt
+    //          src/agt/inc
               
               
    

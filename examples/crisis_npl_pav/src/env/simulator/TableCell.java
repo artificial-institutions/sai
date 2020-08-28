@@ -1,9 +1,13 @@
 package simulator;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import ora4mas.nopl.simulator.SimulatorGUI;
 
 /**
  * A cell in a Tangible Table
@@ -62,8 +66,13 @@ public class TableCell extends JLabel {
 			//System.out.println("[TableCell] icon description " + st.getIcon().getDescription());
 			if(st.getIcon()==null)
 				s = s.concat(st.getId()).concat("<br>");
-			else
-			   s = s.concat("<img  height='25' width='25' src='"+st.getIcon().getDescription()+"' />");
+			else {
+			   s = s.concat(st.getDescription()+"<br>");
+			   
+			   /* The line below has been disabled due a knwon bug in Java 13:https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8230235 */
+			   //s = s.concat("<img  height='15' width='15' src='"+st.getIcon().getDescription()+"' />");
+			   
+			}
 		}
 		s = s.concat("</body></html>");		
 		this.setText(s);		

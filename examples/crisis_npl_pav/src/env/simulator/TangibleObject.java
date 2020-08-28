@@ -13,6 +13,13 @@ public abstract class TangibleObject extends TableObject {
 	public TangibleObject(String id, ImageIcon icon) {
 		this.id = id;
 		this.icon = icon;
+		this.description = "";
+	}
+	
+	public TangibleObject(String id, ImageIcon icon, String description) {
+		this.id = id;
+		this.icon = icon;
+		this.description = description;
 	}
 	
 	
