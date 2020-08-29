@@ -178,6 +178,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 			}
 			prop = prop + ")";
 		}
+		prop = prop.replaceAll("/(.*)", "$1").replaceAll("([^/]*)(/)", "$1_");//CArtAgO 3 - adapt properties that include the workspace structures such as /main/wsp1...
 		return prop;
 	}
 
