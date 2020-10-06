@@ -211,7 +211,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 * of the Count-as Engine 
 	 **/
 	@Override
-	protected void processObsPropertyChanged(ArtifactId artifactId, ArtifactObsProperty[] property){		
+	protected void processObsPropertyChanged(ArtifactId artifactId, ArtifactObsProperty[] property){
 		if(!toIgnoreArt(artifactId)){
 			for(int i=0;i<property.length;i++){
 				for(SaiEngine engine:institutions){
@@ -314,7 +314,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 * @return
 	 */
 	private boolean toIgnoreArt(ArtifactId artifactId){
-		if(artifactId.getArtifactType().equals(" sai4jacamo.Sai4JacamoArt"))
+		if(artifactId.getArtifactType().equals(" sai4jacamo.Sai4JacamoArt")|
+		   artifactId.getName().matches("([A-Za-z0-9])*([0-9])+-body"))
 			return true;
 		return false;
 	}
@@ -328,7 +329,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 * @return
 	 */
 	private boolean toIgnoreArt(ActionSucceededEvent ev){
-		if(ev.getArtifactId().getArtifactType().equals(" sai4jacamo.Sai4JacamoArt"))
+		if(ev.getArtifactId().getArtifactType().equals(" sai4jacamo.Sai4JacamoArt")|
+		   ev.getArtifactId().getName().matches("([A-Za-z0-9])*([0-9])+-body"))
 			return true;
 		return false;
 	}
