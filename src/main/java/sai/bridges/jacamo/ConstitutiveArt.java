@@ -69,7 +69,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.4-1");        
+        log("SAI Engine version 0.4-26");        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
@@ -78,10 +78,10 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         this.sai.addConstitutiveListener(this);
   
 
-
+        String filename = constitutiveProgramPath.replaceAll("^(file:)(.*)", "$2"); //handle file information started by "file:"
 
         try {
-            loadConstitutiveProgram(constitutiveProgramPath);           
+            loadConstitutiveProgram(filename);           
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
