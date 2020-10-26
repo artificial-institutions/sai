@@ -57,8 +57,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	@Override
 	protected void processAgentJoinRequest(AgentJoinRequestInfo req){
 		for(SaiEngine engine:institutions){
-			engine.addEnvironmentalAgent(createAtom(req.getAgentId().toString()));
-		}		
+			engine.addEnvironmentalAgent(createAtom(adaptAgentId(req.getAgentId().getAgentName())));
+		}
 	}
 
 
@@ -74,10 +74,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 				if(agentId.getAgentName().equals("workspace-manager"))
 					agent =  "workspace";
 				else{						
-					agent = agentId.getAgentName();
+					agent = adaptAgentId(agentId.getAgentName());
 				}
-
-				//System.out.println("[RuleEngine] processing action completed: " + fact + " by " + agent);
 
 				for(SaiEngine institution:institutions){
 					try {
@@ -99,10 +97,9 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 		if(agentId.equals("workspace-manager"))
 			agent =  "workspace";
 		else{						
-			agent = agentId;
+			agent = adaptAgentId(agentId);
 		}
 
-		//System.out.println("[RuleEngine] processing action completed: " + fact + " by " + agent);
 
 		for(SaiEngine institution:institutions){
 			try {
@@ -173,12 +170,13 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 		String prop = property.getName().replace("$", "S").replace("@","a").replace("-","_");
 		prop = prop + "(" + artifactId.toString().replace("-","_");
 		if(property.getValues().length>0){			
-			for(int j=0;j<property.getValues().length;j++){
-				prop = prop + "," + property.getValue(j).toString().replace("$", "S").replace("@","_at_").replace("-","_");					
+			for(int j=0;j<property.getValues().length;j++){				
+				prop = prop + "," + property.getValue(j).toString().replace("$", "S").replace("@","_at_").replace("-","_").replace("(\\r|\\n)", "").replace("(^[A-Z|_].*)","sai__term_$1");
+				prop = prop.replaceAll("(^[A-Z|_].*)", "sai__term_$1"); //do not accept varables from the environment
+				prop = prop.replaceAll("([\\(\\)]|,)(_|[A-Z])(.)","$1sai__term_$2$3"); //do not accept variables in nested terms				
 			}
-			prop = prop + ")";
 		}
-		prop = prop.replaceAll("/(.*)", "$1").replaceAll("([^/]*)(/)", "$1_");//CArtAgO 3 - adapt properties that include the workspace structures such as /main/wsp1...
+		prop = prop + ")";
 		return prop;
 	}
 
@@ -191,9 +189,9 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 				//if(j<property.getValues().length-1)
 				//	prop = prop + ",";
 				//else					
-			}
-			prop = prop + ")";
-		}		
+			}			
+		}	
+		prop = prop + ")";
 		return prop;
 	}
 
@@ -216,7 +214,6 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 **/
 	@Override
 	protected void processObsPropertyChanged(ArtifactId artifactId, ArtifactObsProperty[] property){
-		//System.out.println("[RuleEngine] property changed " + artifactId.toString() + ", " + property.toString());		
 		if(!toIgnoreArt(artifactId)){
 			for(int i=0;i<property.length;i++){
 				for(SaiEngine engine:institutions){
@@ -240,8 +237,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 
 
 	@Override
-	protected void processObsPropertyAdded(ArtifactId artifactId, ArtifactObsProperty[] property){
-		//System.out.println("[RuleEngine] property added " + artifactId.toString() + ", " + property.toString());		
+	protected void processObsPropertyAdded(ArtifactId artifactId, ArtifactObsProperty[] property){		
 		if(!toIgnoreArt(artifactId)){
 			for(int i=0;i<property.length;i++){
 				for(SaiEngine engine:institutions){
@@ -249,7 +245,6 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 						engine.addEnvironmentalProperty(parseLiteral(propertyToLiteral(artifactId, property[i])));						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						System.out.println("Problems adding property > " + propertyToLiteral(artifactId, property[i]));
 						e.printStackTrace();
 					}
 				}
@@ -301,7 +296,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 				Term triggeringAgent = p.getTerm(p.getTerms().size()-1);
 				p.getTerms().remove(p.getTerms().size()-1);
 				for(SaiEngine engine:institutions){									
-					engine.addEnvironmentalEvent(p, (Atom) triggeringAgent);
+					engine.addEnvironmentalEvent(p, createAtom(adaptAgentId(triggeringAgent.toString())));
 				}
 			}
 		} catch (ParseException e1) {
@@ -320,8 +315,9 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 * @param artifactId
 	 * @return
 	 */
-	private boolean toIgnoreArt(ArtifactId artifactId){
-		if(artifactId.getArtifactType().equals(" sai4jacamo.Sai4JacamoArt"))
+	protected boolean toIgnoreArt(ArtifactId artifactId){
+		if(artifactId.getArtifactType().equals("sai4jacamo.Sai4JacamoArt")| 		
+				artifactId.getName().matches("([A-Za-z0-9])*([0-9])+-body"))
 			return true;
 		return false;
 	}
@@ -334,12 +330,19 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 * @param artifactId
 	 * @return
 	 */
-	private boolean toIgnoreArt(ActionSucceededEvent ev){
-		if(ev.getArtifactId().getArtifactType().equals(" sai4jacamo.Sai4JacamoArt"))
+	protected boolean toIgnoreArt(ActionSucceededEvent ev){
+		if(ev.getArtifactId().getArtifactType().equals("sai4jacamo.Sai4JacamoArt")|
+				ev.getArtifactId().getName().matches("([A-Za-z0-9])*([0-9])+-body"))
 			return true;
 		return false;
 	}
 
+
+	private String adaptAgentId(String agent) {
+		if(agent.charAt(0)>='A' & agent.charAt(0)<='Z')
+			return "agent_"+agent;
+		return agent;
+	}
 
 	//TODO: find a better way to do this
 	public ArrayList<Literal> getCurrentEnvironmentalState(){
