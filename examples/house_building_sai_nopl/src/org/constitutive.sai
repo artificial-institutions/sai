@@ -141,38 +141,53 @@ constitutive_rules:
 32: count-as achieved("bhsch",interior_painted,Agent)
     when paintInterior[sai__agent(Agent)].
 
+33: count-as achieved("bhsch", house_built,Agent)
+    while play(A,house_owner,"hsh_group") &
+          achieved("bhsch",site_prepared,_) &
+          achieved("bhsch",electrical_system_installed,_) &
+          achieved("bhsch",floors_laid,_) &
+          achieved("bhsch",walls_built,_) &
+          achieved("bhsch",roof_built,_) &
+          achieved("bhsch",windows_fitted,_) &
+          achieved("bhsch",doors_fitted,_) &
+          achieved("bhsch",plumbing_installed,_) &
+          achieved("bhsch",electrical_system_installed,_) &
+          achieved("bhsch",exterior_painted,_) &
+          achieved("bhsch",interior_painted,_).
+
+
 
 
 /* Rules 23 to 22: the occurrence of some events in the environment counts-as, in the institution, the state achieved(S,G,A) */
-22: count-as done(bhsch,site_prepared,Agent)
+34: count-as done(bhsch,site_prepared,Agent)
     when prepareSite[sai__agent(Agent)].
 
-23: count-as done(bhsch,electrical_system_installed,Agent)
+35: count-as done(bhsch,electrical_system_installed,Agent)
     when installElectricalSystem[sai__agent(Agent)].
 
-24: count-as done(bhsch,floors_laid,Agent)
+36: count-as done(bhsch,floors_laid,Agent)
     when layFloors[sai__agent(Agent)].
 
-25: count-as done(bhsch,walls_built,Agent)
+37: count-as done(bhsch,walls_built,Agent)
     when buildWalls[sai__agent(Agent)].
 
-26: count-as done(bhsch,roof_built,Agent)
+38: count-as done(bhsch,roof_built,Agent)
     when buildRoof[sai__agent(Agent)].
 
-27: count-as done(bhsch,windows_fitted,Agent)
+39: count-as done(bhsch,windows_fitted,Agent)
     when fitWindows[sai__agent(Agent)].
 
-28: count-as done(bhsch,doors_fitted,Agent)
+40: count-as done(bhsch,doors_fitted,Agent)
     when fitDoors[sai__agent(Agent)].
 
-29: count-as done(bhsch,plumbing_installed,Agent)
+41: count-as done(bhsch,plumbing_installed,Agent)
     when installPlumbing[sai__agent(Agent)].
 
-30: count-as done(bhsch,electrical_system_installed,Agent)
+42: count-as done(bhsch,electrical_system_installed,Agent)
     when installElectricalSystem[sai__agent(Agent)].
 
-31: count-as done(bhsch,exterior_painted,Agent)
+43: count-as done(bhsch,exterior_painted,Agent)
     when paintExterior[sai__agent(Agent)].
 
-32: count-as done(bhsch,interior_painted,Agent)
+44: count-as done(bhsch,interior_painted,Agent)
     when paintInterior[sai__agent(Agent)].
