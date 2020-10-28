@@ -112,7 +112,25 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	}
 
 
+	/**
+	 * A naive attempt to check whether a string is a filename
+	 * 
+	 */
+	private boolean isFileName(String fileName) {
+		return fileName.indexOf('/')>0;
+	}
+	
+	
 
+	/**
+	 * Adapt filenames since they cannot be coverted to literal
+	 * 
+	 */
+	private String adaptFileName(String fileName) {
+		return '"'+ fileName+'"';
+	}
+	
+	
 	private String Op2Pred(Op op){
 		Object[] o = op.getParamValues();
 		String term;
@@ -123,6 +141,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 			pred = pred +"(";
 			for(int i=0;i<o.length;i++){
 				String current=o[i].toString();
+				if(isFileName(current)) current = adaptFileName(current);
 				if (current.indexOf('@') >= 0){
 					term = "_";}
 				else {
