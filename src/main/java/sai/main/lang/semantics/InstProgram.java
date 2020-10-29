@@ -173,21 +173,25 @@ public class InstProgram extends Observable {
 			while(eventSfsIt.hasNext()){
 				EventStatusFunction currentEventSf = eventSfsIt.next();
 				if(currentEventSf.getEvent().getFunctor().equals(event.getEvent().getFunctor())){
-					if(currentEventSf.getEvent().getTerms().size()==event.getEvent().getTerms().size()){						
-						boolean find = true;
-						if(currentEventSf.getEvent().getTerms().size()>0) 
-							for(int i=0;i<currentEventSf.getEvent().getTerms().size();i++){
-								if((!currentEventSf.getEvent().getTerms().get(i).isVar())& //if both are var
-										(!currentEventSf.getEvent().getTerms().get(i).toString().equals(event.getEvent().getTerms().get(i).toString()))){ //if they are not var, must be equal terms
-									find = false;
-									break;
-								}
+					if(currentEventSf.getEvent().getTerms()==null&event.getEvent().getTerms()==null) //if both the events do not have arguments
+						return event;
+					else
+						if(currentEventSf.getEvent().getTerms().size()==event.getEvent().getTerms().size()){		
+							boolean find = true;
+							if(currentEventSf.getEvent().getTerms()!=null&&
+									currentEventSf.getEvent().getTerms().size()>0) 
+								for(int i=0;i<currentEventSf.getEvent().getTerms().size();i++){
+									if((!currentEventSf.getEvent().getTerms().get(i).isVar())& //if both are var
+											(!currentEventSf.getEvent().getTerms().get(i).toString().equals(event.getEvent().getTerms().get(i).toString()))){ //if they are not var, must be equal terms
+										find = false;
+										break;
+									}
 
+								}
+							if(find==true){
+								return event;
 							}
-						if(find==true){
-							return event;
 						}
-					}
 				}
 			}
 		} catch (ParseException e) {
