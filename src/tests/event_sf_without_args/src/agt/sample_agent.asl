@@ -1,19 +1,17 @@
 // Agent sample_agent in project events
 
-/* Initial beliefs and rules */
-
-/* Initial goals */
-
 !start.
 
-/* Plans */
 
 +!start : true 
    <- .print("hello world.");
-      focusWhenAvailable(clock);
-      op1;
-      op2(99);
+      op1[artifact_name(clock)];
+      op2(99)[artifact_name(clock)];
       .print("done").
+      
+
+
++sai_is(X,Y,A) <- .print("Status function assignment: ", sai_is(X,Y,A)).
 
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }

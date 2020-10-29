@@ -15,8 +15,8 @@
 mas events {
 
     agent sample_agent{
-       join: wsp
-       focus: wsp.clock
+       join: wsp, bh
+       focus: wsp.clock, bh.bh_art
 	}	
 
     workspace wsp{
