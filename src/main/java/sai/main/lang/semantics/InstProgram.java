@@ -44,7 +44,7 @@ public class InstProgram extends Observable {
 
 
 
-	
+
 	public StatusFunction addStatusFunction(StatusFunction sf)throws Exception {
 		if (sf instanceof AgentStatusFunction) {
 			agentStatusFunctions.put(sf.hashCode(), (AgentStatusFunction) sf);
@@ -210,21 +210,24 @@ public class InstProgram extends Observable {
 			while(stateSfsIt.hasNext()){
 				StateStatusFunction currentStateSf = stateSfsIt.next();
 				if(currentStateSf.getState().getFunctor().equals(state.getState().getFunctor()))
-					if(currentStateSf.getState().getTerms().size()==state.getState().getTerms().size()){
-						boolean find = true;
-						if(currentStateSf.getState().getTerms().size()>0){
-							for(int i=0;i<currentStateSf.getState().getTerms().size();i++){							
-								if((!currentStateSf.getState().getTerms().get(i).isVar())& //if both are var
-										(!currentStateSf.getState().getTerms().get(i).equals(state.getState().getTerms().get(i)))){ //if they are not var, must be equal terms
-									find = false;
-									break;
-								}							
+					if(currentStateSf.getState().getTerms()==null&state.getState().getTerms()==null) //if both the state-sfs do not have arguments
+						return state;
+					else
+						if(currentStateSf.getState().getTerms().size()==state.getState().getTerms().size()){
+							boolean find = true;
+							if(currentStateSf.getState().getTerms().size()>0){
+								for(int i=0;i<currentStateSf.getState().getTerms().size();i++){							
+									if((!currentStateSf.getState().getTerms().get(i).isVar())& //if both are var
+											(!currentStateSf.getState().getTerms().get(i).equals(state.getState().getTerms().get(i)))){ //if they are not var, must be equal terms
+										find = false;
+										break;
+									}							
+								}
+							}
+							if(find==true){
+								return state;
 							}
 						}
-						if(find==true){
-							return state;
-						}
-					}
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -232,8 +235,8 @@ public class InstProgram extends Observable {
 
 		return null;
 	}
-	
-	
+
+
 
 	public List<ConstitutiveRule> getConstitutiveRules(){
 		Iterator<ConstitutiveRule> it = this.constitutiveRules.values().iterator();
@@ -243,7 +246,7 @@ public class InstProgram extends Observable {
 		} 
 		return list;
 	}
-	
+
 
 }
 
