@@ -1,0 +1,34 @@
+/*
+    events
+    ---------------------------
+
+    JaCaMo Application File
+
+    This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
+
+    (see jacamo/doc/jcm.html for more information about what can be defined in this file)
+
+    JaCaMo 0.9
+    outubro 29, 2020 - 07:46:22
+*/
+
+mas events {
+
+    agent sample_agent{
+       join: wsp, bh
+       focus: wsp.clock, bh.bh_art
+	}	
+
+    workspace wsp{
+       artifact clock: tools.Counter(0)
+    }
+    
+
+    institution bh:constitutive.sai{
+       workspaces: wsp
+    }
+
+    
+
+}
+

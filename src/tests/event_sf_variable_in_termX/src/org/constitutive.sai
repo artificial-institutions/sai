@@ -1,0 +1,12 @@
+/**/
+
+institution_id : test.
+
+
+status_functions:
+
+events: esf1.
+
+constitutive_rules:
+
+1: X count-as esf1. 

@@ -48,7 +48,7 @@ public class ConstitutiveReasoner extends Thread {
 			//this.reasoner.assertValue("inGs(St,Sf,M):- sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&not(sai__is(St,S)&M&Stf,M)");
 			this.reasoner.assertValue("inGs(St,Sf,M):- sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&M&St&not(sai__is(St,Sf,M))");
 			//this.reasoner.assertValue("inGe(event(Ev),Ef,TriggerAgent,M):-sai__crule(event(Ev),Ef,T,M)&sai__ef(Ef)&(sigmaE(Ev[sai__agent(TriggerAgent)]))&T&M&not(sai__is(event(Ev),Ef,TriggerAgent,M))");			
-			this.reasoner.assertValue("inGe(event(Ev),Ef,TriggerAgent,M):-sai__crule(event(Ev),Ef,T,M)&sai__ef(Ef)&(sigmaE(Ev[sai__agent(TriggerAgent)]))&T&M&not(sai__is(event(Ev),Ef,TriggerAgent,_))");
+			this.reasoner.assertValue("inGe(event(Ev),Ef,TriggerAgent,M):-sai__crule(event(Ev),Ef,T,M)&sai__ef(Ef)&(sigmaE(Ev[sai__agent(TriggerAgent)]))&not(Ev==true)&T&M&not(sai__is(event(Ev),Ef,TriggerAgent,_))");
 			//this.reasoner.assertValue("to_remove(X,Y,M):-sai__is(X,Y,M)&(((sai__af(Y)|sai__sf(Y))&(not(M)|(sai__sf(Y)&not(X))))|sai__ef(Y))");
 			this.reasoner.assertValue("to_remove_agent(X,Y,M):-sai__is(X,Y,M)&sai__af(Y)&not(M)");
 			//this.reasoner.assertValue("to_remove_state(X,Y,M):-sai__is(X,Y,M)&(((sai__sf(Y))&(not(M)|(sai__sf(Y)&not(X)))))");
