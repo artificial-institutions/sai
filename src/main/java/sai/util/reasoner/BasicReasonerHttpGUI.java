@@ -29,7 +29,7 @@ public class BasicReasonerHttpGUI implements IReasonerHttpGUI{
     private int port = 0;
 
 
-    protected BasicReasonerHttpGUI(int port) {
+    public BasicReasonerHttpGUI(int port) {
         super();
         startServer(port);        
     }
