@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -69,7 +70,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.4-1");        
+        log("SAI Engine version 0.4-30");        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
@@ -78,10 +79,10 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         this.sai.addConstitutiveListener(this);
   
 
-
+        String filename = constitutiveProgramPath.replaceAll("^(file:)(.*)", "$2"); //handle file information started by "file:"
 
         try {
-            loadConstitutiveProgram(constitutiveProgramPath);           
+            loadConstitutiveProgram(filename);           
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -95,6 +96,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
         server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
         server.getServer().createContext(getContext()+"/constProgram", new ConstitutiveProgramHandler());
+        server.getServer().createContext(getContext()+"/ignoredArts", new IgnoredArtifactsHandler());
         
         log("Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
 
@@ -277,6 +279,24 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             eventAssignmentsToShow.remove(assignee + " is " + sf + " caused by " + agent);
 
     }
+    
+    /**
+     * Add the artifactName to the list of to be ignored artifacts    
+     * @param artifactName
+     */
+    @OPERATION
+    public void ignoreArtifact(String artifactName) {
+    	this.ruleEngine.addArtifactToIgnore(artifactName);
+    }
+    
+    /**
+     * Remove the artifactName from the list of to be ignored artifacts    
+     * @param artifactName
+     */
+    @OPERATION
+    public void accountArtifact(String artifactName) {
+    	this.ruleEngine.removeArtifactToIgnore(artifactName);
+    }
 
     class MyHandler implements HttpHandler {
         @Override
@@ -288,6 +308,8 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             response = response + "<iframe src=\""+ getContext() + "/environment\"align=top width=\"100%\" height=\"40%\"></iframe>";
             response = response + "<br><br><br><html><font face=\"arial\">Constitutive Program <br></font>";
             response = response + "<iframe src=\""+ getContext() + "/constProgram\"align=top width=\"100%\" height=\"40%\"></iframe>";
+            response = response + "<br><br><br><html><font face=\"arial\">Ignored Artifacts <br></font>";
+            response = response + "<iframe src=\""+ getContext() + "/ignoredArts\"align=top width=\"100%\" height=\"40%\"></iframe>";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
@@ -372,6 +394,21 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         }
     }
 
+    class IgnoredArtifactsHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            String response = "<html>";
+            response = response + "<br><font face=\"arial\" color=\"green\">Ignored artifacts<br></font><font face=\"arial\">";
+            for(String s: new ArrayList<String>(ruleEngine.getArtifactsToIgnore().values())) {
+            	response = response + s + "<br>"; 
+            }
+            response = response + "</html>";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
 
 
 

@@ -1,0 +1,13 @@
+/**/
+
+institution_id : test.
+
+
+status_functions:
+
+events: esf1, esf2.
+
+constitutive_rules:
+
+1: op1 count-as esf1. 
+2: op2(_) count-as esf2. 

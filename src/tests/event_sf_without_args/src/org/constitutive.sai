@@ -1,0 +1,15 @@
+/**/
+
+institution_id : test.
+
+
+status_functions:
+
+events: esf1, esf2, esf3(Arg).
+
+constitutive_rules:
+
+1: op1 count-as esf1.
+2: op2(Arg) count-as esf2.
+3: op2(Arg) count-as esf3(Arg). //arguments both in the environmental event and the status function
+
