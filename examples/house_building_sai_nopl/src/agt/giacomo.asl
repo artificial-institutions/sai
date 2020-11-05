@@ -95,8 +95,5 @@ number_of_tasks(NS) :- .findall( S, task(S), L) & .length(L,NS).
       .fail.
 
 
-+!house_built // I have an obligation towards the top-level goal of the scheme: finished!
-   <- println("*** Finished ***").
-
 
 
