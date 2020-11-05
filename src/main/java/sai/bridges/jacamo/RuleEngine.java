@@ -8,6 +8,7 @@ import jason.asSyntax.Term;
 import jason.asSyntax.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import sai.main.institution.SaiEngine;
@@ -33,6 +34,7 @@ import cartago.events.ActionSucceededEvent;
 public class RuleEngine extends AbstractWSPRuleEngine { 
 
 	List<SaiEngine> institutions = new ArrayList<SaiEngine>();
+	private HashMap<String, String> toIgnoreArt = new HashMap<String, String>(); //a list of the names of artifacts to be ignored 
 
 
 
@@ -349,9 +351,10 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	 * @param artifactId
 	 * @return
 	 */
-	protected boolean toIgnoreArt(ActionSucceededEvent ev){
+	public boolean toIgnoreArt(ActionSucceededEvent ev){
 		if(ev.getArtifactId().getArtifactType().equals("sai4jacamo.Sai4JacamoArt")|
-				ev.getArtifactId().getName().matches("([A-Za-z0-9])*([0-9])+-body"))
+				ev.getArtifactId().getName().matches("([A-Za-z0-9])*([0-9])+-body")|
+				toIgnoreArt.get(ev.getArtifactId().getName())!=null)
 			return true;
 		return false;
 	}
@@ -371,5 +374,31 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 		}
 		return result;
 	}
+	
+	/**
+	 * Add an artifact name to the list of ignored artifacts
+	 * @param artifactName
+	 */
+	public void addArtifactToIgnore(String artifactName) {		
+		toIgnoreArt.put(artifactName, artifactName);
+	}
+	
+	/**
+	 * Remove an artifact name from the list of ignored artifacts
+	 * @param artifactName
+	 */
+	public void removeArtifactToIgnore(String artifactName) {
+		toIgnoreArt.remove(artifactName);
+	}
+	
+	
+	/**
+	 * Get the map of artfacts to be ignored
+	 * @return
+	 */
+	public HashMap<String, String> getArtifactsToIgnore(){
+		return this.toIgnoreArt;
+	}
+	
 
 }
