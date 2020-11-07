@@ -10,6 +10,7 @@ import jason.asSyntax.parser.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sai.main.institution.SaiEngine;
 import cartago.AbstractWSPRuleEngine;
@@ -35,6 +36,8 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 
 	List<SaiEngine> institutions = new ArrayList<SaiEngine>();
 	private HashMap<String, String> toIgnoreArt = new HashMap<String, String>(); //a list of the names of artifacts to be ignored 
+	private static final HashMap<String, String> JACAMO_PROPERTIES = new HashMap<String, String>(){{ put("focusing","focusing");
+																					                 put("joinedWsp","joinedWsp");	}}; //a list of obs.properties related to jacamo machinery - may require some special handling
 
 
 
@@ -188,16 +191,49 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	/*Maiquel*/    
 
 	private String propertyToPred(ArtifactId artifactId, ArtifactObsProperty property){
-		String prop = property.getName().replace("$", "S").replace("@","a").replace("-","_");
+		return propertyToPred(artifactId.getName(), property.getName(), property.getValues());
+	}
+
+
+	public String propertyToPred(String artifactId, String propertyName, Object[] propertyValues){
+		if(isJacamoProperty(propertyName)) return jacamoPropertyToPred(artifactId, propertyName, propertyValues);			
+		String prop = propertyName.replace("$", "S").replace("@","a").replace("-","_");
 		prop = prop + "(" + artifactId.toString().replace("-","_");
-		if(property.getValues().length>0){			
-			for(int j=0;j<property.getValues().length;j++){				
-				prop = prop + "," + property.getValue(j).toString().replace("$", "S").replace("@","_at_").replace("-","_").replace("(\\r|\\n)", "").replace("(^[A-Z|_].*)","sai__term_$1");
+		if(propertyValues.length>0){			
+			for(int j=0;j<propertyValues.length;j++){				
+				prop = prop + "," + propertyValues[j].toString().replace("$", "S").replace("@","_at_").replace("-","_").replace("(\\r|\\n)", "").replace("(^[A-Z|_].*)","sai__term_$1");
 				prop = prop.replaceAll("(^[A-Z|_].*)", "sai__term_$1"); //do not accept varables from the environment
 				prop = prop.replaceAll("([\\(\\)]|,)(_|[A-Z])(.)","$1sai__term_$2$3"); //do not accept variables in nested terms				
 			}
-		}
+		}		
 		prop = prop + ")";
+		return prop;
+	}
+
+	private String jacamoPropertyToPred(String artifactId, String propertyName, Object[] propertyValues){
+		String prop = "";
+		if(propertyName.equals("focusing")){ //focusing: the last property value - workspace full name - requires a particular handling
+			prop = "focusing(" + artifactId.toString().replace("-","_");			
+			for(int j=0;j<propertyValues.length-1;j++){				
+				prop = prop + "," + propertyValues[j].toString().replace("$", "S").replace("@","_at_").replace("-","_").replace("(\\r|\\n)", "").replace("(^[A-Z|_].*)","sai__term_$1");
+				prop = prop.replaceAll("(^[A-Z|_].*)", "sai__term_$1"); //do not accept varables from the environment
+				prop = prop.replaceAll("([\\(\\)]|,)(_|[A-Z])(.)","$1sai__term_$2$3"); //do not accept variables in nested terms				
+			}
+			prop = prop + ",\"" + propertyValues[propertyValues.length-1]+ "\""; 
+			prop = prop + ")";
+		}
+		else
+		if(propertyName.equals("joinedWsp")){ //joinedWsp: the last property value - workspace full name - requires a particular handling
+			prop = "joinedWsp(" + artifactId.toString().replace("-","_");			
+			for(int j=0;j<propertyValues.length-1;j++){				
+				prop = prop + "," + propertyValues[j].toString().replace("$", "S").replace("@","_at_").replace("-","_").replace("(\\r|\\n)", "").replace("(^[A-Z|_].*)","sai__term_$1");
+				prop = prop.replaceAll("(^[A-Z|_].*)", "sai__term_$1"); //do not accept varables from the environment
+				prop = prop.replaceAll("([\\(\\)]|,)(_|[A-Z])(.)","$1sai__term_$2$3"); //do not accept variables in nested terms				
+			}
+			prop = prop + ",\"" + propertyValues[propertyValues.length-1]+ "\""; 
+			prop = prop + ")";
+		}
+		
 		return prop;
 	}
 
@@ -399,6 +435,10 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	public HashMap<String, String> getArtifactsToIgnore(){
 		return this.toIgnoreArt;
 	}
-	
+
+
+	private boolean isJacamoProperty(String propertyName) {
+		return JACAMO_PROPERTIES.get(propertyName) != null;
+	}
 
 }
