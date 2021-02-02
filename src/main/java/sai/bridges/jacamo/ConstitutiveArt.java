@@ -70,7 +70,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.4-30");        
+        log("SAI Engine version 0.4-33");        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
