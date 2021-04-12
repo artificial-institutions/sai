@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -70,7 +69,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.4-30");        
+        log("SAI Engine version 0.5-dev-13 " + id);        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();

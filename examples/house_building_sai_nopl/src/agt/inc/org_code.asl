@@ -25,27 +25,17 @@ task_roles("Painting",         [painter]).
    <- .print("Failed to sign the contract for ",Service,"/",GroupName,": ",Msg," (",E,"). command: ",Cmd, " on ",Src,":", Line).
 
 
-/*+!in_ora4mas : in_ora4mas.
-+!in_ora4mas : .intend(in_ora4mas)
-   <- .wait({+in_ora4mas},100,_);
-      !in_ora4mas.
-@lin[atomic]
 +!in_ora4mas
-   <- joinWorkspace("ora4mas",_);
-      +in_ora4mas.
-*/
-
-+!in_ora4mas
-   <- joinWorkspace("ora4mas",_);
+   <- joinWorkspace("/main/ora4mas",_);
       +in_ora4mas.
 
 -!in_ora4mas
-   <- .wait(100);
+   <- .wait(100); 
       !in_ora4mas.
 
 
 +!in_bh_institution <-
-   joinWorkspace("bh",_);
+   joinWorkspace("/main/bh",_);
    lookupArtifact("bh_art", InstArt);
    focus(InstArt).
    

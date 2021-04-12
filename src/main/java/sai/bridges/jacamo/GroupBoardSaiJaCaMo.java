@@ -1,71 +1,69 @@
 /**
- * This class implements a general purpose GroupBoard that takes part in a SAI institution.
- * 
- * For JaCaMo applications, use a GroupBoardSaiJaCaMo.
- */
-
+ * This class implements a GroupBoard that takes part in a SAI institution in JaCaMo applications.
+*/
 
 package sai.bridges.jacamo;
 
+import cartago.AgentIdCredential;
 import cartago.ArtifactId;
+import cartago.CartagoEvent;
+import cartago.CartagoException;
+import cartago.ICartagoCallback;
+import cartago.ICartagoContext;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
-import cartago.OpFeedbackParam;
+import cartago.Op;
 import cartago.OperationException;
+import cartago.Workspace;
 import moise.common.MoiseException;
 import npl.NormativeFailureException;
 import npl.parser.ParseException;
-import ora4mas.nopl.GroupBoard;
 import ora4mas.nopl.JasonTermWrapper;
 import ora4mas.nopl.oe.CollectiveOE;
 import ora4mas.nopl.oe.Group;
-import sai.main.institution.INormativeEngine;
-import sai.main.institution.SaiEngine;
-import sai.norms.npl.nopl2sai.IGroup2SaiListener;
-import sai.norms.npl.nopl2sai.NOpl2Sai;
 
-public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
+public class GroupBoardSaiJaCaMo extends GroupBoardSai {
 
-    private NOpl2Sai npl2sai;
+	protected String institution = null;
+
 
 	@Override
 	public void init(final String osFile, final String grType) throws ParseException, MoiseException, OperationException {
 		super.init(osFile, grType);
-
-		this.npl2sai = new NOpl2Sai(getNormativeEngine());
-		this.npl2sai.addGroupListener(this);
 	}
 
 
-	@OPERATION
-	public void getNormativeEngine(OpFeedbackParam<INormativeEngine> nEngine){
-		nEngine.set(this.npl2sai);
+	@OPERATION public void setInstitutionName(String institutionName) {
+		this.institution = institutionName;
 	}
 
 
-	public void sai_play(String agent, String role, String group) {
-		if (orgState.hasPlayer(agent, role))
-			return;
-		adoptRole(agent, role);
-	}
 
-
-	@INTERNAL_OPERATION
-	private void internal_adoptRole(String ag, String role){
-		adoptRole(ag, role);        
-	}
-
+	@Override
 	public void sai_responsible(String group, String scheme) {      
 		if(group.replaceAll("\"", "").equals(this.getId().getName())){
 			while(!this.isWellFormed()){ //TODO: put this in a thread
 			}			
-			internal_addScheme(scheme.replaceAll("\"", ""));
-		}	
 
+			cartago.CartagoEnvironment cenv = cartago.CartagoEnvironment.getInstance(); 
+			Workspace main = cenv.getRootWSP().getWorkspace();
+			Workspace instWks = main.getChildWSP(this.getOEId()).get().getWorkspace();
+			ICartagoContext context;
+			try {
+				context = instWks.joinWorkspace(new AgentIdCredential("JaCaMoLauncherAgOrg"), new ICartagoCallback() {
+					public void notifyCartagoEvent(CartagoEvent a) {    }
+				});
+				context.doAction(1, this.getId().toString(), new Op("internal_addScheme", new Object[] {scheme.replaceAll("\"", "")}), null, -1);
+			} catch (CartagoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+		}		
 	}
 
-	//@INTERNAL_OPERATION 
-	//implemented in the superclass as the operation addScheme
+	@INTERNAL_OPERATION //implemented in the superclass as the operation addScheme
 	private void internal_addScheme(String schId) {		
 		if (!running) return;
 		CollectiveOE bak = orgState.clone();
@@ -99,24 +97,4 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 			failed(e.toString());
 		}   
 	}
-
-	
-	/**
-	 * Set the institution which the SchemeBoard belongs to. 
-	 * An institution is actually a SaiEngine
-	 */
-	@OPERATION
-	public void setInstitution(SaiEngine institution){
-		institution.addNormativeEngine(this.getNormEngine());
-
-	}
-
-
-
-	public INormativeEngine getNormEngine() {	
-		return this.npl2sai;
-	}
-
-
-
 }
