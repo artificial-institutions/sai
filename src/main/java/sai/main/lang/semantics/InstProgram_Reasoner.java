@@ -4,6 +4,7 @@ import static jason.asSyntax.ASSyntax.createLiteral;
 import static jason.asSyntax.ASSyntax.createVar;
 import static jason.asSyntax.ASSyntax.parseFormula;
 import jason.asSyntax.Pred;
+import sai.main.exception.StatusFunctionNotFoundException;
 import sai.main.lang.parser.FormulaAdapter;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 import sai.main.lang.semantics.statusFunction.AgentStatusFunction;
@@ -104,7 +105,10 @@ public class InstProgram_Reasoner extends InstProgram{
 
 
 	@Override
-	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule)	throws Exception {		
+	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule)	throws Exception {
+		if(crule.getY()==null || getStatusFunctionByName(crule.getY().toString())==null) {			
+			throw new StatusFunctionNotFoundException();
+		}
 
 		if((getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction)&&(!crule.getX().isVar())&&(getStatusFunctionByName(crule.getX().toString())==null)){	//if Y is a state status function, the term X is added to the term M, thus it is not necessary add "true" to the term M
 			if(crule.getM()==null||crule.getM().toString()=="true")
