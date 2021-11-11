@@ -12,6 +12,7 @@ import static jason.asSyntax.ASSyntax.createAtom;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import sai.main.exception.SaiException;
+import sai.main.exception.StatusFunctionNotFoundException;
 import sai.main.lang.semantics.InstProgram;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 import sai.main.lang.semantics.statusFunction.AgentStatusFunction;
@@ -137,8 +138,8 @@ public class sai_constitutiveListenerImpl extends sai_constitutiveBaseListener{
 			instProgram.addConstitutiveRule(new ConstitutiveRule(x,y,t,m));
 		} catch (ParseException e) {
 			e.printStackTrace();
-		} catch (SaiException e) {
-			// TODO Auto-generated catch block				
+		} catch (StatusFunctionNotFoundException e) {
+			System.err.println("Failed to add constitutive rule. The status function " + ctx.count_as_stat().y().getText().toString() + " in term Y does not belong to the institution" );				
 			e.printStackTrace();				
 		} catch (RevisionFailedException e) {
 			// TODO Auto-generated catch block
@@ -148,46 +149,6 @@ public class sai_constitutiveListenerImpl extends sai_constitutiveBaseListener{
 			e.printStackTrace();
 		}
 
-		/*Pred y = null; 
-		if(ctx.count_as_stat().y()!=null){
-			try {
-				y = (Pred) parseLiteral(ctx.count_as_stat().y().getText());
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			Pred x = null;
-			if(ctx.count_as_stat().x()!=null)
-				try {
-					x = (Pred) parseLiteral(ctx.count_as_stat().x().getText());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			LogicalFormula t = null;
-			if(ctx.t()!=null)
-				try {
-					t = parseFormula(ctx.t().getText());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			LogicalFormula m = null;
-			if(ctx.m()!=null)
-				try {
-					m = parseFormula(ctx.m().getText());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			//instProgram.addConstitutiveRule(new ConstitutiveRule(x,y,t,m));
-		}
-		else{
-
-		}
-		 */
+	
 	}
 }

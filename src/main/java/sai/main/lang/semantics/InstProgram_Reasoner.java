@@ -4,6 +4,7 @@ import static jason.asSyntax.ASSyntax.createLiteral;
 import static jason.asSyntax.ASSyntax.createVar;
 import static jason.asSyntax.ASSyntax.parseFormula;
 import jason.asSyntax.Pred;
+import sai.main.exception.StatusFunctionNotFoundException;
 import sai.main.lang.parser.FormulaAdapter;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 import sai.main.lang.semantics.statusFunction.AgentStatusFunction;
@@ -104,19 +105,16 @@ public class InstProgram_Reasoner extends InstProgram{
 
 
 	@Override
-	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule)	throws Exception {		
+	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule) throws Exception	{		
 
-		/*if((crule.getX()!=null)&&(getStatusFunctionByName(crule.getX().toString())!=null)){
-			crule.setM(parseFormula(crule.getM().toString()+"&(sai__is(_,"+crule.getX().toString()+",_))"));
-		}*/
+		if(crule.getY()==null || getStatusFunctionByName(crule.getY().toString())==null) {			
+			throw new StatusFunctionNotFoundException();
+		}
 
-		
-		
+
 		if((getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction)&&(!crule.getX().isVar())&&(getStatusFunctionByName(crule.getX().toString())==null)){	//if Y is a state status function, the term X is added to the term M, thus it is not necessary add "true" to the term M
 			if(crule.getM()==null||crule.getM().toString()=="true")
 				crule.setM(parseFormula(crule.getX().toString()));
-			//else
-			//	crule.setM(parseFormula("("+crule.getX().toString() + ")&" + crule.getM()));
 		}
 		else
 			if(crule.getM()==null){				
@@ -124,34 +122,20 @@ public class InstProgram_Reasoner extends InstProgram{
 			}
 
 
-		/*
-		if(getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction){
-			if(!getStatusFunctionByName(crule.getY().toString()).getId().isGround()){
-				reasoner.assertValue("sai__sf("+crule.getY().toString()+")[source(instprogram_reasoner)]");
-			}
-		}
-		 */
-
-		//System.out.println("[InstProgram_Reasoner] >> 0 " + crule.getX().toString());
 		String rule = "sai__crule(";
 		if(crule.getX().toString().equals("_")){ //the parser (sai_constitutveListenerImpl.java) returns "_" when termX is null.
 			crule.setX(new Pred(createLiteral("sai__freestandingY")));
 		}
 		else
-			if((getStatusFunctionByName(crule.getX().toString())!=null)&(!crule.getX().isVar())){
-				//System.out.println("[InstProgram_Reasoner] >> 1 " + crule.getX().toString());  
+			if((getStatusFunctionByName(crule.getX().toString())!=null)&(!crule.getX().isVar())){ 
 				if(getStatusFunctionByName(crule.getX().toString()) instanceof EventStatusFunction){
 					Pred p = new Pred(crule.getX().getFunctor());
 					p.addTerms(crule.getX().getTerms());				
-					//System.out.println("[InstProgram_Reasoner] >> 1 - 1" );
 					crule.setM(parseFormula(crule.getM().toString() + " & sai__is(SaiSF,"+ p +"," + crule.getX().getAnnot("sai__agent").getTerm(0) + ",_)"));
 				}else{
 					crule.setM(parseFormula(crule.getM().toString() + " & sai__is(SaiSF,"+ crule.getX().toString() +",_)"));
-					//System.out.println("[InstProgram_Reasoner] >> 2 - 2" );
-					//System.out.println("[InstProgram_Reasoner] >> 2 " + crule.getX().toString());
 				}
 				crule.setX(new Pred(createVar("SaiSF")));
-				//System.out.println("[InstProgram_Reasoner] >> 3 " + crule.getX().toString());
 			} 
 
 
@@ -180,12 +164,12 @@ public class InstProgram_Reasoner extends InstProgram{
 		//if(getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction){
 		//	rule = rule + "("+crule.getX().toString() + ")&";
 		//}
-				
+
 		//rule = rule + crule.getM();
 		rule = rule + FormulaAdapter.adaptFormula( crule.getM().toString().replaceAll("((_)+(\\d+)(Var)?)+", "Var$3"), this);
 		rule = rule + ")";
-		
-		
+
+
 		reasoner.assertValue(rule);
 		return super.addConstitutiveRule(crule);
 	}
