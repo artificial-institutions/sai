@@ -1,0 +1,19 @@
+/*
+    inst
+    ---------------------------
+
+
+*/
+
+mas inst {
+
+    agent bob: sample_agent.asl {
+        focus: w1.a
+    }
+
+    workspace w1 {
+        artifact a: tools.Counter(1)
+    }
+
+
+}
