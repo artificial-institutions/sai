@@ -20,7 +20,7 @@
       !do_inc.
 
 +!setup_sai
-   <- makeArtifact(i1,sai.bridges.jacamo.ConstitutiveArt,[ "i1","src/org/demo.sai"], InstArt); //launch institution
+   <- makeArtifact(i1,"sai.bridges.jacamo.ConstitutiveArt",[ "i1","src/org/demo.sai"], InstArt); //launch institution
       getRuleEngine(RE)[artifact_id(InstArt)]; //gets the reference RE for instutional rule engine (responsible for handling the environmental state) 
       joinWorkspace("/main/w1",W1); 
       setWSPRuleEngine(RE)[artifact_id(W1)].
