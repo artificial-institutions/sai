@@ -52,7 +52,7 @@ import com.sun.net.httpserver.HttpHandler;
  *   - getRuleEngine(R):
  *   - addNormativeEngine(N): register the normative engine N as a client to be updated when the constitutive state changes
  *   - loadConstitutiveProgram(F): loads the constitutive program written in the file F
- * 
+ *
  * @author maiquel
  */
 
@@ -69,34 +69,35 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.5-dev");        
-        defineObsProperty("institution", createAtom(id));        
+        log("SAI Engine version 0.5-dev-1");
+        defineObsProperty("institution", createAtom(id));
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
         this.id = id;
         this.ruleEngine.addInstitution(sai);
         this.sai.addConstitutiveListener(this);
-  
+
 
         String filename = constitutiveProgramPath.replaceAll("^(file:)(.*)", "$2"); //handle file information started by "file:"
 
         try {
-            loadConstitutiveProgram(filename);           
+            loadConstitutiveProgram(filename);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }   
+        }
 
 
         //The HTTP server
         SaiHttpServer server = SaiHttpServer.getInstance();
         //server.getServer().createContext(getContext()+ "/", new MyHandler());
         server.getServer().createContext(getContext(), new MyHandler());
+        server.getServer().createContext(getContext()+"/menu", new MenuHandler());
         server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
         server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
         server.getServer().createContext(getContext()+"/constProgram", new ConstitutiveProgramHandler());
         server.getServer().createContext(getContext()+"/ignoredArts", new IgnoredArtifactsHandler());
-        
+
         log("Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
 
     }
@@ -107,39 +108,39 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         sai = new SaiEngine();
         this.ruleEngine.addInstitution(sai);
         this.sai.addConstitutiveListener(this);
-    
+
         try {
             loadConstitutiveProgram(constitutiveProgramPath);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }   
-        
-        
+        }
+
+
         //The HTTP server
         SaiHttpServer server = SaiHttpServer.getInstance();
         server.getServer().createContext(getContext()+ "/", new MyHandler());
         server.getServer().createContext(getContext()+"/assignments", new AssignmentsHandler());
         server.getServer().createContext(getContext()+"/environment", new EnvironmentalStateHandler());
-        
+
         }
-*/  
-    
+*/
+
     /**
      * Returns a reference for the Rule Engine, that is the CArtAgO engine t
      * hat feeds the Constitutive Engine with facts from the environmental facts
      * @param engine
      */
-    @OPERATION 
+    @OPERATION
     public void getRuleEngine(OpFeedbackParam<RuleEngine> engine){
         engine.set(this.ruleEngine);
     }
-    
-    @OPERATION 
+
+    @OPERATION
     public void getSaiEngine(OpFeedbackParam<SaiEngine> engine){
         engine.set(this.sai);
     }
-    
+
     @OPERATION
     void loadConstitutiveProgram(String fileName) throws IOException{
         this.internalLoadConstitutiveProgram(fileName);
@@ -153,12 +154,12 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
      */
     @OPERATION
     public void addNormativeEngine(INormativeEngine normativeEngine){
-        this.sai.addNormativeEngine(normativeEngine);       
+        this.sai.addNormativeEngine(normativeEngine);
     }
-    
+
 
     // returns the context used in the http gui
-    private String getContext(){         
+    private String getContext(){
         if(this.id==null)
             return "";
         else
@@ -170,7 +171,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     private void internalLoadConstitutiveProgram(String fileName) throws IOException{
         InputStream is = new FileInputStream(fileName);
         ANTLRInputStream input = new ANTLRInputStream(is);
-        sai_constitutiveLexer constLexer = new sai_constitutiveLexer(input);        
+        sai_constitutiveLexer constLexer = new sai_constitutiveLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(constLexer);
         sai_constitutiveParser constParser = new sai_constitutiveParser(tokens);
         ParseTree tree = constParser.constitutive_spec();
@@ -178,11 +179,11 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         sai_constitutiveListenerImpl constExtractor = new sai_constitutiveListenerImpl(sai.getProgram());
         walker.walk(constExtractor, tree); // initiate walk of tree with listener
         for(ConstitutiveRule c:sai.getProgram().getConstitutiveRules()){
-            execInternalOp("addConstitutiveRule", c);           
+            execInternalOp("addConstitutiveRule", c);
         }
     }
 
-    
+
 
     @INTERNAL_OPERATION void addConstitutiveRule(ConstitutiveRule c){
         Pred x;
@@ -195,29 +196,29 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             LogicalFormula m;
             if(c.getT() != null)
                 t = c.getT();
-            else        
+            else
                 t = parseFormula("true");
 
             if(c.getM() != null)
                 m = c.getM();
             else
                 m = parseFormula("true");
-            
-            //the term Y of the constitutive rule must be casted to LogicalFormula to macth with the aim of the norm 
+
+            //the term Y of the constitutive rule must be casted to LogicalFormula to macth with the aim of the norm
             defineObsProperty("constitutive_rule", x, parseFormula(c.getY().toString()),t,m);
 
-            
+
             if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof AgentStatusFunction){
-                defineObsProperty("agent_sf", c.getY().getId());    
+                defineObsProperty("agent_sf", c.getY().getId());
             }else
                 if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof EventStatusFunction){
-                    defineObsProperty("event_sf", c.getY().getId());    
+                    defineObsProperty("event_sf", c.getY().getId());
                 }else
                     if(sai.getProgram().getStatusFunctionByName(c.getY().toString()) instanceof StateStatusFunction){
-                        defineObsProperty("state_sf", c.getY().getId());    
+                        defineObsProperty("state_sf", c.getY().getId());
                     }
-                    
-    
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -233,7 +234,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     @Override
     public void addStateAssignment(String assignee, StateStatusFunction sf) {
     	defineObsProperty("sai_is", assignee, sf.getId());
-        stateAssignmentsToShow.add(assignee + " is " + sf);      
+        stateAssignmentsToShow.add(assignee + " is " + sf);
     }
 
 
@@ -241,7 +242,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     @Override
     public void addAgentAssignment(String assignee, AgentStatusFunction sf) {
     	defineObsProperty("sai_is", assignee, sf.getId());
-        agentAssignmentsToShow.add(assignee + " is " + sf);              
+        agentAssignmentsToShow.add(assignee + " is " + sf);
     }
 
 
@@ -250,11 +251,11 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     public void addEventAssignment(String assignee, EventStatusFunction sf,
             Atom agent) {
     	defineObsProperty("sai_is", assignee, sf.getId(),agent.toString());
-        eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);           
+        eventAssignmentsToShow.add(assignee + " is " + sf + " caused by " + agent);
     }
 
 
-    
+
     @Override
     public void removeStateAssignment(String assignee, StateStatusFunction sf) {
         if(stateAssignmentsToShow.contains(assignee + " is " + sf))
@@ -278,18 +279,18 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             eventAssignmentsToShow.remove(assignee + " is " + sf + " caused by " + agent);
 
     }
-    
+
     /**
-     * Add the artifactName to the list of to be ignored artifacts    
+     * Add the artifactName to the list of to be ignored artifacts
      * @param artifactName
      */
     @OPERATION
     public void ignoreArtifact(String artifactName) {
     	this.ruleEngine.addArtifactToIgnore(artifactName);
     }
-    
+
     /**
-     * Remove the artifactName from the list of to be ignored artifacts    
+     * Remove the artifactName from the list of to be ignored artifacts
      * @param artifactName
      */
     @OPERATION
@@ -300,7 +301,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     class MyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange t) throws IOException {
-            String response = "<html><font face=\"arial\"></font>";
+            /*String response = "<html><font face=\"arial\"></font>";
             response = response + "<html><font face=\"arial\">SAI Constitutive State <br></font>";
             response = response + "<iframe src=\""+ getContext() + "/assignments\"align=top width=\"100%\" height=\"40%\"></iframe>";
             response = response + "<br><br><br><html><font face=\"arial\">Environmental State <br></font>";
@@ -308,22 +309,32 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             response = response + "<br><br><br><html><font face=\"arial\">Constitutive Program <br></font>";
             response = response + "<iframe src=\""+ getContext() + "/constProgram\"align=top width=\"100%\" height=\"40%\"></iframe>";
             response = response + "<br><br><br><html><font face=\"arial\">Ignored Artifacts <br></font>";
-            response = response + "<iframe src=\""+ getContext() + "/ignoredArts\"align=top width=\"100%\" height=\"40%\"></iframe>";
+            response = response + "<iframe src=\""+ getContext() + "/ignoredArts\"align=top width=\"100%\" height=\"40%\"></iframe>";*/
+            String response = "<html><head><title>SAI Inspector -- " + id +  "</title></head><body>";
+            //response = response + "<iframe src=\""+ getContext() + "/menu\" width=\"20%\" height=\"100%\" align=left border=5 frameborder=0 > </iframe>";
+            response = response + "<iframe src=\""+ getContext() + "/menu\" width=\"20%\" height=\"100%\" align=left border=5 frameborder=0 > </iframe>";
+            response = response + "<iframe width=\"78%\" height=\"100%\" align=left src=\"/agent-mind/no_ag\" name=\"infoFrame\" border=5 frameborder=0></iframe>";
+            response = response + "aaaa</body></head>";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();
         }
+
+
     }
 
     class AssignmentsHandler implements HttpHandler {
+        private boolean showAgentSF = true;
+        private boolean showAEventSF = true;
+        private boolean showStateSF = true;
         @Override
         public void handle(HttpExchange t) throws IOException {
             String response = "<html>";
-            response = response + "<br><font face=\"arial\" color=\"green\">Agent-status function assignments:<br></font><font face=\"arial\">";
+            /*response = response + "<br><font face=\"arial\" color=\"green\">Agent-status function assignments:<br></font><font face=\"arial\">";
             for(String s:agentAssignmentsToShow){
                 response = response + s.toString().replaceAll("Var", "_") + "<br>";
-            }               
+            }
             response = response + "<br><font face=\"arial\" color=\"green\">Event-status function assignments:<br></font><font face=\"arial\">";
             for(String s:eventAssignmentsToShow){
                 response = response + s.toString().replaceAll("Var", "_") + "<br>";
@@ -331,7 +342,41 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             response = response + "<br><font face=\"arial\" color=\"green\">State-status function assignments:<br></font><font face=\"arial\">";
             for(String s:stateAssignmentsToShow){
                 response = response + s.toString().replaceAll("Var", "_") + "<br>";
+            }*/
+            response = response + "<table border=0>" +
+                                  "<tr><td>Agent-Status Function Assignments<td></td></tr>";
+            for(String s:agentAssignmentsToShow){
+               response = response + "<tr><td></td><td>"+s.toString().replaceAll("Var", "_") + "</td></tr>";
             }
+            response = response +"<tr><td>Event-Status Function Assignments<td></td></tr>";
+            for(String s:eventAssignmentsToShow){
+                response = response + "<tr><td></td><td>" + s.toString().replaceAll("Var", "_") + "</td></tr>";
+            }
+            response = response +"<tr><td>State-Status Function Assignments<td></td></tr>";
+            for(String s:stateAssignmentsToShow){
+                response = response +  "<tr><td></td><td>" + s.toString().replaceAll("Var", "_") + "</td></tr>";
+            }
+
+            response = response + "</table>";
+            response = response + "</html>";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+
+    class MenuHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            String response = "<html>";
+            //response = response + "<a href=\"/assignments\" style=\"font-family: arial; text-decoration: none\"assignmentss</a><br>";
+            response = response + "Constitutive State <br> Environmental State<br>"+
+                                  "<a href=\""+ getContext() + "/assignments\" style=\"font-family: arial; text-decoration: none\" target=\"infoFrame\">Constitutive state</a><br>"+
+                                  "<a href=\""+ getContext() + "/environment\" style=\"font-family: arial; text-decoration: none\" target=\"infoFrame\">Environmental state</a><br>"+
+                                  "<a href=\""+ getContext() + "/constProgram\" style=\"font-family: arial; text-decoration: none\" target=\"infoFrame\">Constitutive program</a><br>"+
+                                  "<a href=\""+ getContext() + "/ignoredArts\" style=\"font-family: arial; text-decoration: none\" target=\"infoFrame\">Ignored Artifacts</a><br>";
+
             response = response + "</html>";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
@@ -349,7 +394,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             ArrayList<String> state = new ArrayList<String>();
             for(Literal l : envState){
                 if(l.getFunctor().toString().equals("sigmaA")){
-                    agents.add(l.getTerm(0).toString());                    
+                    agents.add(l.getTerm(0).toString());
                 }
                 else
                     if(l.getFunctor().toString().equals("sigmaE"))
@@ -376,7 +421,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             os.close();
         }
     }
-    
+
     class ConstitutiveProgramHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange t) throws IOException {
@@ -384,7 +429,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             response = response + "<br><font face=\"arial\" color=\"green\">Constitutive program:<br></font><font face=\"arial\">";
             for(ConstitutiveRule r: sai.getProgram().getConstitutiveRules()) {
             	response = response + r.toString().replaceAll("Var", "_") + "<br>";
-            }            
+            }
             response = response + "</html>";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
@@ -399,7 +444,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
             String response = "<html>";
             response = response + "<br><font face=\"arial\" color=\"green\">Ignored artifacts<br></font><font face=\"arial\">";
             for(String s: new ArrayList<String>(ruleEngine.getArtifactsToIgnore().values())) {
-            	response = response + s + "<br>"; 
+            	response = response + s + "<br>";
             }
             response = response + "</html>";
             t.sendResponseHeaders(200, response.length());
@@ -413,3 +458,4 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
 
 
 }
+
