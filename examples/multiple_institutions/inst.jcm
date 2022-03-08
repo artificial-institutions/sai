@@ -2,34 +2,38 @@
 
 Example of multiple institutions in the same system.
 
-The sample_agent acts in the workspaces w1 and w2 producing brute facts. These facts are handled by the institutions i1 and y2.
+The sample_agent acts in the workspaces w1, w3, and w2 producing brute facts.
+These facts have different institutional meanings in the institutions i1 and i2, cf. /src/org/demo1 and /src/org/demo2, respectively.
 
-ToDo: a single workspace affecting multiple institutions.
 
 */
 
 mas inst {
 
     agent bob: sample_agent.asl {
-        focus: w1.a, w2.b
+        focus: w1.a1, w2.a2, w3.a3
     }
 
     workspace w1 {
-        artifact a: tools.Counter(10)
+        artifact a1: tools.Counter(10)
     }
 
 
     workspace w2 {
-        artifact b: tools.Counter(10)
+        artifact a2: tools.Counter(10)
+    }
+
+    workspace w3 {
+        artifact a3: tools.Counter(10)
     }
 
     institution i1 : demo1.sai {
-        workspaces: w1
+        workspaces: w1, w2
 
     }
 
     institution i2 : demo2.sai {
-        workspaces: w2
+        workspaces: w2,w3
     }
 
 }
