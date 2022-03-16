@@ -1,10 +1,17 @@
-apply plugin: 'java'
+
+apply plugin: 'java-library'
 apply plugin: 'antlr'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version '0.5-SNAPSHOT'
+version '0.5.1-SNAPSHOT'
 group   'org.jacamo'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(15)
+    }
+}
 
 repositories {
     mavenCentral()
