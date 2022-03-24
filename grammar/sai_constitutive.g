@@ -1,3 +1,5 @@
+//To generate the grammar files, type antlr4 sai_constitutive.g
+
 grammar sai_constitutive;
 
 
@@ -38,7 +40,7 @@ t			:	'when' event_sf ;
 m			:	'while' sf_formula;
 
 agent_sf:	ATOM;
-event_sf:	pred;
+event_sf:	pred|VAR;
 state_sf:	pred;
 
 agent_x:	ATOM;
@@ -114,7 +116,7 @@ DIGIT	:	'0'..'9';
 TERM_NULL:	'_';
 
 COMMENT_STAT
-	:	 //'/*' (options {greedy=false;} : .)* '*/' //{$channel=HIDDEN;} //<- para antlr3
+	:	// '/*' (options {greedy=false;} : .)* '*/' //{$channel=HIDDEN;} //<- para antlr3
 		'/*' .*? '*/'-> channel(HIDDEN) //<- para antlr4
 		;
 
