@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.time.LocalDateTime;
 
 import sai.main.lang.semantics.InstProgram;
 import sai.main.lang.semantics.InstProgram_Reasoner;
@@ -91,12 +92,26 @@ public class SaiEngine/* implements Observer */{
 	 * The new event is properly formatted according to the Reasoner patterns
 	 * @param event
 	 */
-	public void addEnvironmentalEvent(Literal event, Atom agent){
+	public void addEnvironmentalEvent(Literal event, Atom agent, LocalDateTime time ){
 		this.addEnvironmentalAgent(agent); //the agent must be added before the event because when the reason reasons about the event, it must "know" the agent.
 		Pred annot = new Pred(createLiteral("sai__agent"));
 		annot.addTerm(agent);
-		event.addAnnot(annot);		
-		Literal eventToAdd = createLiteral("sigmaE", event);				
+		event.addAnnot(annot);	
+		
+		
+		
+		Pred annotTime = new Pred(createLiteral("sai__time"));
+		annotTime.addTerms(createAtom(Integer.toString(time.getYear())),
+			      	       createAtom(Integer.toString(time.getMonthValue())),
+			      	       createAtom(Integer.toString(time.getDayOfMonth())),
+		                   createAtom(Integer.toString(time.getHour())),
+		                   createAtom(Integer.toString(time.getMinute())),
+		                   createAtom(Integer.toString(time.getSecond())),
+		                   createAtom(Integer.toString(time.getNano()))				
+				);		
+		event.addAnnot(annotTime);
+		
+		Literal eventToAdd = createLiteral("sigmaE", event);	
 		this.environmentQueue.add(eventToAdd);		
 	}
 
