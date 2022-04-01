@@ -40,7 +40,7 @@ t			:	'when' event_sf ;
 m			:	'while' sf_formula;
 
 agent_sf:	ATOM;
-event_sf:	pred|VAR;
+event_sf:	pred|(VAR(annotation)?);
 state_sf:	pred;
 
 agent_x:	ATOM;
