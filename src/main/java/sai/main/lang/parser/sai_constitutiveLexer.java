@@ -1,4 +1,4 @@
-// Generated from sai_constitutive.g by ANTLR 4.8
+// Generated from sai_constitutive.g by ANTLR 4.7.2
 
 package sai.main.lang.parser;
 
@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class sai_constitutiveLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =

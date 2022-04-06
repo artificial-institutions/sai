@@ -13,14 +13,12 @@ apply plugin: 'eclipse'
 version '1.0'
 group   'org.jacamo'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 repositories {
     mavenCentral()
 
-    maven { url "http://jacamo.sourceforge.net/maven2" }
-    maven { url "http://jade.tilab.com/maven/" }
+     maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
+     maven { url "https://repo.gradle.org/gradle/libs-releases-local" }
+   
 
     flatDir {
        dirs 'lib'
@@ -28,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.jacamo', name: 'jacamo', version: '0.7'
+   implementation('org.jacamo:jacamo:1.1-SNAPSHOT')    
 }
 
 sourceSets {

@@ -105,10 +105,12 @@ public class InstProgram_Reasoner extends InstProgram{
 
 
 	@Override
-	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule)	throws Exception {
+	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule) throws Exception	{		
+
 		if(crule.getY()==null || getStatusFunctionByName(crule.getY().toString())==null) {			
 			throw new StatusFunctionNotFoundException();
 		}
+
 
 		if((getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction)&&(!crule.getX().isVar())&&(getStatusFunctionByName(crule.getX().toString())==null)){	//if Y is a state status function, the term X is added to the term M, thus it is not necessary add "true" to the term M
 			if(crule.getM()==null||crule.getM().toString()=="true")
@@ -119,12 +121,13 @@ public class InstProgram_Reasoner extends InstProgram{
 				crule.setM(parseFormula("true"));
 			}
 
+
 		String rule = "sai__crule(";
 		if(crule.getX().toString().equals("_")){ //the parser (sai_constitutveListenerImpl.java) returns "_" when termX is null.
 			crule.setX(new Pred(createLiteral("sai__freestandingY")));
 		}
 		else
-			if((getStatusFunctionByName(crule.getX().toString())!=null)&(!crule.getX().isVar())){
+			if((getStatusFunctionByName(crule.getX().toString())!=null)&(!crule.getX().isVar())){ 
 				if(getStatusFunctionByName(crule.getX().toString()) instanceof EventStatusFunction){
 					Pred p = new Pred(crule.getX().getFunctor());
 					p.addTerms(crule.getX().getTerms());				
@@ -156,14 +159,17 @@ public class InstProgram_Reasoner extends InstProgram{
 
 
 		rule = rule + ",";
-		
-		rule = rule.replaceAll("((_)+(\\d+)(Var)?)+", "Var$3");
 
+		/* In the case of state-status function, the term X is attached to the term M due to substitutions*/
+		//if(getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction){
+		//	rule = rule + "("+crule.getX().toString() + ")&";
+		//}
+
+		//rule = rule + crule.getM();
 		rule = rule + FormulaAdapter.adaptFormula( crule.getM().toString().replaceAll("((_)+(\\d+)(Var)?)+", "Var$3"), this);
-		
 		rule = rule + ")";
 
-		
+
 		reasoner.assertValue(rule);
 		return super.addConstitutiveRule(crule);
 	}

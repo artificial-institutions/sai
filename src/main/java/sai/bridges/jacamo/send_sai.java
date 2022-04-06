@@ -1,27 +1,28 @@
 package sai.bridges.jacamo;
 
+import java.util.HashMap;
+
 import cartago.AgentIdCredential;
-import cartago.ArtifactId;
-import cartago.CartagoContext;
+import cartago.CartagoEvent;
 import cartago.CartagoException;
-import cartago.CartagoService;
+import cartago.ICartagoCallback;
+import cartago.ICartagoContext;
 import cartago.Op;
 import cartago.OpFeedbackParam;
-import cartago.WorkspaceId;
-import jason.JasonException;
-import jason.asSemantics.Message;
+import cartago.Workspace;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Term;
-import jason.asSyntax.Atom;
 import jason.asSyntax.ListTerm;
-import jason.asSyntax.StringTerm;
 
 import jason.stdlib.send;
 
 public class send_sai extends send {
 
-	private static CartagoContext cartagoCtx = null;
+	private HashMap<Term, ICartagoContext> contexts = new HashMap<Term, ICartagoContext>();
+	private HashMap<String, Workspace> workspaces = new HashMap<String, Workspace>();
+	private cartago.CartagoEnvironment cenv = cartago.CartagoEnvironment.getInstance(); 
+	private Workspace main = cenv.getRootWSP().getWorkspace();
 
 	@Override
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {		
@@ -33,72 +34,41 @@ public class send_sai extends send {
 	}
 
 
-	private void notifyInstitutions(Term target, Term performative, Term message, ListTerm institutions, String sender ) {
+	private void notifyInstitutions( Term target,Term performative, Term message, ListTerm institutions, String sender ) {
+		System.out.println("[send_sai] notifyIntitutions " + target +" - " + performative.toString() + ", " + message.toString() + "," + institutions);
 		for(Term inst : institutions) {
-			if(cartagoCtx==null) {
-			   cartagoCtx = new CartagoContext(new AgentIdCredential("JaCaMo_Inst_Launcher"), inst.toString());
+			if(workspaces.get(inst.toString())==null)
+				workspaces.put(inst.toString(), main.getChildWSP(inst.toString()).get().getWorkspace());
+			Workspace instWks = workspaces.get(inst.toString());
+			if(contexts.get(inst)==null){				
+				ICartagoContext context = null;
+				try {
+					context = instWks.joinWorkspace(new AgentIdCredential("JaCaMoLauncherAgOrg"), new ICartagoCallback() {
+						public void notifyCartagoEvent(CartagoEvent a) {    }
+					});
+				} catch (CartagoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				contexts.put(inst, context);
 			}
 			try {
-				WorkspaceId wspId = cartagoCtx.getJoinedWspId(inst.toString());
-				ArtifactId artId = cartagoCtx.lookupArtifact(wspId, inst.toString()+ "_art");					
-				// get listener object from SAI
-				OpFeedbackParam<RuleEngine> obj = new OpFeedbackParam<RuleEngine>();
-				cartagoCtx.doAction(artId, new Op("getRuleEngine", new Object[] { obj } ));				
+				String artName = instWks.getId() + "_art";
+				OpFeedbackParam<RuleEngine> obj = new OpFeedbackParam<RuleEngine>(); 
+				contexts.get(inst).doAction(1, instWks.getArtifact(artName).getName(),new Op("getRuleEngine", new Object[] { obj } ), null,-1);
+				int i=0;
+	            while (obj.get() == null && i++ < 30) {Thread.sleep(50);}
 				obj.get().processActionCompleted("send("+target+","+performative+","+message+")", sender);
+				//System.out.println("[sai.bridges.jacamo.send_sai] " + "send("+target+"," +performative+","+message+")" + sender);
+
 			} catch (CartagoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-
-	/*private void notifyInstitutions(Term target, Term performative, Term message) {
-		CartagoContext cartagoCtx;			
-		cartagoCtx = new CartagoContext(new AgentIdCredential("JaCaMo_Inst_Launcher"), "inst_a");
-		try {
-			for(WorkspaceId wspId:cartagoCtx.getJoinedWorkspaces()) {
-				ArtifactId artId = cartagoCtx.lookupArtifact(wspId, "inst_a_art");
-				//ArtifactId artId = cartagoCtx.lookupArtifact(wspId, "xxxxxxxxxx");
-				System.out.println("[send_sai] xxxxxxx");
-				cartagoCtx.focus(artId);
-
-				// get listener object from SAI
-				OpFeedbackParam<RuleEngine> obj = new OpFeedbackParam<RuleEngine>();
-				cartagoCtx.doAction(artId, new Op("getRuleEngine", new Object[] { obj } ));
-
-				//obj.get().processActionCompleted("send(a,b)", "bob");
-				obj.get().processActionCompleted("send("+target+","+performative+","+message+")", "bob");
-
-			}
-		} catch (CartagoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		 
-
-	}*/
-
-	/*public Object execute(TransitionSystem ts, Unifier un, Term[] args, ConstitutiveArt[] institutions) throws Exception {
-		for(int i=0;i<institutions.length;i++) {
-			System.out.println("[send_sai] " + institutions[i]);
-		}
-
-        return super.execute(ts, un, args);
-    }*/
-
-	private void delegateSendToArch(Term to, TransitionSystem ts, Message m) throws Exception {
-		if (!to.isAtom() && !to.isString())
-			throw new JasonException("The TO parameter ('"+to+"') of the internal action 'send' is not an atom!");
-
-		String rec = null;
-		if (to.isString())
-			rec = ((StringTerm)to).getString();
-		else if (to.isAtom())
-			rec = ((Atom)to).getFunctor(); // remove annotations 
-		else
-			rec = to.toString();
-		if (rec.equals("self"))
-			rec = ts.getUserAgArch().getAgName();
-		m.setReceiver(rec);
-		ts.getUserAgArch().sendMsg(m);
-	}
+	
 }

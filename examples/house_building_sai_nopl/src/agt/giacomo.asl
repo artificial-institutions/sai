@@ -18,7 +18,7 @@ number_of_tasks(NS) :- .findall( S, task(S), L) & .length(L,NS).
 
 /* Plans */
 
-+!have_a_house  
++!have_a_house
    <- !contract; // hire the companies that will build the house
       !execute.  // (simulates) the execution of the construction
 
@@ -29,7 +29,7 @@ number_of_tasks(NS) :- .findall( S, task(S), L) & .length(L,NS).
 /* Plans for Contracting */
 
 +!contract
-   <- start[artifact_id(Clock)]; //while the clock is counting the bidders can bid 
+   <- start[artifact_id(Clock)]; //while the clock is counting the bidders can bid
       ?nticks(Starting_Auction_Time);
       +starting_auction_time(Starting_Auction_Time);
       !wait_for_bids.
@@ -37,16 +37,16 @@ number_of_tasks(NS) :- .findall( S, task(S), L) & .length(L,NS).
 
 
 +!wait_for_bids:nticks(X)&(X>=8000) // use an internal deadline of 5 seconds to close the auctions
-   <-   joinWorkspace("wsp_auction",I);
+   <-
       stop[artifact_id(Clock)];
       !show_winners.
 
-      
+
 +!wait_for_bids
    <- ?nticks(X);
-      ?starting_auction_time(Starting_Auction_Time)
+      ?starting_auction_time(Starting_Auction_Time);
       println("Waiting the bids ", 8000-X," seconds...");
-      .wait(1000); 
+      .wait(1000);
       !wait_for_bids;
       .
 
@@ -66,19 +66,26 @@ number_of_tasks(NS) :- .findall( S, task(S), L) & .length(L,NS).
       println;
 
       // create the GUI artifact
+      joinWorkspace("/main",_);
       createWorkspace("wsp_house");
-      joinWorkspace("wsp_house",WspHouse); 
-      makeArtifact("housegui", "simulator.House")[wid(WspHouse)];
+      joinWorkspace("/main/wsp_house",WspHouse);
 
-      joinWorkspace("bh",_);
+      makeArtifact("housegui", "simulator.House")[wid(WspHouse)];
+      lookupArtifact("housegui", HouseArt);
+      focus(HouseArt);
+
+
+      joinWorkspace("/main/bh",_);
       lookupArtifact("bh_art", InstArt);
-      focus(InstArt)
+      focus(InstArt);
       getRuleEngine(RE)[artifact_id(InstArt)];
-      joinWorkspace("wsp_house",Wsp_House); 
-      setWSPRuleEngine(RE)[artifact_id(Wsp_House)]; //links the woskspace "wsp_house" to SAI. Thus, the SAI engine is fed with the environmental facts from that workspace           
+
+      joinWorkspace("/main/wsp_house",WspHouse2);
+      setWSPRuleEngine(RE)[artifact_id(WspHouse2)]; //links the woskspace "wsp_house" to SAI. Thus, the SAI engine is fed with the environmental facts from that workspace
+
       !in_ora4mas;
       !contract_winners("hsh_group").
-      
+
 
 +!contract_winners(GroupName)
     : number_of_tasks(NS) &
@@ -93,7 +100,3 @@ number_of_tasks(NS) :- .findall( S, task(S), L) & .length(L,NS).
 +!contract_winners(_)
    <- println("** I didn't find enough builders!");
       .fail.
-
-
-
-

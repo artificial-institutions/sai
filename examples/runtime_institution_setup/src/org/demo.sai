@@ -1,0 +1,9 @@
+institution_id : test.
+
+status_functions:
+   states: c(a).
+
+
+constitutive_rules:
+
+1: count(a,5) count-as c(a).

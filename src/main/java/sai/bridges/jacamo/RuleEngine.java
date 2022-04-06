@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.time.LocalDateTime.now;
+
 import sai.main.institution.SaiEngine;
 import cartago.AbstractWSPRuleEngine;
 import cartago.AgentId;
@@ -84,7 +86,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 
 				for(SaiEngine institution:institutions){
 					try {
-						institution.addEnvironmentalEvent(parseLiteral(fact), createAtom(agent));
+						institution.addEnvironmentalEvent(parseLiteral(fact), createAtom(agent), now());
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -108,7 +110,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 
 		for(SaiEngine institution:institutions){
 			try {
-				institution.addEnvironmentalEvent(parseLiteral(fact), createAtom(agent));
+				institution.addEnvironmentalEvent(parseLiteral(fact), createAtom(agent), now());
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -353,7 +355,7 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 				Term triggeringAgent = p.getTerm(p.getTerms().size()-1);
 				p.getTerms().remove(p.getTerms().size()-1);
 				for(SaiEngine engine:institutions){									
-					engine.addEnvironmentalEvent(p, createAtom(adaptAgentId(triggeringAgent.toString())));
+					engine.addEnvironmentalEvent(p, createAtom(adaptAgentId(triggeringAgent.toString())), now());
 				}
 			}
 		} catch (ParseException e1) {

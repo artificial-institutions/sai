@@ -1,33 +1,36 @@
-apply plugin: 'java'
+
+apply plugin: 'java-library'
 apply plugin: 'antlr'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version '0.4'
+version '0.5.1-SNAPSHOT'
 group   'org.jacamo'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(15)
+    }
+}
 
 repositories {
     mavenCentral()
 
 
         //url "http://jacamo.sourceforge.net/maven2"
-        maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
+       maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
 
-    
 }
 
 dependencies{
    antlr "org.antlr:antlr4:4.8" // use ANTLR version 4
-   compile group: 'org.jason'      , name: 'jason'   , version: '2.6-SNAPSHOT' , changing: true, transitive: false
-   compile group: 'org.jacamo',     name: 'moise' ,   version: '0.13', changing: true, transitive: false
-   compile group: 'org.jacamo',     name: 'npl' ,     version: '0.5', changing: false, transitive: false
-   compile group: 'org.jacamo',     name: 'cartago',  version: '2.5', changing: true, transitive: false
-   compile group: 'org.jacamo',     name: 'jaca',     version: '2.5', changing: true, transitive: false
+   implementation group: 'org.jason'      , name: 'jason'   , version: '3.1-SNAPSHOT' , changing: true, transitive: false
+   implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.0', changing: true, transitive: false
+   implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.5', changing: false, transitive: false
+   implementation group: 'org.jacamo'     , name: 'cartago' , version: '3.1-SNAPSHOT' , changing: true, transitive: false
+   implementation group: 'org.jacamo'     , name: 'jaca'    , version: '3.1-SNAPSHOT' , changing: true, transitive: false
 
-   testCompile 'junit:junit:4.12'
+   testImplementation 'junit:junit:4.12'
 }
 
 jar {
@@ -74,8 +77,6 @@ publishing {
     }
 }
 
-
-
 task publishMavenGitHub(dependsOn: [ 'build', 'publishToMavenLocal']) {
   doLast {
     def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/sai'
@@ -102,8 +103,6 @@ task publishMavenGitHub(dependsOn: [ 'build', 'publishToMavenLocal']) {
     }
   }
 }
-
-
 
 /*task publishMavenSF(dependsOn: [ 'jar', 'build', 'publishToMavenLocal', 'sourceJar', 'javadocJar']) {
   doLast {

@@ -192,7 +192,7 @@ public class ConstitutiveReasoner extends Thread {
 							assignee = adaptTerm(un.get("X").toString());
 						}
 						else{
-							sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(un.get("M").toString())) +")");
+							sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(un.get("M").toString())) +")");						
 							assignee = "_";
 						}						
 

@@ -99,6 +99,8 @@ public class FormulaAdapter {
 	public static String adaptFormula(String lformula, InstProgram instProgram) throws IOException, ParseException{						
 		return FormulaAdapter.adaptFormula(parseFormula(lformula), instProgram);
 	}
+
+
 	
 	
 	/**

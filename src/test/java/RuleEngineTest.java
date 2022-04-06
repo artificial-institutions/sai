@@ -10,15 +10,11 @@ import cartago.AgentIdCredential;
 import cartago.Artifact;
 import cartago.ArtifactAlreadyPresentException;
 import cartago.ArtifactId;
-import cartago.CartagoContext;
 import cartago.CartagoException;
-import cartago.CartagoService;
-import cartago.CartagoWorkspace;
 import cartago.EventRegistry;
 import cartago.Op;
 import cartago.WorkspaceArtifact;
 import cartago.WorkspaceId;
-import cartago.WorkspaceKernel;
 import cartago.events.ActionSucceededEvent;
 import cartago.tools.Clock;
 import jaca.CartagoEnvironment;
@@ -44,31 +40,6 @@ public class RuleEngineTest {
 	}
 
 
-	/*
-	 * Test the processing of an action of an artifact that should be ignored
-	 */
-	@Test
-	public void test_ProcessActionCompleted_IgnoredArt() {
-		CartagoEnvironment env = new CartagoEnvironment();
-		String[] params = {};
-		env.init(params);  
-		try {
-			CartagoContext cartagoCtx = CartagoService.startSession(CartagoService.MAIN_WSP_NAME, new AgentIdCredential("JaCaMo_Launcher"));
-			CartagoService.createWorkspace("wsp");
-			WorkspaceId wid = cartagoCtx.joinWorkspace("wsp", new AgentIdCredential("JaCaMoLauncherAgEnv"));
-			ArtifactId aid = cartagoCtx.makeArtifact(wid, "myArt","cartago.tools.Clock"); 
-			Op op = new Op("op", new Object[] {});
-			ActionSucceededEvent ev = new ActionSucceededEvent(0, 0, op, aid);
-			RuleEngine re = new RuleEngine();
-			re.addArtifactToIgnore("myArt");
-			assertTrue(re.toIgnoreArt(ev));
-		} catch (CartagoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	
 	/**
 	 * test the handling of string as arguments of events
 	 */

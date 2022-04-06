@@ -110,15 +110,14 @@ public class sai_constitutiveListenerImpl extends sai_constitutiveBaseListener{
 
 	@Override public void exitConst_rule(@NotNull sai_constitutiveParser.Const_ruleContext ctx)  {
 		StatusFunction y = null;
-   	    try {
-			y = instProgram.getStatusFunctionByName(ctx.count_as_stat().y().getText().toString());
-			Pred x = null;
-			LogicalFormula t = null;
-			LogicalFormula m = null;
-
-
-
-
+		y = instProgram.getStatusFunctionByName(ctx.count_as_stat().y().getText().toString());
+		Pred x = null;
+		LogicalFormula t = null;
+		LogicalFormula m = null;
+		
+		
+		
+		try {
 			if(ctx.count_as_stat().x()!=null){				
 				x = (Pred) parseLiteral(ctx.count_as_stat().x().getText());
 			}
@@ -141,9 +140,6 @@ public class sai_constitutiveListenerImpl extends sai_constitutiveBaseListener{
 			e.printStackTrace();
 		} catch (StatusFunctionNotFoundException e) {
 			System.err.println("Failed to add constitutive rule. The status function " + ctx.count_as_stat().y().getText().toString() + " in term Y does not belong to the institution" );				
-			e.printStackTrace();	
-		} catch (SaiException e) {
-			// TODO Auto-generated catch block				
 			e.printStackTrace();				
 		} catch (RevisionFailedException e) {
 			// TODO Auto-generated catch block
@@ -153,46 +149,6 @@ public class sai_constitutiveListenerImpl extends sai_constitutiveBaseListener{
 			e.printStackTrace();
 		}
 
-		/*Pred y = null; 
-		if(ctx.count_as_stat().y()!=null){
-			try {
-				y = (Pred) parseLiteral(ctx.count_as_stat().y().getText());
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			Pred x = null;
-			if(ctx.count_as_stat().x()!=null)
-				try {
-					x = (Pred) parseLiteral(ctx.count_as_stat().x().getText());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			LogicalFormula t = null;
-			if(ctx.t()!=null)
-				try {
-					t = parseFormula(ctx.t().getText());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			LogicalFormula m = null;
-			if(ctx.m()!=null)
-				try {
-					m = parseFormula(ctx.m().getText());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			//instProgram.addConstitutiveRule(new ConstitutiveRule(x,y,t,m));
-		}
-		else{
-
-		}
-		 */
+	
 	}
 }

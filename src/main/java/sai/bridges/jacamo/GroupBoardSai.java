@@ -1,15 +1,17 @@
+/**
+ * This class implements a general purpose GroupBoard that takes part in a SAI institution.
+ * 
+ * For JaCaMo applications, use a GroupBoardSaiJaCaMo.
+ */
+
+
 package sai.bridges.jacamo;
 
-import cartago.AgentIdCredential;
 import cartago.ArtifactId;
-import cartago.CartagoContext;
-import cartago.CartagoException;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
-import cartago.Op;
 import cartago.OpFeedbackParam;
 import cartago.OperationException;
-import cartago.util.agent.ActionFailedException;
 import moise.common.MoiseException;
 import npl.NormativeFailureException;
 import npl.parser.ParseException;
@@ -26,112 +28,44 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 
     private NOpl2Sai npl2sai;
 
-    private CartagoContext cartagoCtx;
+	@Override
+	public void init(final String osFile, final String grType) throws ParseException, MoiseException, OperationException {
+		super.init(osFile, grType);
 
-    @Override
-    public void init(final String osFile, final String grType) throws ParseException, MoiseException, OperationException {
-        super.init(osFile, grType);
-
-        this.npl2sai = new NOpl2Sai(getNormativeEngine());
-        this.npl2sai.addGroupListener(this);
-        String workspacename = getCreatorId().getWorkspaceId().getName();
-        cartagoCtx = new CartagoContext(new AgentIdCredential("sai__institution"), workspacename);
-        try {
-            cartagoCtx.joinWorkspace(workspacename, new AgentIdCredential("sai__institution__ag"));
-        } catch (CartagoException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @OPERATION
-    public void getNormativeEngine(OpFeedbackParam<INormativeEngine> nEngine){
-        nEngine.set(this.npl2sai);
-    }
-
-
-    public void sai_play(String agent, String role, String group) {
-        if (orgState.hasPlayer(agent, role))
-            return;
-        try {
-            cartagoCtx.doAction(this.getId(), new Op("internal_adoptRole", new Object[] {agent, role}));
-        } catch (ActionFailedException e) {
-            e.printStackTrace();
-        } catch (CartagoException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @INTERNAL_OPERATION
-    private void internal_adoptRole(String ag, String role){
-        adoptRole(ag, role);        
-    }
-
-    
-    /*@INTERNAL_OPERATION
-    private void adoptRole(String ag, String role) {
-        if (!running) return;
-        boolean oldStatus = isWellFormed();
-        CollectiveOE bak = orgState.clone();
-        orgState.addPlayer(ag, role);
-        try {
-            nengine.verifyNorms();
-
-            boolean status = isWellFormed();
-            if (parentGroup != null) {
-                execLinkedOp(parentGroup, "updateSubgroupPlayers", orgState.getId(), orgState.getPlayers());
-                if (status != oldStatus) {
-                    logger.fine(orgState.getId()+": informing parent group that now my formation is "+status);
-                    execLinkedOp(parentGroup, "updateSubgroupFormationStatus", orgState.getId(), status);
-                }
-            }
-            notifyObservers();
-
-            defineObsProperty(obsPropPlay, 
-                    new JasonTermWrapper(ag), 
-                    new JasonTermWrapper(role), 
-                    this.getId().getName());            
-            if (status != oldStatus) { 
-                getObsProperty(obsWellFormed).updateValue(new JasonTermWrapper(status ? "ok" : "nok"));
-
-                while (!futureSchemes.isEmpty()) {
-                    String sch = futureSchemes.remove(0);
-                    //logger.info("Since the group "+orgState.getId()+" is now well formed, adding scheme "+sch);
-                    addScheme(sch);
-                }
-            }
-            updateGuiOE();            
-        } catch (NormativeFailureException e) {
-            e.printStackTrace();
-            orgState = bak; // takes the backup as the current model since the action failed
-            failed("Error adopting role "+role, "reason", new JasonTermWrapper(e.getFail()));
-        } catch (Exception e) {
-            orgState = bak; // takes the backup as the current model since the action failed
-            e.printStackTrace();
-            failed(e.toString());
-        }   
-    }
-*/
-    
-    public void sai_responsible(String group, String scheme) {      
-        if(group.replaceAll("\"", "").equals(this.getId().getName())){
-			while(!this.isWellFormed()){ //TODO: put this in a thread
-			}			
-			//execInternalOp("internal_addScheme", scheme.replaceAll("\"", ""));
-            try {
-                cartagoCtx.doAction(this.getId(), new Op("internal_addScheme", new Object[] {scheme.replaceAll("\"", "")}));
-			} catch (ActionFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CartagoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}		
+		this.npl2sai = new NOpl2Sai(getNormativeEngine());
+		this.npl2sai.addGroupListener(this);
 	}
 
-	@INTERNAL_OPERATION //implemented in the superclass as the operation addScheme
+
+	@OPERATION
+	public void getNormativeEngine(OpFeedbackParam<INormativeEngine> nEngine){
+		nEngine.set(this.npl2sai);
+	}
+
+
+	public void sai_play(String agent, String role, String group) {
+		if (orgState.hasPlayer(agent, role))
+			return;
+		adoptRole(agent, role);
+	}
+
+
+	@INTERNAL_OPERATION
+	private void internal_adoptRole(String ag, String role){
+		adoptRole(ag, role);        
+	}
+
+	public void sai_responsible(String group, String scheme) {      
+		if(group.replaceAll("\"", "").equals(this.getId().getName())){
+			while(!this.isWellFormed()){ //TODO: put this in a thread
+			}			
+			internal_addScheme(scheme.replaceAll("\"", ""));
+		}	
+
+	}
+
+	//@INTERNAL_OPERATION 
+	//implemented in the superclass as the operation addScheme
 	private void internal_addScheme(String schId) {		
 		if (!running) return;
 		CollectiveOE bak = orgState.clone();
@@ -139,14 +73,14 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 			ArtifactId schAr = lookupArtifact(schId);
 			getGrpState().addResponsibleForScheme(schId);			
 			nengine.verifyNorms();
-			
+
 
 			getObsProperty(obsPropSchemes).updateValue(getGrpState().getResponsibleForAsProlog());
 
-			
+
 			schemes.add(schAr);
 			notifyObservers();
-		    
+
 			updateGuiOE();
 
 			// update in subgroups
@@ -154,8 +88,8 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 				ArtifactId sgid = lookupArtifact(sg.getId());
 				execLinkedOp(sgid, "addScheme", schId);                
 			}
-			
-			
+
+
 
 		} catch (NormativeFailureException e) {
 			orgState = bak; // takes the backup as the current model since the action failed
@@ -171,22 +105,18 @@ public class GroupBoardSai extends GroupBoard implements IGroup2SaiListener {
 	 * Set the institution which the SchemeBoard belongs to. 
 	 * An institution is actually a SaiEngine
 	 */
-    @OPERATION
-    public void setInstitution(SaiEngine institution){
-    	institution.addNormativeEngine(this.getNormEngine());
-    }
-	 
-	
-    
+	@OPERATION
+	public void setInstitution(SaiEngine institution){
+		institution.addNormativeEngine(this.getNormEngine());
+
+	}
+
+
+
 	public INormativeEngine getNormEngine() {	
 		return this.npl2sai;
 	}
 
-
-	//the same in the superclass. Should be protected there
-	/*private Group getGrpState() {
-		return (Group)orgState;
-	}*/
 
 
 }

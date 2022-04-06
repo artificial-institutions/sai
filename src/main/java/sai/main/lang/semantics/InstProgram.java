@@ -16,6 +16,7 @@ import java.util.Observable;
 
 import sai.norms.sai.semantics.Norm;
 import sai.main.exception.SaiException;
+import sai.main.exception.StatusFunctionNotFoundException;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 import sai.main.lang.semantics.statusFunction.AgentStatusFunction;
 import sai.main.lang.semantics.statusFunction.EventStatusFunction;
@@ -65,7 +66,7 @@ public class InstProgram extends Observable {
 
 	public ConstitutiveRule addConstitutiveRule(ConstitutiveRule crule) throws Exception{
 		if(getStatusFunctionByName(crule.getY().toString())==null){
-			throw new SaiException("Invalid status function: " + crule.getY().toString());
+			throw new StatusFunctionNotFoundException();
 		}	
 		constitutiveRules.put(crule.hashCode(), crule);		
 		this.setChanged();		
