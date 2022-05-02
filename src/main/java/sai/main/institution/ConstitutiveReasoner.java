@@ -5,7 +5,9 @@ import static jason.asSyntax.ASSyntax.parseLiteral;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Pred;
+import jason.asSyntax.Term;
 
+import java.io.IOException;
 import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -62,7 +64,12 @@ public class ConstitutiveReasoner extends Thread {
 			this.reasoner.assertValue("fulfilled(A,obliged,I,C,O,R):-sai__active__norm(A,D,I,C,O,R)&not(R)&I");
 			this.reasoner.assertValue("fulfilled(A,prohibited,I,C,O,R):-sai__active__norm(A,D,I,C,O,R)&R&not(I)");
 			this.reasoner.assertValue("to_remove_norm(A,D,I,C,O,R):-sai__active__norm(A,D,I,C,O,R)&((D==obliged&(I|R))|(D==prohibited&R))");
+			
 
+			//rules to check time precedence
+			this.reasoner.assertValue("before_date(Year1,Month1,Day1,Year2,Month2,Day2):-(Year1<Year2)|(Year1==Year2&Month1<Month2)|(Year1==Year2&Month1==Month2&Day1<Day2)");
+			this.reasoner.assertValue("before(Year1,Month1,Day1,Hour1,Minute1,Second1,Milissecond1,Year2,Month2,Day2,Hour2,Minute2,Second2,Milissecond2):-before_date(Year1,Month1,Day1,Year2,Month2,Day2)|(Hour1<Hour2)|(Hour1==Hour2 & Minute1<Minute2)|(Hour1==Hour2 & Minute1==Minute2 & Second1<Second2)|(Hour1==Hour2 & Minute1==Minute2 & Second1==Second2&Milissecond1<Milissecond2)");
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -187,15 +194,9 @@ public class ConstitutiveReasoner extends Thread {
 					Unifier un = it.next();
 					if(reasoner.check( adaptTerm(un.get("M").toString()))){
 						changed=true;
-						if(un.get("X")!=null){
-							sToAdd.add("sai__is("+ adaptTerm(un.get("X").toString()) + ","+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(un.get("M").toString()),false)+")");
-							assignee = adaptTerm(un.get("X").toString());
-						}
-						else{
-							sToAdd.add("sai__is(_,"+ adaptTerm(un.get("Y").toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(un.get("M").toString())) +")");						
-							assignee = "_";
-						}						
-
+						
+						assignee = addStateSf(un.get("X"), un.get("Y"), un.get("M"), sToAdd);
+						
 						for( ConstitutiveListener l : constitutiveListeners){
 							l.addStateAssignment(assignee, new StateStatusFunction(new Pred(parseLiteral(adaptTerm(un.get("Y").toString())))));
 						}						
@@ -297,6 +298,19 @@ public class ConstitutiveReasoner extends Thread {
 
 		}//synchronized
 
+	}
+	
+	private String addStateSf(Term x, Term y, Term m, List<String> sToAdd) throws IOException {
+		String assignee;
+		if(x!=null){
+			sToAdd.add("sai__is("+ adaptTerm(x.toString()) + ","+ adaptTerm(y.toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(m.toString()),false)+")");
+			assignee = adaptTerm(x.toString());
+		}
+		else{
+			sToAdd.add("sai__is(_,"+ adaptTerm(y.toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(m.toString())) +")");						
+			assignee = "_";
+		}
+		return assignee;
 	}
 
 	public List<Unifier> getConstitutiveLiterals() throws Exception{
