@@ -310,6 +310,7 @@ public class ConstitutiveReasoner extends Thread {
 			sToAdd.add("sai__is(_,"+ adaptTerm(y.toString())+","+FormulaAdapter.adaptContextSFA(adaptTerm(m.toString())) +")");						
 			assignee = "_";
 		}
+		sToAdd.add(adaptTerm(y.toString()));
 		return assignee;
 	}
 
