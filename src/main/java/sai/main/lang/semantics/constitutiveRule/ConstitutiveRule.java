@@ -57,7 +57,10 @@ public class ConstitutiveRule extends SaiElement {
 		String s = "";
 		if(getX()!=null)
 			s = s.concat(getX().toString());
-		s = s.concat(" count-as " + getY().toString());
+		if(getY()==null)
+			s = s.concat(" count-as NULL ");
+		else
+		   s = s.concat(" count-as " + getY().toString());
 		if(getT()!=null)
 			s = s.concat(" when " + getT().toString());
 		if(getM()!=null)
