@@ -1,31 +1,3 @@
-// Agent sample_agent in project teste_list_jason
-
-/* Initial beliefs and rules */
-
-/* Initial goals */
-
-!start.
-
-/* Plans */
-
-+!start : true <-    
-   !setup_sai;      
-   load("src/org/norms.npl");
-   start. //start the clock
-
-
-+!setup_sai <-
-   joinWorkspace("test",I);
-   lookupArtifact("test_art",ArtSai); 
-   focus(ArtSai);
-   getSaiEngine(SE)[artifact_id(ArtSai)];
-    
-   joinWorkspace("wsp_npl",WspNpl);
-   lookupArtifact("nplArt",NplArt);
-   focus(NplArt);
-   setInstitution(SE)[artifact_id(NplArt)].
-
-
 
 // obligation to achieve a goal
 // ============================      
@@ -48,6 +20,22 @@
    <- println("I am obliged to ",What,", but I don't know what to do!").
 
 
+
+
+//start the clock artifact
++!start_session <-       
+    start. //start the clock, meaning that the session is started    
+
+
+//connect norms to institution
++!setup_sai: focusing(ArtSai,inst_test_art,_,_,inst_test,_) & focusing(NplArt,nplArt,_,_,wsp_npl,_) <-
+   getSaiEngine(SE)[artifact_id(ArtSai)];
+   setInstitution(SE)[artifact_id(NplArt)];
+   load("src/org/norms.npl").   
+
++!setup_sai<-
+    .wait(focusing(A,_,_,B,inst_test,_)&focusing(ArtSai,inst_test_art,_,_,inst_test,_) & focusing(NplArt,nplArt,_,_,wsp_npl,_));
+    !setup_sai.
 
 
 { include("$jacamoJar/templates/common-cartago.asl") }
