@@ -15,8 +15,11 @@
 mas sai_npl {
 
     agent sample_agent{
-    	focus: wsp_test.clock
-    	focus: wsp_npl.nplArt
+    	focus: wsp_test.clock, 
+               wsp_npl.nplArt,
+               inst_test.inst_test_art //focus on the institutional artifact
+        goals: start_session,
+               setup_sai  //connect norms and institution
     }
 
     workspace wsp_test{
@@ -28,7 +31,7 @@ mas sai_npl {
           artifact nplArt: sai.bridges.jacamo.NormativeBoardSai
     }
      
-    institution test:constitutive.sai{
+    institution inst_test:constitutive.sai{
        workspaces: wsp_test
    }
 
