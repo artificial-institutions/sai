@@ -33,7 +33,7 @@
 
 //start the clock artifact
 +!start_session <-       
-   .wait(2000);
+   .wait(2000); //wait the system setup
     start. //start the clock, meaning that the session is started    
 
 
