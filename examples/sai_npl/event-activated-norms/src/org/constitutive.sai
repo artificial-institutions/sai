@@ -1,0 +1,21 @@
+institution_id : inst_test.
+
+status_functions:
+
+agents: clock_manager.
+
+events: finish_session(1), start_session(1).
+
+
+constitutive_rules:
+
+
+/* The agent that starts the clock counts as the clock_manager */
+1: Agent count-as clock_manager when start[sai__agent(Agent)].
+
+
+/* Stop the clock counts as finish_session if the agent that stops it counts as clock_manager */
+2: stop[sai__agent(Agent)] count-as finish_session(1) while Agent is clock_manager.
+
+/* The event of starting the clock counts as starting the session */
+4: start[sai__agent(Agent)] count-as start_session(1).
