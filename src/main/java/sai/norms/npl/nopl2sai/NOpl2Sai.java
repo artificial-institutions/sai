@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import npl.NPLInterpreter;
 import sai.main.lang.semantics.statusFunction.StateStatusFunction;
 import sai.norms.npl.npl2sai.Npl2Sai;
+import sai.bridges.jacamo.GroupBoardSaiJaCaMo;
 
 
 /**
@@ -83,6 +84,16 @@ public class NOpl2Sai extends Npl2Sai{
 		else if(arg1.getState().getFunctor().equals("responsible")){			
 			for(IGroup2SaiListener listener:groupListeners){
 				listener.sai_responsible(arg1.getState().getTerm(0).toString(), arg1.getState().getTerm(1).toString());
+				if(listener instanceof GroupBoardSaiJaCaMo)
+				    
+				    while(!((GroupBoardSaiJaCaMo)listener).isResponsibleForScheme(arg1.getState().getTerm(1).toString().replaceAll("\"", ""))){
+					try {
+					   Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+				   };
 			}
 		}
 		else if(arg1.getState().getFunctor().equals("formationStatusOk")){			
