@@ -103,7 +103,9 @@ list_term
 
 
 STRING
-	:	'"'(ATOM|VAR|DIGIT|SPECIAL_CHAR_TERM)+(('/'|' ')(ATOM|VAR|DIGIT|SPECIAL_CHAR_TERM))*'"';
+	:	//'"'(ATOM|VAR|DIGIT|SPECIAL_CHAR_TERM)+(('/'|' ')(ATOM|VAR|DIGIT|SPECIAL_CHAR_TERM))*'"';	
+		'"'('a'..'z'|'A'..'Z'|DIGIT|'_'|'$'|'@'|SPECIAL_CHAR_TERM)*'"';
+		
 NEGATION 	:	'not';
 TK_NEG 	:                     '~';
 INTDIV	:	 'div';
@@ -116,7 +118,7 @@ DIGIT	:	'0'..'9';
 TERM_NULL:	'_';
 
 SPECIAL_CHAR_TERM
-	:	('-'|'+'|'%'|'*'|'!'|'@'|'#'|'&');
+	:	('-'|'+'|'%'|'*'|'!'|'@'|'#'|'&'|'/'|':'|'.');
 
 COMMENT_STAT
 	:	// '/*' (options {greedy=false;} : .)* '*/' //{$channel=HIDDEN;} //<- para antlr3
