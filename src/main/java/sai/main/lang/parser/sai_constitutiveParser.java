@@ -24,7 +24,8 @@ public class sai_constitutiveParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, TK_OR=22, TK_AND=23, TK_REL_OP=24, 
 		TK_IS=25, STRING=26, NEGATION=27, TK_NEG=28, INTDIV=29, INTMOD=30, ATOM=31, 
-		VAR=32, DIGIT=33, TERM_NULL=34, COMMENT_STAT=35, WS=36;
+		VAR=32, DIGIT=33, TERM_NULL=34, SPECIAL_CHAR_TERM=35, COMMENT_STAT=36, 
+		WS=37;
 	public static final int
 		RULE_constitutive_spec = 0, RULE_normative_id = 1, RULE_status_functions = 2, 
 		RULE_agent_sf_decl = 3, RULE_agent_sf_list = 4, RULE_event_sf_decl = 5, 
@@ -65,7 +66,8 @@ public class sai_constitutiveParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, "TK_OR", 
 			"TK_AND", "TK_REL_OP", "TK_IS", "STRING", "NEGATION", "TK_NEG", "INTDIV", 
-			"INTMOD", "ATOM", "VAR", "DIGIT", "TERM_NULL", "COMMENT_STAT", "WS"
+			"INTMOD", "ATOM", "VAR", "DIGIT", "TERM_NULL", "SPECIAL_CHAR_TERM", "COMMENT_STAT", 
+			"WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2299,7 +2301,7 @@ public class sai_constitutiveParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3&\u0131\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\'\u0131\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
