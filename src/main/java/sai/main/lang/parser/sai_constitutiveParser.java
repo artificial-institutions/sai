@@ -1,7 +1,6 @@
-// Generated from sai_constitutive.g by ANTLR 4.7.2
+// Generated from grammar/sai_constitutive.g by ANTLR 4.8
 
 package sai.main.lang.parser;
-
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class sai_constitutiveParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -124,6 +123,7 @@ public class sai_constitutiveParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class Constitutive_specContext extends ParserRuleContext {
 		public Normative_idContext normative_id() {
 			return getRuleContext(Normative_idContext.class,0);
@@ -145,6 +145,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitConstitutive_spec(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitConstitutive_spec(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -195,6 +200,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitNormative_id(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitNormative_id(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -255,6 +265,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitStatus_functions(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitStatus_functions(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -332,6 +347,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitAgent_sf_decl(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitAgent_sf_decl(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Agent_sf_declContext agent_sf_decl() throws RecognitionException {
@@ -379,6 +399,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitAgent_sf_list(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitAgent_sf_list(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -436,6 +461,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitEvent_sf_decl(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitEvent_sf_decl(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Event_sf_declContext event_sf_decl() throws RecognitionException {
@@ -483,6 +513,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitEvent_sf_list(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitEvent_sf_list(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -540,6 +575,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitState_sf_decl(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitState_sf_decl(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final State_sf_declContext state_sf_decl() throws RecognitionException {
@@ -587,6 +627,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitState_sf_list(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitState_sf_list(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -646,6 +691,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitConstitutive_rules(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitConstitutive_rules(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -711,6 +761,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitConst_rule(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitConst_rule(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -779,6 +834,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitId(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitId(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final IdContext id() throws RecognitionException {
@@ -834,6 +894,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitCount_as_stat(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitCount_as_stat(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Count_as_statContext count_as_stat() throws RecognitionException {
@@ -888,6 +953,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitY(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitY(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final YContext y() throws RecognitionException {
@@ -927,6 +997,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitX(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitX(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -983,6 +1058,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitT(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitT(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final TContext t() throws RecognitionException {
@@ -1024,6 +1104,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitM(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitM(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final MContext m() throws RecognitionException {
@@ -1062,6 +1147,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitAgent_sf(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitAgent_sf(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1105,6 +1195,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitEvent_sf(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitEvent_sf(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1173,6 +1268,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitState_sf(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitState_sf(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final State_sfContext state_sf() throws RecognitionException {
@@ -1209,6 +1309,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitAgent_x(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitAgent_x(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1249,6 +1354,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitEvent_x(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitEvent_x(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Event_xContext event_x() throws RecognitionException {
@@ -1288,6 +1398,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitState_x(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitState_x(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final State_xContext state_x() throws RecognitionException {
@@ -1326,6 +1441,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitSf_formula(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitSf_formula(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1369,6 +1489,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitSff_or_expr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitSff_or_expr(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1426,6 +1551,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitSff_and_expr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitSff_and_expr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Sff_and_exprContext sff_and_expr() throws RecognitionException {
@@ -1482,6 +1612,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitSff_rel(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitSff_rel(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1545,6 +1680,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitArithm_term(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitArithm_term(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1610,6 +1750,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitArithm_factor(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitArithm_factor(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1682,6 +1827,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitSff_atom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitSff_atom(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1805,6 +1955,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitSai__is_term(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitSai__is_term(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Sai__is_termContext sai__is_term() throws RecognitionException {
@@ -1859,6 +2014,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitPred(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitPred(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1920,6 +2080,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitList_of_pred_terms(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitList_of_pred_terms(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final List_of_pred_termsContext list_of_pred_terms() throws RecognitionException {
@@ -1965,6 +2130,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitPred_terms(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitPred_terms(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2032,6 +2202,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitPred_term(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitPred_term(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2144,6 +2319,11 @@ public class sai_constitutiveParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitAnnotation(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitAnnotation(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final AnnotationContext annotation() throws RecognitionException {
@@ -2185,6 +2365,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitList(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitList(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2249,6 +2434,11 @@ public class sai_constitutiveParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sai_constitutiveListener ) ((sai_constitutiveListener)listener).exitList_term(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sai_constitutiveVisitor ) return ((sai_constitutiveVisitor<? extends T>)visitor).visitList_term(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
