@@ -64,12 +64,11 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     private ArrayList<String> agentAssignmentsToShow = new ArrayList<String>();
     private ArrayList<String> eventAssignmentsToShow = new ArrayList<String>();
     private ArrayList<String> stateAssignmentsToShow = new ArrayList<String>();
-
+    private String  VERSION = "5.0.2";
 
 
 
     void init(String id, String constitutiveProgramPath) {
-        log("SAI Engine version 0.5-dev");        
         defineObsProperty("institution", createAtom(id));        
         this.ruleEngine = new RuleEngine();
         sai = new SaiEngine();
@@ -97,7 +96,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
         server.getServer().createContext(getContext()+"/constProgram", new ConstitutiveProgramHandler());
         server.getServer().createContext(getContext()+"/ignoredArts", new IgnoredArtifactsHandler());
         
-        log("Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
+        log("SAI v."+ VERSION +" - Institution \"" + id + "\" started. Go to http://localhost:" + SaiHttpServer.SAI_HTTP_SERVER_PORT+ getContext() + " to inspect the constitutive state.");
 
     }
 
