@@ -51,24 +51,42 @@ public class SchemeBoardSaiJaCaMo extends SchemeBoardSai {
 				e1.printStackTrace();
 			}
 
-			while(true){            
-				if(commitmentsList.size()>0){                                        
-					added.clear();
+                        //wait for some responsible group
+			while (getSchState().getIdsGroupsResponsibleFor().isEmpty()) {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+				}
+			}
 
-					synchronized (commitmentsList) {                        
-						for(Commitment c:commitmentsList){
+			while (true) {
+				synchronized (commitmentsList) {
+
+					if (commitmentsList.size() > 0) {
+						added.clear();
+
+						for (Commitment c : commitmentsList) {
 							try {
-								//cartagoCtx.doAction(SchemeBoardSai.this.getId(), new Op("internal_commitMission", new Object[] {c.getAgent(),c.getMission()}));
-								//commitMission(c.getAgent(),c.getMission());
-								context.doAction(1, SchemeBoardSaiJaCaMo.this.getId().toString(), new Op("internal_commitMission", new Object[] {c.getAgent(),c.getMission()}), null, -1);
+								context.doAction(1, SchemeBoardSaiJaCaMo.this.getId().toString(),
+										new Op("internal_commitMission", new Object[] { c.getAgent(), c.getMission() }),
+										null, -1);
+								added.add(c);
+
+                                                               //wait until the commitment is processed by the orgnanization
+								while(!orgState.hasPlayer( c.getAgent(), c.getMission() )){
+									try {
+										Thread.sleep(50);
+									} catch (InterruptedException e) {
+									}
+								}
 							} catch (ActionFailedException e) {
 								e.printStackTrace();
 							} catch (CartagoException e) {
 								e.printStackTrace();
 							}
-							added.add(c);
-						}   
-					}                   
+
+						}
+					}
 					commitmentsList.removeAll(added);
 				}
 
@@ -84,11 +102,20 @@ public class SchemeBoardSaiJaCaMo extends SchemeBoardSai {
 								if(nengine.getAg().believes(parseFormula("fulfilled(obligation("+c.getAgent()+",_,done("+getSchState().getId()+","+c.getGoal()+","+c.getAgent()+"),_))"), new Unifier())){
 									addedAchievement.add(c);
 								}
-								else{
-									toAchieve = nengine.getAg().believes(parseFormula("enabled("+getSchState().getId()+","+c.getGoal()+")"), new Unifier());
-									if(toAchieve){
-										execInternalOp("internal_goalAchieved",c.getAgent(),c.getGoal());
-									}   
+                                                               else{
+									toAchieve = nengine.getAg().believes(parseFormula("enabled("+getSchState().getId()+","+c.getGoal()+")"),new Unifier());
+									if (toAchieve) {
+										//execInternalOp("internal_goalAchieved", c.getAgent(), c.getGoal());
+										try {
+											context.doAction(1, SchemeBoardSaiJaCaMo.this.getId().toString(),
+													new Op("internal_goalAchieved",
+															new Object[] { c.getAgent(), c.getGoal() }),
+													null, -1);
+										} catch (CartagoException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
 								}
 							} catch (jason.asSyntax.parser.ParseException e) {
 								e.printStackTrace();

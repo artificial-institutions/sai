@@ -4,6 +4,8 @@
 
 package sai.bridges.jacamo;
 
+import java.util.HashSet;
+
 import cartago.AgentIdCredential;
 import cartago.ArtifactId;
 import cartago.CartagoEvent;
@@ -25,7 +27,7 @@ import ora4mas.nopl.oe.Group;
 public class GroupBoardSaiJaCaMo extends GroupBoardSai {
 
 	protected String institution = null;
-
+	private HashSet<String> schemesResponsible = new HashSet<String>(); //schemes this group is responsible for
 
 	@Override
 	public void init(final String osFile, final String grType) throws ParseException, MoiseException, OperationException {
@@ -87,6 +89,7 @@ public class GroupBoardSaiJaCaMo extends GroupBoardSai {
 				execLinkedOp(sgid, "addScheme", schId);                
 			}
 
+			schemesResponsible.add(schId.replaceAll("\"", ""));
 
 
 		} catch (NormativeFailureException e) {
@@ -96,5 +99,9 @@ public class GroupBoardSaiJaCaMo extends GroupBoardSai {
 			orgState = bak; // takes the backup as the current model since the action failed
 			failed(e.toString());
 		}   
+	}
+
+	public boolean isResponsibleForScheme(String scheme){
+		return schemesResponsible.contains(scheme);
 	}
 }

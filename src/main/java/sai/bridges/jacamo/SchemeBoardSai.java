@@ -165,7 +165,7 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
 		public boolean equals(Object obj) {
 			if (!(obj instanceof Commitment)) { return false;}
 			Commitment c = (Commitment) obj;
-			if(!c.getAgent().equals(this.getAgent())&&c.getMission().equals(this.getMission()))
+			if (!(c.getAgent().equals(this.getAgent()) && c.getMission().equals(this.getMission())))
 				return false;
 
 			return true;
