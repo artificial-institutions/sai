@@ -1,4 +1,5 @@
-//To generate the grammar files, type antlr4 sai_constitutive.g
+// To generate the grammar files, use the script generate_parser.sh
+// Currently using antlr4.8. 
 
 grammar sai_constitutive;
 
