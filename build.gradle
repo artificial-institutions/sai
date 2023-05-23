@@ -4,7 +4,7 @@ apply plugin: 'antlr'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version '0.5.1'
+version '0.5.3'
 group   'org.jacamo'
 
 java {
