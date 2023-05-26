@@ -1,0 +1,22 @@
+/**/
+
+institution_id : bhInst.
+
+
+status_functions:
+
+states: raining(X).
+events: rain_warning(X), rain_warning_broadcast(X).
+
+
+
+
+constitutive_rules:
+
+1: raining(X,true) count-as raining(X).
+ 
+/*2: send(Ag,tell,raining) count-as rain_warning(alice)[sai__agent(Sai__Agent)].*/
+
+2: send(Receiver,tell,raining)[sai__agent(Sender)] count-as rain_warning(Receiver).
+
+3: broadcast(tell,raining)[sai__agent(Agent)] count-as rain_warning_broadcast(Agent).

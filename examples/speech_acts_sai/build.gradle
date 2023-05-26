@@ -1,0 +1,61 @@
+/*
+   example: house building
+
+   Gradle build file for JaCaMo Application
+   September 27, 2018 - 15:33:36
+*/
+
+defaultTasks 'run'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version '1.0'
+group   'org.jacamo'
+
+
+repositories {
+    mavenCentral()
+
+     maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
+     maven { url "https://repo.gradle.org/gradle/libs-releases-local" }
+     maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+     
+     maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+
+    flatDir {
+       dirs 'lib'
+    }
+}
+
+dependencies {
+   //implementation('org.jacamo:jacamo:1.1')    
+    //implementation name: 'sai-0.5.11' 
+    implementation('org.jacamo:jacamo:1.2') 
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/env'
+            srcDir 'src/agt'
+            srcDir 'src/org'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
+}
+
+task run (type: JavaExec, dependsOn: 'classes') {
+    description 'runs the application'
+    group ' JaCaMo'
+    main = 'jacamo.infra.JaCaMoLauncher'
+    args 'speech_acts_sai_dev.jcm'
+    classpath sourceSets.main.runtimeClasspath
+}
+
+clean {
+    delete 'bin'
+    delete 'build'
+}
