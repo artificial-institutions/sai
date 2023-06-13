@@ -60,7 +60,7 @@ constitutive_rules:
           play(Plumber1,plumber,"hsh_group")  &  not(play(Plumber2,plumber,"hsh_group") & not(Plumber1==Plumber2))&play(Window_fitter1,window_fitter,"hsh_group") &  not(play(Window_fitter2,window_fitter,"hsh_group")& not(Window_fitter1==Window_fitter2))&play(Door_fitter1,door_fitter,"hsh_group")& not(play(Door_fitter2,door_fitter,"hsh_group") & not(Door_fitter1==Door_fitter2))&play(Roofer1,roofer,"hsh_group") &  not(play(Roofer2,roofer,"hsh_group") & not(Roofer1==Roofer2))&play(House_owner1,house_owner,"hsh_group") &  not(play(House_owner2,house_owner,"hsh_group") & not(House_owner1==House_owner2)).
 
 
-/* Rules 13 to 22 (2nd order constitution): An the state of an agent A carrying the status function Y counts as the state committed(A,M,S) in the institution */
+/* Rules 13 to 22 (2nd order constitution): The state where an agent A carries the status function Y counts as the state committed(A,M,S) in the institution */
 12: play(A,house_owner,"hsh_group")
     count-as committed(A,management_of_house_building,"bhsch")
     while responsible("hsh_group","bhsch").
