@@ -111,6 +111,7 @@ public class InstProgram_ReasonerTest {
 		}				
 	}
 	
+
 	/* check whether an exception is raised when a constitutive rule with invalid SF in term Y	 is to be added */
 	@Test
 	public void testAddConstitutiveRule_NullF() throws ParseException, TokenMgrError, Exception{
