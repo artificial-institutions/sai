@@ -5,7 +5,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jason.infra.centralised.RunCentralisedMAS;
+import jason.infra.local.RunLocalMAS;
 
 public class SaiLogger {
 
@@ -14,7 +14,7 @@ public class SaiLogger {
 	
 	
 	private SaiLogger(){
-		if (RunCentralisedMAS.getRunner() == null) { // it is not running under jason/jacamo
+		if(RunLocalMAS.getRunner() == null){ // it is not running under jason/jacamo
 			logger.setLevel(Level.FINEST);
 			try {
 				logger.setUseParentHandlers(false);

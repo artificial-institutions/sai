@@ -259,6 +259,9 @@ public class RuleEngine extends AbstractWSPRuleEngine {
 	}
 
 	private String adaptTerm(String term){
+		//if the term has "-", it is a string (if it were not a string,  it would be an invalid term)
+		//TODO: handle other special chars
+		if(term.indexOf("-")>-1) term = "\"" + term + "\"" ; 
 		return term.replace("$", "S").replace("@","_at_").replace("->", ",");
 
 	}

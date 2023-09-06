@@ -1,11 +1,9 @@
-/**/
-
 institution_id : bhInst.
 
 
 status_functions:
 
-states: play(A,R,G), responsible(G,S), committed(A,Mission,S), achieved(S,G,A), done(S,G,A)/*, well_formed(Group)*/.
+states: play(A,R,G), responsible(G,S), committed(A,Mission,S), done(S,G,A).
 
 
 
@@ -62,7 +60,7 @@ constitutive_rules:
           play(Plumber1,plumber,"hsh_group")  &  not(play(Plumber2,plumber,"hsh_group") & not(Plumber1==Plumber2))&play(Window_fitter1,window_fitter,"hsh_group") &  not(play(Window_fitter2,window_fitter,"hsh_group")& not(Window_fitter1==Window_fitter2))&play(Door_fitter1,door_fitter,"hsh_group")& not(play(Door_fitter2,door_fitter,"hsh_group") & not(Door_fitter1==Door_fitter2))&play(Roofer1,roofer,"hsh_group") &  not(play(Roofer2,roofer,"hsh_group") & not(Roofer1==Roofer2))&play(House_owner1,house_owner,"hsh_group") &  not(play(House_owner2,house_owner,"hsh_group") & not(House_owner1==House_owner2)).
 
 
-/* Rules 13 to 22 (2nd order constitution): An the state of an agent A carrying the status function Y counts as the state committed(A,M,S) in the institution */
+/* Rules 13 to 22 (2nd order constitution): The state where an agent A carries the status function Y counts as the state committed(A,M,S) in the institution */
 12: play(A,house_owner,"hsh_group")
     count-as committed(A,management_of_house_building,"bhsch")
     while responsible("hsh_group","bhsch").
@@ -107,87 +105,36 @@ constitutive_rules:
 
 
 
-/* Rules 23 to 22: the occurrence of some events in the environment counts-as, in the institution, the state achieved(S,G,A) */
-22: count-as achieved("bhsch",site_prepared,Agent)
+/* Rules 22 to 32: the occurrence of some events in the environment counts-as, in the institution, the state done(S,G,A) */
+22: count-as done(bhsch,site_prepared,Agent)
     when prepareSite[sai__agent(Agent)].
 
-23: count-as achieved("bhsch",electrical_system_installed,Agent)
+23: count-as done(bhsch,electrical_system_installed,Agent)
     when installElectricalSystem[sai__agent(Agent)].
 
-24: count-as achieved("bhsch",floors_laid,Agent)
+24: count-as done(bhsch,floors_laid,Agent)
     when layFloors[sai__agent(Agent)].
 
-25: count-as achieved("bhsch",walls_built,Agent)
+25: count-as done(bhsch,walls_built,Agent)
     when buildWalls[sai__agent(Agent)].
 
-26: count-as achieved("bhsch",roof_built,Agent)
+26: count-as done(bhsch,roof_built,Agent)
     when buildRoof[sai__agent(Agent)].
 
-27: count-as achieved("bhsch",windows_fitted,Agent)
+27: count-as done(bhsch,windows_fitted,Agent)
     when fitWindows[sai__agent(Agent)].
 
-28: count-as achieved("bhsch",doors_fitted,Agent)
+28: count-as done(bhsch,doors_fitted,Agent)
     when fitDoors[sai__agent(Agent)].
 
-29: count-as achieved("bhsch",plumbing_installed,Agent)
+29: count-as done(bhsch,plumbing_installed,Agent)
     when installPlumbing[sai__agent(Agent)].
 
-30: count-as achieved("bhsch",electrical_system_installed,Agent)
+30: count-as done(bhsch,electrical_system_installed,Agent)
     when installElectricalSystem[sai__agent(Agent)].
 
-31: count-as achieved("bhsch",exterior_painted,Agent)
+31: count-as done(bhsch,exterior_painted,Agent)
     when paintExterior[sai__agent(Agent)].
 
-32: count-as achieved("bhsch",interior_painted,Agent)
-    when paintInterior[sai__agent(Agent)].
-
-33: count-as achieved("bhsch", house_built,Agent)
-    while play(A,house_owner,"hsh_group") &
-          achieved("bhsch",site_prepared,_) &
-          achieved("bhsch",electrical_system_installed,_) &
-          achieved("bhsch",floors_laid,_) &
-          achieved("bhsch",walls_built,_) &
-          achieved("bhsch",roof_built,_) &
-          achieved("bhsch",windows_fitted,_) &
-          achieved("bhsch",doors_fitted,_) &
-          achieved("bhsch",plumbing_installed,_) &
-          achieved("bhsch",electrical_system_installed,_) &
-          achieved("bhsch",exterior_painted,_) &
-          achieved("bhsch",interior_painted,_).
-
-
-
-
-/* Rules 23 to 22: the occurrence of some events in the environment counts-as, in the institution, the state achieved(S,G,A) */
-34: count-as done(bhsch,site_prepared,Agent)
-    when prepareSite[sai__agent(Agent)].
-
-35: count-as done(bhsch,electrical_system_installed,Agent)
-    when installElectricalSystem[sai__agent(Agent)].
-
-36: count-as done(bhsch,floors_laid,Agent)
-    when layFloors[sai__agent(Agent)].
-
-37: count-as done(bhsch,walls_built,Agent)
-    when buildWalls[sai__agent(Agent)].
-
-38: count-as done(bhsch,roof_built,Agent)
-    when buildRoof[sai__agent(Agent)].
-
-39: count-as done(bhsch,windows_fitted,Agent)
-    when fitWindows[sai__agent(Agent)].
-
-40: count-as done(bhsch,doors_fitted,Agent)
-    when fitDoors[sai__agent(Agent)].
-
-41: count-as done(bhsch,plumbing_installed,Agent)
-    when installPlumbing[sai__agent(Agent)].
-
-42: count-as done(bhsch,electrical_system_installed,Agent)
-    when installElectricalSystem[sai__agent(Agent)].
-
-43: count-as done(bhsch,exterior_painted,Agent)
-    when paintExterior[sai__agent(Agent)].
-
-44: count-as done(bhsch,interior_painted,Agent)
+32: count-as done(bhsch,interior_painted,Agent)
     when paintInterior[sai__agent(Agent)].

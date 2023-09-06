@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import npl.NPLInterpreter;
 import sai.main.lang.semantics.statusFunction.StateStatusFunction;
 import sai.norms.npl.npl2sai.Npl2Sai;
+import sai.bridges.jacamo.GroupBoardSaiJaCaMo;
 
 
 /**
@@ -62,7 +63,7 @@ public class NOpl2Sai extends Npl2Sai{
 	@Override	
 	public void addStateAssignment(String arg0, StateStatusFunction arg1) {
 		//System.out.println("[NOpl2Sai] adding state assignment " + arg0.toString() + " count-as " + arg1.toString() + " listeners " + schemeListeners.size());
-		if(arg1.getState().getFunctor().equals("achieved"))
+		if(arg1.getState().getFunctor().equals("achieved")|arg1.getState().getFunctor().equals("done"))
 			for(IScheme2SaiListener listener:schemeListeners){
 				listener.sai_goalAchieved(arg1.getState().getTerm(2).toString(),arg1.getState().getTerm(1).toString());
 			}

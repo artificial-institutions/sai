@@ -1,0 +1,19 @@
+/**/
+
+institution_id : bhInst.
+
+
+status_functions:
+
+states: bad_weather(X).
+events: bad_weather_warning(X).
+
+
+
+
+constitutive_rules:
+
+1: raining(X,true)
+   count-as bad_weather(X).
+   
+2: send(Agent,tell,raining) count-as bad_weather_warning(Agent).

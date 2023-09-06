@@ -1,0 +1,7 @@
+scope main {
+
+
+    norm n1: start_session(1)
+       -> obligation(clock_manager,n1, finish_session(1), `now`+`15 seconds`).
+    
+}

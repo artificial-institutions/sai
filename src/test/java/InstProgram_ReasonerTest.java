@@ -111,7 +111,8 @@ public class InstProgram_ReasonerTest {
 		}				
 	}
 	
-	/* check whether an exception is raised when a constitutive rule with invalid SF in term Y is to be added */
+
+	/* check whether an exception is raised when a constitutive rule with invalid SF in term Y	 is to be added */
 	@Test
 	public void testAddConstitutiveRule_NullF() throws ParseException, TokenMgrError, Exception{
 		InstProgram_Reasoner program = new InstProgram_Reasoner(new JasonReasoner());
@@ -120,8 +121,7 @@ public class InstProgram_ReasonerTest {
 		try {
 		   program.addConstitutiveRule(crule);
 		}catch (Exception e) {			
-			//assertEquals("Exception different from expected","StatusFunctionNotFoundException", e.getClass().getSimpleName());
-			System.out.println("[InstProgram_ReasonerTest] erroao adiconar " + crule.toString() + " - " + e.getClass().getSimpleName());
+			assertEquals("Exception different from expected","StatusFunctionNotFoundException", e.getClass().getSimpleName());
 		}				
 	}
 }

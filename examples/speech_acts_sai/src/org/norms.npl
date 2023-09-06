@@ -1,0 +1,13 @@
+scope main {
+
+    
+    /*norm n1: raining(X)
+       -> obligation(alice,n1, get(umbrella), `now`+`15 seconds`).*/
+               
+    norm n2: raining(X)
+       -> obligation(bob,n2, rain_warning(alice), `now`+`15 seconds`).          
+     
+    norm n3: raining(X)
+       -> obligation(bob,n3, rain_warning_broadcast(bob), `now`+`15 seconds`).                                  
+    
+}

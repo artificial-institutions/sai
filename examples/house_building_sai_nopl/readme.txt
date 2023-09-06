@@ -2,11 +2,7 @@ This is a "sitauted" version of the classical house_built example. The dynamic f
 
 
 Running the example:
-(1) in Eclipse, import the project as a JaCaMo project and run it as usual
-
-or
-
-(2) in a terminal, type #jacamo house.jcm.
+In a terminal, type ./gradlew run
 
 
 While the example is running:
