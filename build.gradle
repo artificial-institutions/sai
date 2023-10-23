@@ -25,12 +25,16 @@ repositories {
 }
 
 dependencies{
-   antlr "org.antlr:antlr4:4.8" // use ANTLR version 4
+   antlr "org.antlr:antlr4:4.12.0" // use ANTLR version 4
    implementation group: 'org.jason'      , name: 'jason'   , version: '3.1' , changing: true, transitive: false
    implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.0', changing: true, transitive: false
    implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.5', changing: false, transitive: false
    implementation group: 'org.jacamo'     , name: 'cartago' , version: '3.1-SNAPSHOT' , changing: true, transitive: false
    implementation group: 'org.jacamo'     , name: 'jaca'    , version: '3.1-SNAPSHOT' , changing: true, transitive: false
+   
+   // https://mvnrepository.com/artifact/javax.json/javax.json-api
+   implementation group: 'javax.json', name: 'javax.json-api', version: '1.1.4' //required  by jason.asSyntax.Literal
+
 
    testImplementation 'junit:junit:4.12'
 }
