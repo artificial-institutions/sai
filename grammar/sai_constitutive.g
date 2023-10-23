@@ -87,7 +87,7 @@ pred_terms
 	:	pred_term(','pred_term)*;	
 pred_term
 	:	//VAR|TERM_NULL|STRING|DIGIT+|ATOM(list_of_pred_terms)?|list_of_pred_terms;
-	       VAR|TERM_NULL|STRING|DIGIT+|ATOM(list_of_pred_terms)?|('('sff_or_expr')');
+	       VAR|TERM_NULL|STRING|DIGIT+|list|ATOM(list_of_pred_terms)?|('('sff_or_expr')');
 annotation
 	:	list;
 

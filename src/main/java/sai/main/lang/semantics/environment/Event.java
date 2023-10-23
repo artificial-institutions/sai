@@ -34,5 +34,11 @@ public class Event extends SaiElement {
 		this.agent = agent;
 	}
 
+	@Override
+	public String toString() {
+		return "("+name + ", " + agent.getName() + ")";
+	}
+
+	
 	
 }
