@@ -1,4 +1,4 @@
-// Generated from grammar/sai_constitutive.g by ANTLR 4.8
+// Generated from sai_constitutive.g by ANTLR 4.12.0
 
 package sai.main.lang.parser;
 
@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
+@SuppressWarnings("CheckReturnValue")
 public class sai_constitutiveBaseListener implements sai_constitutiveListener {
 	/**
 	 * {@inheritDoc}
