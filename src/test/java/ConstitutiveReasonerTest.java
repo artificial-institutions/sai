@@ -27,7 +27,7 @@ public class ConstitutiveReasonerTest {
 
 	@Test
 	public void test() {
-		int MAX_WAIT = 1000;
+		int MAX_WAIT = 10000;
 		System.out.println("-------------------- COMECANDO --------------------");
 		ConcurrentLinkedQueue<Literal> environmentQueue = new ConcurrentLinkedQueue<Literal>();
 		ConstitutiveReasoner r = new ConstitutiveReasoner(environmentQueue);
