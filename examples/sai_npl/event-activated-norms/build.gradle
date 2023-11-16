@@ -8,7 +8,7 @@ group   'org.jacamo'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(15)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -46,4 +46,10 @@ task run (type: JavaExec, dependsOn: 'classes') {
 clean {
     delete 'bin'
     delete 'build'
+}
+
+task buildJCMDeps (type: JavaExec, dependsOn: 'classes') {
+    mainClass = 'jacamo.infra.RunJaCaMoProject'
+    args = ['agents_intro.jcm', '--deps']
+    classpath sourceSets.main.runtimeClasspath
 }
