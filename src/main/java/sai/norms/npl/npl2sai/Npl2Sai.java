@@ -116,7 +116,7 @@ public class Npl2Sai implements INormativeEngine{
 	public void removeEventAssignment(String arg0, EventStatusFunction arg1,
 			AgentStatusFunction arg2) {
 		try {
-			nengine.getAg().getBB().remove(parseLiteral("sai__is("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));
+			nengine.getAg().getBB().remove(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
