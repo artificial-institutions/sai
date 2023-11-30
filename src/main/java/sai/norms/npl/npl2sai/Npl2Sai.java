@@ -37,7 +37,7 @@ public class Npl2Sai implements INormativeEngine{
 
 	public Npl2Sai(NPLInterpreter nengine){
 		this.nengine = nengine;
-		this.nengine.getAg().getBB().add(createLiteral("true"));
+		this.nengine.addFact(createLiteral("true"));
 	}
 
 
@@ -49,7 +49,7 @@ public class Npl2Sai implements INormativeEngine{
 	public void addAgentAssignment(String arg0, AgentStatusFunction arg1) {
 		synchronized (nengine) {					
 			try {				
-				nengine.getAg().getBB().add(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
+				nengine.addFact(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -66,7 +66,7 @@ public class Npl2Sai implements INormativeEngine{
 			Atom arg2) {
 		try {
 			synchronized (nengine) {
-				nengine.getAg().getBB().add(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));	
+				nengine.addFact(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -89,7 +89,7 @@ public class Npl2Sai implements INormativeEngine{
 				stateAssignments.put(arg1.toString(),v);
 			}
 			synchronized (nengine) {
-				nengine.getAg().getBB().add(parseLiteral(arg1.toString()));
+				nengine.addFact(parseLiteral(arg1.toString()));																
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -102,7 +102,7 @@ public class Npl2Sai implements INormativeEngine{
 	@Override
 	public void removeAgentAssignment(String arg0, AgentStatusFunction arg1) {
 		try {
-			nengine.getAg().getBB().remove(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
+			nengine.removeFact(parseLiteral("sai__is("+arg0.toString()+","+arg1.toString()+")"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();			
@@ -116,7 +116,7 @@ public class Npl2Sai implements INormativeEngine{
 	public void removeEventAssignment(String arg0, EventStatusFunction arg1,
 			AgentStatusFunction arg2) {
 		try {
-			nengine.getAg().getBB().remove(parseLiteral("sai__is("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));
+			nengine.removeFact(parseLiteral("sai__event("+arg1.toString()+"[sai__agent("+arg2.toString()+")])"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -137,7 +137,7 @@ public class Npl2Sai implements INormativeEngine{
 				stateAssignments.put(arg1.toString(), v);
 			}
 			if(v==0) {
-				nengine.getAg().getBB().remove(parseLiteral(arg1.toString()));
+				nengine.removeFact(parseLiteral(arg1.toString()));
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();			

@@ -239,11 +239,11 @@ public class SchemeBoardSai extends SchemeBoard implements IScheme2SaiListener{
 					synchronized (achievementsList) {
 						for(Goal c:achievementsList){
 							try {                                                                       
-								if(nengine.getAg().believes(parseFormula("fulfilled(obligation("+c.getAgent()+",_,done("+getSchState().getId()+","+c.getGoal()+","+c.getAgent()+"),_))"), new Unifier())){
+								if(nengine.holds(parseFormula("fulfilled(obligation("+c.getAgent()+",_,done("+getSchState().getId()+","+c.getGoal()+","+c.getAgent()+"),_))"))){
 									addedAchievement.add(c);
 								}
 								else{
-									toAchieve = nengine.getAg().believes(parseFormula("enabled("+getSchState().getId()+","+c.getGoal()+")"), new Unifier());
+									toAchieve = nengine.holds(parseFormula("enabled("+getSchState().getId()+","+c.getGoal()+")"));
 									if(toAchieve){
 										execInternalOp("internal_goalAchieved",c.getAgent(),c.getGoal());
 									}   
