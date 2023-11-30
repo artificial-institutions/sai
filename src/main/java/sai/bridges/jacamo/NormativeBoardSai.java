@@ -50,7 +50,10 @@ public class NormativeBoardSai extends NormativeBoard {
             logger.warning("error parsing \n"+nplProgram);
             e.printStackTrace();
             throw e;
-        }
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         
         /* The following piece of code is introduced in this artifact to convert Npl norms in SAI compliant NPL Nomrs */
@@ -79,7 +82,12 @@ public class NormativeBoardSai extends NormativeBoard {
         }
         
         for(INorm a:toAdd) {
-        	p.getRoot().addNorm(a);
+        	try {
+				p.getRoot().addNorm(a);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         
         

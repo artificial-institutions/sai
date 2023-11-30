@@ -11,6 +11,12 @@ public class WarningArtifact extends Artifact {
 	void rainWarning() {		
 		ObsProperty prop = getObsProperty("raining");
 		prop.updateValue(true);
+        }
+
+	@OPERATION
+	void undoRainWarning() {		
+		ObsProperty prop = getObsProperty("raining");
+		prop.updateValue(false);		
 	}
 }
 
