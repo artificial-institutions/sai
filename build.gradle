@@ -83,10 +83,11 @@ publishing {
     }
 }
 
+
 task publishMavenGitHub(dependsOn: [ 'build', 'publishToMavenLocal']) {
   doLast {
     def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/sai'
-    def rdir = System.getProperty("user.home")+'/pro/jacamo-mvn-repo'
+    def rdir = System.getProperty("user.home")+'/pro/mvn-repo'
     exec {
         commandLine 'git', 'pull'
         workingDir rdir
