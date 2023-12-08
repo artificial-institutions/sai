@@ -64,7 +64,7 @@ public class ConstitutiveArt extends Artifact implements ConstitutiveListener{
     private ArrayList<String> agentAssignmentsToShow = new ArrayList<String>();
     private ArrayList<String> eventAssignmentsToShow = new ArrayList<String>();
     private ArrayList<String> stateAssignmentsToShow = new ArrayList<String>();
-    private String  VERSION = "0.5.41";
+    private String  VERSION = "0.5.46";
 
 
 

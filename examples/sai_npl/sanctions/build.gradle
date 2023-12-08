@@ -35,8 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation('org.jacamo:jacamo:1.3-SNAPSHOT')
-    implementation files('/mnt/1C4C766F4C764414/maiquel/git/sai_sanctions/sai/build/libs/sai-0.5.4-SNAPSHOT.jar')
+    implementation('org.jacamo:jacamo:1.3-SNAPSHOT')    
 }
 
 sourceSets {
