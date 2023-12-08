@@ -94,7 +94,7 @@ public class InstProgram_ReasonerTest {
 		program.addStatusFunction(new StateStatusFunction(new Pred(parseLiteral("state3"))));
 		ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("teste")), new StateStatusFunction(new Pred(parseLiteral("state1"))), parseFormula("true"), parseFormula("state2&state3"));
 		program.addConstitutiveRule(crule);
-		assertTrue(program.CheckBel("sai__crule(teste,state1,sigmaE(true),sai__is(_,state2,_)&sai__is(_,state3,_))"));
+		assertTrue(program.CheckBel("sai__crule(teste,state1,sigmaE(true),teste&sai__is(_,state2,_)&sai__is(_,state3,_))"));
 	}
 	
 	
