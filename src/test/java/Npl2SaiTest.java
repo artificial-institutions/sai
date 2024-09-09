@@ -2,11 +2,9 @@
 
 import static org.junit.Assert.*;
 
-import java.util.Iterator;
 
 import org.junit.Test;
 
-import jason.asSemantics.Unifier;
 import jason.asSyntax.Pred;
 import jason.asSyntax.parser.ParseException;
 import jason.asSyntax.parser.TokenMgrError;
