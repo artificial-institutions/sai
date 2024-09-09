@@ -32,7 +32,6 @@ import jason.asSyntax.LiteralImpl;
 import jason.asSyntax.Pred;
 import jason.asSyntax.Structure;
 import jason.asSyntax.parser.ParseException;
-import npl.DeonticModality;
 import npl.DynamicFactsProvider;
 import npl.INorm;
 import npl.LiteralFactory;
@@ -397,7 +396,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 	}
 
 	@INTERNAL_OPERATION
-	void internal_fulfilled(DeonticModality o){
+	void internal_fulfilled(NormInstance o){
 		removeObsPropertyByTemplate("obligation", o.getTerm(0), o.getTerm(1), o.getTerm(2), o.getTerm(3));
 		defineObsProperty(o.getFunctor(), o.getTerms());		
 	}
@@ -409,7 +408,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 
 
 	@INTERNAL_OPERATION
-	void internal_unfulfilled(DeonticModality o){
+	void internal_unfulfilled(NormInstance o){
 		removeObsPropertyByTemplate("obligation", o.getTerm(0), o.getTerm(1), o.getTerm(2), o.getTerm(3));
 		defineObsProperty(o.getFunctor(), o.getTerms());		
 	}
@@ -434,7 +433,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 	}
 	
 	@INTERNAL_OPERATION
-	void internal_inactive(DeonticModality o){
+	void internal_inactive(NormInstance o){
 		removeObsPropertyByTemplate("obligation", o.getTerm(0), o.getTerm(1), o.getTerm(2), o.getTerm(3));
 		defineObsProperty(o.getFunctor(), o.getTerms());		
 	}
