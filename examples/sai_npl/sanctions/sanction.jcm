@@ -1,0 +1,18 @@
+mas sanction_demo {
+
+    agent karlos{
+        focus: wsp_test.clock, 
+               inst_test.inst_test_art //focus on the institutional artifact
+        goals: manage_clock, //start the clock to produces institutional facts
+               setup_sai //connect institution with the normative engine
+    }
+
+    workspace wsp_test{
+    	artifact clock : cartago.tools.Clock() //the clock produces the institutional facts that activate norms
+    }
+
+    institution inst_test:constitutive.sai{
+       workspaces: wsp_test
+   }
+
+}

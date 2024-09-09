@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import cartago.LINK;
 import cartago.OPERATION;
+import jason.asSyntax.Literal;
 import moise.common.MoiseException;
 import npl.INorm;
 import npl.NormativeProgram;
@@ -50,7 +51,10 @@ public class NormativeBoardSai extends NormativeBoard {
             logger.warning("error parsing \n"+nplProgram);
             e.printStackTrace();
             throw e;
-        }
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         
         /* The following piece of code is introduced in this artifact to convert Npl norms in SAI compliant NPL Nomrs */
@@ -63,6 +67,9 @@ public class NormativeBoardSai extends NormativeBoard {
         	try {
         		//create a SAI compliant norm
 				NormSai nSai = new NormSai("nSai" + ++i, n.getConsequence(), n.getCondition(), institution.getProgram());
+				for(Literal l:n.ifUnfulfilledSanction()) nSai.addUnfulfilledSanction(l);
+				for(Literal l:n.ifInactiveSanction()) nSai.addInactiveSanction(l);
+				for(Literal l:n.ifFulfilledSanction()) nSai.addFulfilledSanction(l);
 				//remove the original norm from the NPL interpreter
 				toRemove.add(n.getId());
 				//replace the original norm by a SAI compliant one
@@ -79,7 +86,12 @@ public class NormativeBoardSai extends NormativeBoard {
         }
         
         for(INorm a:toAdd) {
-        	p.getRoot().addNorm(a);
+        	try {
+				p.getRoot().addNorm(a);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         
         

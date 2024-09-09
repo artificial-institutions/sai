@@ -11,24 +11,23 @@ group   'org.jacamo'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(15)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
 repositories {
     mavenCentral()
 
-
-        //url "http://jacamo.sourceforge.net/maven2"
-       maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
+    maven { url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
 
 }
 
 dependencies{
    antlr "org.antlr:antlr4:4.12.0" // use ANTLR version 4
    implementation group: 'org.jason'      , name: 'jason'   , version: '3.1' , changing: true, transitive: false
-   implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.0', changing: true, transitive: false
-   implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.5', changing: false, transitive: false
+   implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.1-SNAPSHOT', changing: true, transitive: false
+   implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.6-SNAPSHOT', changing: false, transitive: false
    implementation group: 'org.jacamo'     , name: 'cartago' , version: '3.1-SNAPSHOT' , changing: true, transitive: false
    implementation group: 'org.jacamo'     , name: 'jaca'    , version: '3.1-SNAPSHOT' , changing: true, transitive: false
    
@@ -83,10 +82,11 @@ publishing {
     }
 }
 
+
 task publishMavenGitHub(dependsOn: [ 'build', 'publishToMavenLocal']) {
   doLast {
     def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/sai'
-    def rdir = System.getProperty("user.home")+'/pro/jacamo-mvn-repo'
+    def rdir = System.getProperty("user.home")+'/pro/mvn-repo'
     exec {
         commandLine 'git', 'pull'
         workingDir rdir

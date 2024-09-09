@@ -32,12 +32,12 @@ import jason.asSyntax.LiteralImpl;
 import jason.asSyntax.Pred;
 import jason.asSyntax.Structure;
 import jason.asSyntax.parser.ParseException;
-import npl.DeonticModality;
 import npl.DynamicFactsProvider;
 import npl.INorm;
 import npl.LiteralFactory;
 import npl.NPLInterpreter;
 import npl.Norm;
+import npl.NormInstance;
 import npl.NormativeProgram;
 import npl.Scope;
 import npl.TimeTerm;
@@ -292,7 +292,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 				response = response + "-- " + n + "<br>";
 			}			
 			response = response + "<br><br>";
-			Iterator<Literal> it = nengine.getAg().getBB().clone().iterator();
+			Iterator<Literal> it = nengine.getFacts().iterator();
 			while(it.hasNext()){
 				response = response + it.next() + "<br>";
 			}
@@ -308,7 +308,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 		@Override
 		public void handle(HttpExchange t) throws IOException {	
 			String response = "<html><font size=\"2\" face=\"arial\" color=\"green\">Facts</font><br><font face=\"arial\">";
-			Iterator<Literal> it = nengine.getAg().getBB().clone().iterator(); 
+			Iterator<Literal> it = nengine.getFacts().iterator(); 
 			while(it.hasNext()){
 				response = response + it.next() + "<br>";
 			}			
@@ -350,7 +350,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 
 
 	@Override
-	public void created(DeonticModality o) {
+	public void created(NormInstance o) {
 		o.delAnnot(o.getAnnot("created"));		
 		execInternalOp("internal_created", o);
 		if(!obligationsToShow.contains(o)){
@@ -376,7 +376,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 	}
 
 	@Override
-	public void fulfilled(DeonticModality o) {
+	public void fulfilled(NormInstance o) {
 		o.delAnnot(o.getAnnot("done"));
 		o.delAnnot(o.getAnnot("fulfilled"));
 		execInternalOp("internal_fulfilled", o);
@@ -396,25 +396,25 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 	}
 
 	@INTERNAL_OPERATION
-	void internal_fulfilled(DeonticModality o){
+	void internal_fulfilled(NormInstance o){
 		removeObsPropertyByTemplate("obligation", o.getTerm(0), o.getTerm(1), o.getTerm(2), o.getTerm(3));
 		defineObsProperty(o.getFunctor(), o.getTerms());		
 	}
 
 	@Override
-	public void unfulfilled(DeonticModality o) {
+	public void unfulfilled(NormInstance o) {
 		execInternalOp("internal_unfulfilled", o);		
 	}
 
 
 	@INTERNAL_OPERATION
-	void internal_unfulfilled(DeonticModality o){
+	void internal_unfulfilled(NormInstance o){
 		removeObsPropertyByTemplate("obligation", o.getTerm(0), o.getTerm(1), o.getTerm(2), o.getTerm(3));
 		defineObsProperty(o.getFunctor(), o.getTerms());		
 	}
 
 	@Override
-	public void inactive(DeonticModality o) {
+	public void inactive(NormInstance o) {
 		o.delAnnot(o.getAnnot("inactive"));
 		execInternalOp("internal_inactive", o);
 		Literal toRemove = null;
@@ -433,7 +433,7 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 	}
 	
 	@INTERNAL_OPERATION
-	void internal_inactive(DeonticModality o){
+	void internal_inactive(NormInstance o){
 		removeObsPropertyByTemplate("obligation", o.getTerm(0), o.getTerm(1), o.getTerm(2), o.getTerm(3));
 		defineObsProperty(o.getFunctor(), o.getTerms());		
 	}
@@ -516,6 +516,9 @@ public class SaiNplArt extends Artifact implements npl.NormativeListener  {
 			
 		} catch (IOException | npl.parser.ParseException  e) {
 			// TODO Auto-generated catch blocke
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

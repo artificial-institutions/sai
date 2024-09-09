@@ -28,7 +28,10 @@
    setInstitution(SE)[artifact_id(NplArt)];
    load("src/org/norms.npl");
    
-   rainWarning.
+   rainWarning;
+   .wait(5000);
+   undoRainWarning;
+.
          
 
 { include("$jacamoJar/templates/common-cartago.asl") }
