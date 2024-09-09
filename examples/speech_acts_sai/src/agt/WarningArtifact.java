@@ -11,6 +11,10 @@ public class WarningArtifact extends Artifact {
 	void rainWarning() {		
 		ObsProperty prop = getObsProperty("raining");
 		prop.updateValue(true);
+
+		await_time(15000);
+		log("=================");
+		prop.updateValue(false);
 	}
 }
 
