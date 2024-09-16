@@ -11,16 +11,15 @@ group   'org.jacamo'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(15)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
 repositories {
     mavenCentral()
 
-
-        //url "http://jacamo.sourceforge.net/maven2"
-       maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
+    maven { url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
 
 }
 
@@ -83,10 +82,11 @@ publishing {
     }
 }
 
+
 task publishMavenGitHub(dependsOn: [ 'build', 'publishToMavenLocal']) {
   doLast {
     def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/sai'
-    def rdir = System.getProperty("user.home")+'/pro/jacamo-mvn-repo'
+    def rdir = System.getProperty("user.home")+'/pro/mvn-repo'
     exec {
         commandLine 'git', 'pull'
         workingDir rdir

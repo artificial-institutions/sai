@@ -7,7 +7,7 @@ status_functions:
 
 events: b(V).
 
-states: vl(V), c(V).
+states: vl(V), extra(V).
 
 
 
@@ -17,4 +17,4 @@ constitutive_rules:
 
 1: nticks(clock,V) count-as  vl(V) while V==5000.
 
-2: nticks(clock,V) count-as c(V).
+2: nticks(clock,V) count-as extra(V).

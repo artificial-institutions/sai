@@ -115,6 +115,8 @@ public class InstProgram_Reasoner extends InstProgram{
 		if((getStatusFunctionByName(crule.getY().toString()) instanceof StateStatusFunction)&&(!crule.getX().isVar())&&(getStatusFunctionByName(crule.getX().toString())==null)){	//if Y is a state status function, the term X is added to the term M, thus it is not necessary add "true" to the term M
 			if(crule.getM()==null||crule.getM().toString()=="true")
 				crule.setM(parseFormula(crule.getX().toString()));
+			else
+				crule.setM(parseFormula("(" + crule.getX() + ")&(" + crule.getM()+")" ));
 		}
 		else
 			if(crule.getM()==null){				

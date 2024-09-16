@@ -30,7 +30,8 @@
 
 
 +oblUnfulfilled(O) <- .print("Unfulfilled ",O).
-+sanction(NormId,Event,Sanction) <- .print("Sanction ",Sanction," created for norm ", NormId, " that is ",Event).
+
++sanction(NormId,Event,Ag,Sanction) <- .print("Sanction ",Sanction," for ",Ag," created from norm ", NormId, " that is ",Event).
 
 
 { include("$jacamo/templates/common-cartago.asl") }
