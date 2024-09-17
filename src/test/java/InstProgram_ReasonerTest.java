@@ -47,7 +47,126 @@ public class InstProgram_ReasonerTest {
 		assertFalse(program.CheckBel("sai__ef(auction_running)"));
 		
 	}
+
+	@Test
+	public void testAddStateStatusFunctionWithVariable() {
+		InstProgram_Reasoner program = new InstProgram_Reasoner(new JasonReasoner());
+
+		try {
+			StateStatusFunction sf = new StateStatusFunction(new Pred(parseLiteral("vl(V1,v,V2)")));
+			program.addStatusFunction(sf);
+			ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("s(V1,V2)")),
+					new StateStatusFunction(new Pred(parseLiteral("vl(5000,v,6000)"))),
+					parseFormula("true"),
+					parseFormula("V1>=5000&V2>=6000")
+					//parseFormula("true")
+					);
+			program.addConstitutiveRule(crule);
+			program.getReasoner().assertValue("s(7000,8000)");
+			program.getReasoner().assertValue("sigmaE(true)");	
+
+			assertTrue(program.CheckBel("sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&M&St&not(sai__is(St,Sf,M))"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TokenMgrError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	
+	@Test
+	public void testAddStateStatusFunctionWithoutVariable() {
+		InstProgram_Reasoner program = new InstProgram_Reasoner(new JasonReasoner());
+
+		try {
+			StateStatusFunction sf = new StateStatusFunction(new Pred(parseLiteral("vl(a,b,c)")));
+			program.addStatusFunction(sf);
+			ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("s(V1,V2)")),
+					new StateStatusFunction(new Pred(parseLiteral("vl(a,b,c)"))),
+					parseFormula("true"),
+					parseFormula("V1>=5000&V2>=6000")
+					//parseFormula("true")
+					);
+			program.addConstitutiveRule(crule);
+			program.getReasoner().assertValue("s(7000,8000)");
+			program.getReasoner().assertValue("sigmaE(true)");	
+
+			assertTrue(program.CheckBel("sai__crule(St,Sf,T,M)&T&sai__sf(Sf)&M&St&not(sai__is(St,Sf,M))"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TokenMgrError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testAddEventStatusFunctionWithVariable() {
+		InstProgram_Reasoner program = new InstProgram_Reasoner(new JasonReasoner());
+		try {
+			EventStatusFunction sf = new EventStatusFunction(new Pred(parseLiteral("vl(V1,v,V2)")));
+			program.addStatusFunction(sf);
+			ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("s(V1,V2)")),
+					new EventStatusFunction(new Pred(parseLiteral("vl(5000,v,6000)"))),
+					parseFormula("true"),
+					parseFormula("V1>=5000&V2>=6000")
+					);
+			program.addConstitutiveRule(crule);
+			program.getReasoner().assertValue("sigmaE(s(7000,8000)[sai__agent(bob)])");
+			program.getReasoner().assertValue("sigmaE(true)");			
+			assertTrue(program.CheckBel("sai__crule(event(Ev),Ef,T,M)&sai__ef(Ef)&(sigmaE(Ev[sai__agent(TriggerAgent)]))&not(Ev==true)&T&M&not(sai__is(event(Ev),Ef,TriggerAgent,_))"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TokenMgrError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	@Test
+	public void testAddEventStatusFunctionWithoutVariable() {
+		InstProgram_Reasoner program = new InstProgram_Reasoner(new JasonReasoner());
+		try {
+			EventStatusFunction sf = new EventStatusFunction(new Pred(parseLiteral("vl(a,b,c)")));
+			program.addStatusFunction(sf);
+			ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("s(V1,V2)")),
+					new EventStatusFunction(new Pred(parseLiteral("vl(a,b,c)"))),
+					parseFormula("true"),
+					parseFormula("V1>=5000&V2>=6000")
+					);
+			program.addConstitutiveRule(crule);
+			program.getReasoner().assertValue("sigmaE(s(7000,8000)[sai__agent(bob)])");
+			program.getReasoner().assertValue("sigmaE(true)");			
+			assertTrue(program.CheckBel("sai__crule(event(Ev),Ef,T,M)&sai__ef(Ef)&(sigmaE(Ev[sai__agent(TriggerAgent)]))&not(Ev==true)&T&M&not(sai__is(event(Ev),Ef,TriggerAgent,_))"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TokenMgrError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+
+
 	@Test
 	public void testAddConstitutiveRule() throws Exception{
 		InstProgram_Reasoner program = new InstProgram_Reasoner(new JasonReasoner(new BasicReasonerHttpGUI(8001)));
@@ -68,7 +187,6 @@ public class InstProgram_ReasonerTest {
 		program.addStatusFunction(new AgentStatusFunction(createAtom("participant")));
 		ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("bidder")), new AgentStatusFunction(createAtom("participant")), parseFormula("true"), parseFormula("true"));
 		program.addConstitutiveRule(crule);
-		System.out.println(program.toString());
 		assertTrue(program.CheckBel("sai__crule(SaiSF,participant,sigmaE(true),(true & sai__is(SaiSF,bidder,_1)))"));
 	}
 	
@@ -81,7 +199,6 @@ public class InstProgram_ReasonerTest {
 		program.addStatusFunction(new StateStatusFunction(new Pred(parseLiteral("state2"))));
 		ConstitutiveRule crule = new ConstitutiveRule(new Pred(parseLiteral("state1")), new StateStatusFunction(new Pred(parseLiteral("state2"))), parseFormula("true"), parseFormula("true"));
 		program.addConstitutiveRule(crule);
-		System.out.println(program);
 		assertTrue(program.CheckBel("sai__crule(SaiSF,state2,sigmaE(true),(true & sai__is(_,state1,_1)))"));
 	}
 	

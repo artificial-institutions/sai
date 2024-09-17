@@ -3,6 +3,7 @@ package sai.main.lang.semantics;
 import static jason.asSyntax.ASSyntax.createLiteral;
 import static jason.asSyntax.ASSyntax.createVar;
 import static jason.asSyntax.ASSyntax.parseFormula;
+import jason.asSyntax.Literal;
 import jason.asSyntax.Pred;
 import sai.main.exception.StatusFunctionNotFoundException;
 import sai.main.lang.parser.FormulaAdapter;
@@ -28,6 +29,7 @@ import sai.util.reasoner.IReasoner;
 public class InstProgram_Reasoner extends InstProgram{
 
 	private IReasoner reasoner;		
+	private int varCount = 0;
 
 	public InstProgram_Reasoner(IReasoner reasoner){
 		super();
@@ -36,51 +38,11 @@ public class InstProgram_Reasoner extends InstProgram{
 
 	}
 
-	/*public void setReasoner(IReasoner reasoner){
-		this.reasoner = reasoner;
-	}*/
-
-	/*
-
-	@Override
-	public Norm addNorm(Norm norm) throws Exception {				
-
-		String lit = "sai__norm("+norm.getAttribute() +","+
-				norm.getDeontic().toString()+","+
-				norm.getAim().toString()+",";
-
-
-		if(norm.getCondition()==null)
-			lit = lit + "true,";
-		else{
-			lit = lit + norm.getCondition() + ",";
-		}
-
-		if(norm.getOrElse()==null)
-			lit = lit + "true,";
-		else
-			lit = lit + norm.getOrElse().toString() + ",";
-		if(norm.getDeadline()==null)
-			lit = lit + "false";
-		else{
-			lit = lit + norm.getDeadline().toString();
-
-		}
-
-		lit = lit + ")";
-
-
-		try{
-			reasoner.assertValue(lit);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-
-
-		return super.addNorm(norm);
+	
+	
+	public IReasoner getReasoner(){
+		return this.reasoner;
 	}
-	 */
 
 	@Override
 	public StatusFunction addStatusFunction(StatusFunction sf) throws Exception  {
@@ -90,17 +52,25 @@ public class InstProgram_Reasoner extends InstProgram{
 
 		}else
 			if (sf instanceof EventStatusFunction) {
-				lit = "sai__ef(" + sf.toString() + ")";
+				lit = "sai__ef(" + renameVars(sf.getId()) + ")";
 
 			}else
-				if (sf instanceof StateStatusFunction) {
-					lit ="sai__sf(" + sf.toString() + ")";
-
-				}
+				if (sf instanceof StateStatusFunction) 
+					lit ="sai__sf(" + renameVars(sf.getId()) + ")";
 		reasoner.assertValue(lit);		
 		return super.addStatusFunction(sf);
 	}
 
+	
+	/* customize variables with a custmized sai variable */
+	private Literal renameVars(Literal literal) {
+		for(int i=0;i<literal.getArity();i++)
+			if(literal.getTerm(i).isVar()) {
+				literal.setTerm(i, createVar("Sai__Var__" + varCount++ +"__" + literal.getTerm(i)));
+				
+			}
+		return literal;
+	}
 
 
 
@@ -181,47 +151,4 @@ public class InstProgram_Reasoner extends InstProgram{
 
 	}
 
-
-
-
-
-	/*
-	class FormulaParser extends sai_normativeBaseListener{
-		private ArrayList<String> terms = new ArrayList<String>();
-
-
-		@Override
-		public void exitPred_term(Pred_termContext ctx) {
-			terms.add(ctx.getText());
-
-		}
-
-
-		public List<String> getTerms(){
-			return this.terms;
-		}		
-
-	}
-
-	class NormParser extends sai_normativeBaseListener {
-		String sNorm = "";
-
-
-		public void exitSff_and_expr(@NotNull sai_normativeParser.Sff_and_exprContext ctx) {
-			if(ctx.TK_AND()!= null)
-				this.sNorm =  ctx.TK_AND().getText()+ this.sNorm ;
-
-
-		}
-
-
-
-
-
-		String getResult(){
-			return this.sNorm;
-		}
-
-	}		
-	 */
 }
