@@ -3,7 +3,7 @@ institution_id : bhInst.
 
 status_functions:
 
-states: play(A,R,G), responsible(G,S), committed(A,Mission,S), done(S,G,A).
+states: play(A,R,G), responsible(G,S), committed(A,Mission,S), done(S,G,A).	
 
 
 
@@ -51,6 +51,7 @@ constitutive_rules:
 10: currentWinner(auction_for_Painting,Agent)
     count-as play(Agent,painter,"hsh_group")
     while nticks(clock,Time)&(Time>=8000).
+    
 
 /* Defining what counts as, from the institutional perspective, a well formed group. This constitution is necessary to constitute the commitments */
 11: count-as responsible("hsh_group","bhsch")
@@ -58,6 +59,9 @@ constitutive_rules:
           play(Site_prep_contractor1,site_prep_contractor,"hsh_group") &  not(play(Site_prep_contractor2,site_prep_contractor,"hsh_group") & not(Site_prep_contractor1==Site_prep_contractor2))&
           play(Bricklayer1,bricklayer,"hsh_group")&play(Bricklayer2,bricklayer,"hsh_group")&not(play(Bricklayer3,bricklayer,"hsh_group")&not(Bricklayer1==Bricklayer3)&not(Bricklayer2==Bricklayer3))&
           play(Plumber1,plumber,"hsh_group")  &  not(play(Plumber2,plumber,"hsh_group") & not(Plumber1==Plumber2))&play(Window_fitter1,window_fitter,"hsh_group") &  not(play(Window_fitter2,window_fitter,"hsh_group")& not(Window_fitter1==Window_fitter2))&play(Door_fitter1,door_fitter,"hsh_group")& not(play(Door_fitter2,door_fitter,"hsh_group") & not(Door_fitter1==Door_fitter2))&play(Roofer1,roofer,"hsh_group") &  not(play(Roofer2,roofer,"hsh_group") & not(Roofer1==Roofer2))&play(House_owner1,house_owner,"hsh_group") &  not(play(House_owner2,house_owner,"hsh_group") & not(House_owner1==House_owner2)).
+    
+    
+    
 
 
 /* Rules 13 to 22 (2nd order constitution): The state where an agent A carries the status function Y counts as the state committed(A,M,S) in the institution */
@@ -138,3 +142,4 @@ constitutive_rules:
 
 32: count-as done(bhsch,interior_painted,Agent)
     when paintInterior[sai__agent(Agent)].
+   

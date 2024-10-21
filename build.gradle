@@ -5,13 +5,13 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 
-version '0.5.4-SNAPSHOT'
+version '0.5.4'
 
 group   'org.jacamo'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -25,11 +25,11 @@ repositories {
 
 dependencies{
    antlr "org.antlr:antlr4:4.12.0" // use ANTLR version 4
-   implementation group: 'org.jason'      , name: 'jason'   , version: '3.1' , changing: true, transitive: false
-   implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.1-SNAPSHOT', changing: true, transitive: false
-   implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.6-SNAPSHOT', changing: false, transitive: false
-   implementation group: 'org.jacamo'     , name: 'cartago' , version: '3.1-SNAPSHOT' , changing: true, transitive: false
-   implementation group: 'org.jacamo'     , name: 'jaca'    , version: '3.1-SNAPSHOT' , changing: true, transitive: false
+   implementation group: 'org.jason'      , name: 'jason'   , version: '3.1' , changing: true	, transitive: false
+   implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.1', changing: true, transitive: false
+   implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.6', changing: false, transitive: false
+   implementation group: 'org.jacamo'     , name: 'cartago' , version: '3.1' , changing: true, transitive: false
+   implementation group: 'org.jacamo'     , name: 'jaca'    , version: '3.1' , changing: true, transitive: false
    
    // https://mvnrepository.com/artifact/javax.json/javax.json-api
    implementation group: 'javax.json', name: 'javax.json-api', version: '1.1.4' //required  by jason.asSyntax.Literal
