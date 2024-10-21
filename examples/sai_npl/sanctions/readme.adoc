@@ -1,4 +1,4 @@
-This application extends the link:https://github.com/jacamo-lang/jacamo/tree/develop/demos/sanction[JaCaMo __sanction__ demo]. In this implementation, the activation of norms and sanctions include institutional facts.
+This application extends the link:https://github.com/jacamo-lang/jacamo/tree/develop/demos/sanction[JaCaMo __sanction__ demo]. In this implementation, the activation of norms and sanctions includes institutional facts.
 
 
 
