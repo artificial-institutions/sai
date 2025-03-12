@@ -1,5 +1,6 @@
 package sai.util.reasoner.jason;
 
+import jason.JasonException;
 import jason.asSemantics.Agent;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Atom;
@@ -34,7 +35,12 @@ public class VerifiableConsequenceLiteral extends LiteralDecorator {
 			ag.initAg();
 		}
 		ag.getBB().clear();
-		ag.getBB().add(literal);
+		try {
+			ag.getBB().add(literal);
+		} catch (JasonException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		//TODO: usar a linha desativada (primeira abaixo). Ela foi desativada por causa de um problema  ao verificar a consequencia lógica na linha "if(violatedInstance.isLogicalConsequenceOf(next)){"

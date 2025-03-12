@@ -6,6 +6,7 @@ import static jason.asSyntax.ASSyntax.createVar;
 import static jason.asSyntax.ASSyntax.parseFormula;
 import static jason.asSyntax.ASSyntax.parseLiteral;
 import jason.asSyntax.Literal;
+import jason.asSyntax.LogExpr;
 import jason.asSyntax.LogicalFormula;
 import jason.asSyntax.parser.ParseException;
 import sai.main.lang.semantics.InstProgram;
@@ -48,16 +49,25 @@ public class NormSai extends Norm {
 
 
 	private static LogicalFormula adaptBody(Literal head, LogicalFormula body, InstProgram instProgram) throws ParseException{
-		LogicalFormula newBody = body; 
-		if(body.isPred()) //if the activation condition is an event, it is a pred
-			if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
-				newBody = parseFormula("sai__event("+newBody+"[sai__agent(Sai__Agent)])");										
-			}		
-		if(!head.getTerm(0).isVar())
-			if(instProgram.getStatusFunctionByName(head.getTerm(0).toString())!=null)
-				if(instProgram.getStatusFunctionByName(head.getTerm(0).toString()) instanceof AgentStatusFunction){
-					newBody = parseFormula("(sai__is(Sai__Agent,"+head.getTerm(0).toString()+"))&" + newBody.toString() );
-				}				
+		LogicalFormula newBody = null;
+		if(body instanceof LogExpr) {
+			if(((LogExpr)body).getTerms().size()<=1) //if it is an expression with an unary operator
+				newBody = parseFormula("not " + adaptBody(head, ((LogExpr)body).getLHS(), instProgram));
+			else
+				newBody = parseFormula(adaptBody(head, ((LogExpr)body).getLHS(), instProgram).toString()+((LogExpr)body).getOp().toString() + adaptBody(head, ((LogExpr)body).getRHS(), instProgram).toString());
+		}
+		else {
+			newBody = body;
+			if(body.isPred()) //if the activation condition is an event, it is a pred
+				if(instProgram.getStatusFunctionByName(body.toString()) instanceof EventStatusFunction ) {
+					newBody = parseFormula("sai__event("+newBody+"[sai__agent(Sai__Agent)])");										
+				}		
+			if(!head.getTerm(0).isVar())
+				if(instProgram.getStatusFunctionByName(head.getTerm(0).toString())!=null)
+					if(instProgram.getStatusFunctionByName(head.getTerm(0).toString()) instanceof AgentStatusFunction){
+						newBody = parseFormula("(sai__is(Sai__Agent,"+head.getTerm(0).toString()+"))&" + newBody.toString() );
+					}
+		}
 		return newBody;
 	}
 

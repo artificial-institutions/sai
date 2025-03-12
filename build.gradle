@@ -5,7 +5,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 
-version '0.5.4'
+version '0.5.4-SNAPSHOT'
 
 group   'org.jacamo'
 
@@ -25,7 +25,10 @@ repositories {
 
 dependencies{
    antlr "org.antlr:antlr4:4.12.0" // use ANTLR version 4
-   implementation group: 'org.jason'      , name: 'jason'   , version: '3.1' , changing: true	, transitive: false
+   //implementation group: 'org.jason'      , name: 'jason'   , version: '3.1' , changing: true, transitive: false
+   api('io.github.jason-lang:jason-interpreter:3.3.0') {
+        exclude group: 'net.sf.ingenias', module: 'jade'
+    }
    implementation group: 'org.jacamo'     , name: 'moise'   , version: '1.1', changing: true, transitive: false
    implementation group: 'org.jacamo',     name: 'npl' ,     version: '0.6', changing: false, transitive: false
    implementation group: 'org.jacamo'     , name: 'cartago' , version: '3.1' , changing: true, transitive: false
@@ -39,7 +42,7 @@ dependencies{
 }
 
 jar {
-    baseName 'sai'
+    archiveBaseName = 'sai'
 }
 
 
@@ -59,8 +62,8 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-task javadocJar (type: Jar, dependsOn: javadoc) {
-    baseName 'sai'
+/*task javadocJar (type: Jar, dependsOn: javadoc) {
+    archiveBaseName = 'sai'
     classifier = 'javadoc'
     from '${docsDir}/../../doc/api'
 }
@@ -70,13 +73,15 @@ task sourceJar (type : Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
+*/
+
 
 publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            artifact sourceJar
-            artifact javadocJar
+            //artifact sourceJar
+            //artifact javadocJar
             artifactId 'sai'
         }
     }
