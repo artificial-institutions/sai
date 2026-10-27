@@ -32,13 +32,12 @@ import sai.main.lang.semantics.statusFunction.StatusFunction;
  *
  */
 public class InstProgram extends Observable {
-	Map<Integer, Norm> norms = new HashMap<Integer, Norm>();
-	Map<Integer, AgentStatusFunction> agentStatusFunctions = new HashMap<Integer, AgentStatusFunction>();
-	Map<Integer, EventStatusFunction> eventStatusFunctions = new HashMap<Integer, EventStatusFunction>();
-	Map<Integer, StateStatusFunction> stateStatusFunctions = new HashMap<Integer, StateStatusFunction>();
-	Map<Integer, ConstitutiveRule> constitutiveRules = new HashMap<Integer, ConstitutiveRule>();	
-	Map<Integer, Literal> relevantEvent = new HashMap<Integer, Literal>();
-
+	protected Map<Integer, Norm> norms = new HashMap<Integer, Norm>();
+	protected Map<Integer, AgentStatusFunction> agentStatusFunctions = new HashMap<Integer, AgentStatusFunction>();
+	protected Map<Integer, EventStatusFunction> eventStatusFunctions = new HashMap<Integer, EventStatusFunction>();
+	protected Map<Integer, StateStatusFunction> stateStatusFunctions = new HashMap<Integer, StateStatusFunction>();
+	protected Map<Integer, ConstitutiveRule> constitutiveRules = new HashMap<Integer, ConstitutiveRule>();	
+	
 
 	public InstProgram(){
 	}

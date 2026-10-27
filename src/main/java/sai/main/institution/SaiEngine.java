@@ -38,6 +38,12 @@ public class SaiEngine/* implements Observer */{
 		
 	}
 
+	public SaiEngine(ConstitutiveReasoner envHandler, InstProgram program){
+        this.envHandler = envHandler;
+        this.program = program;
+        envHandler.start();
+    }
+
 	/**
 	 * Returns the institutional program of the institution 
 	 * @return
